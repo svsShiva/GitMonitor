@@ -12,15 +12,11 @@ namespace DataModel
     using System;
     using System.Collections.Generic;
     
-    public partial class tblBranch
+    public partial class tblSetting
     {
-        public long tblBranchID { get; set; }
-        public string Name { get; set; }
-        public long tblRepoID { get; set; }
-        public bool EnableDeskTopNotifications { get; set; }
-        public bool AutoPull { get; set; }
+        public long tblSettingsID { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
         public bool IsActive { get; set; }
-    
-        public virtual tblRepo tblRepo { get; set; }
     }
 }

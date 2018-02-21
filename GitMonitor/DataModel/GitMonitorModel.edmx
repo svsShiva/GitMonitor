@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GitMonitorModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=C:\Users\kishore.ithadi\Desktop\GitMonitor\GitMonitor\Service.ConsoleApp\DB\GitMonitor.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblBranch">
+          <Key>
+            <PropertyRef Name="tblBranchID" />
+          </Key>
+          <Property Name="tblBranchID" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="tblRepoID" Type="integer" Nullable="false" />
+          <Property Name="EnableDeskTopNotifications" Type="bit" Nullable="false" />
+          <Property Name="AutoPull" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblRepo">
+          <Key>
+            <PropertyRef Name="tblRepoID" />
+          </Key>
+          <Property Name="tblRepoID" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="RepoUrl" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="WorkingDirectory" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="AutoTrack" Type="bit" Nullable="false" />
+          <Property Name="EnableDesktopNotification" Type="bit" Nullable="false" />
+          <Property Name="NotificationEmail" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="CurrentBranch" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="IsUntrackedRepo" Type="bit" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedAt" Type="datetime" Nullable="false" />
+          <Property Name="RecentCheck" Type="datetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblSettings">
+          <Key>
+            <PropertyRef Name="tblSettingsID" />
+          </Key>
+          <Property Name="tblSettingsID" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Key" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tblBranch_0_0">
+          <End Role="tblRepo" Type="Self.tblRepo" Multiplicity="1" />
+          <End Role="tblBranch" Type="Self.tblBranch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRepo">
+              <PropertyRef Name="tblRepoID" />
+            </Principal>
+            <Dependent Role="tblBranch">
+              <PropertyRef Name="tblRepoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GitMonitorModelStoreContainer">
+          <EntitySet Name="tblBranch" EntityType="Self.tblBranch" store:Type="Tables" />
+          <EntitySet Name="tblRepo" EntityType="Self.tblRepo" store:Type="Tables" />
+          <EntitySet Name="tblSettings" EntityType="Self.tblSettings" store:Type="Tables" />
+          <AssociationSet Name="FK_tblBranch_0_0" Association="Self.FK_tblBranch_0_0">
+            <End Role="tblRepo" EntitySet="tblRepo" />
+            <End Role="tblBranch" EntitySet="tblBranch" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GitMonitorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblBranch">
+          <Key>
+            <PropertyRef Name="tblBranchID" />
+          </Key>
+          <Property Name="tblBranchID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="tblRepoID" Type="Int64" Nullable="false" />
+          <Property Name="EnableDeskTopNotifications" Type="Boolean" Nullable="false" />
+          <Property Name="AutoPull" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblRepo" Relationship="Self.FK_tblBranch_0_0" FromRole="tblBranch" ToRole="tblRepo" />
+        </EntityType>
+        <EntityType Name="tblRepo">
+          <Key>
+            <PropertyRef Name="tblRepoID" />
+          </Key>
+          <Property Name="tblRepoID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="RepoUrl" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="WorkingDirectory" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="AutoTrack" Type="Boolean" Nullable="false" />
+          <Property Name="EnableDesktopNotification" Type="Boolean" Nullable="false" />
+          <Property Name="NotificationEmail" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CurrentBranch" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="IsUntrackedRepo" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
+          <Property Name="ModifiedAt" Type="DateTime" Nullable="false" />
+          <Property Name="RecentCheck" Type="DateTime" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblBranches" Relationship="Self.FK_tblBranch_0_0" FromRole="tblRepo" ToRole="tblBranch" />
+        </EntityType>
+        <EntityType Name="tblSetting">
+          <Key>
+            <PropertyRef Name="tblSettingsID" />
+          </Key>
+          <Property Name="tblSettingsID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Key" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tblBranch_0_0">
+          <End Role="tblRepo" Type="Self.tblRepo" Multiplicity="1" />
+          <End Role="tblBranch" Type="Self.tblBranch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRepo">
+              <PropertyRef Name="tblRepoID" />
+            </Principal>
+            <Dependent Role="tblBranch">
+              <PropertyRef Name="tblRepoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GitMonitorEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblBranches" EntityType="Self.tblBranch" />
+          <EntitySet Name="tblRepoes" EntityType="Self.tblRepo" />
+          <EntitySet Name="tblSettings" EntityType="Self.tblSetting" />
+          <AssociationSet Name="FK_tblBranch_0_0" Association="Self.FK_tblBranch_0_0">
+            <End Role="tblRepo" EntitySet="tblRepoes" />
+            <End Role="tblBranch" EntitySet="tblBranches" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GitMonitorModelStoreContainer" CdmEntityContainer="GitMonitorEntities">
+          <EntitySetMapping Name="tblBranches">
+            <EntityTypeMapping TypeName="GitMonitorModel.tblBranch">
+              <MappingFragment StoreEntitySet="tblBranch">
+                <ScalarProperty Name="tblBranchID" ColumnName="tblBranchID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="tblRepoID" ColumnName="tblRepoID" />
+                <ScalarProperty Name="EnableDeskTopNotifications" ColumnName="EnableDeskTopNotifications" />
+                <ScalarProperty Name="AutoPull" ColumnName="AutoPull" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblRepoes">
+            <EntityTypeMapping TypeName="GitMonitorModel.tblRepo">
+              <MappingFragment StoreEntitySet="tblRepo">
+                <ScalarProperty Name="tblRepoID" ColumnName="tblRepoID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RepoUrl" ColumnName="RepoUrl" />
+                <ScalarProperty Name="WorkingDirectory" ColumnName="WorkingDirectory" />
+                <ScalarProperty Name="AutoTrack" ColumnName="AutoTrack" />
+                <ScalarProperty Name="EnableDesktopNotification" ColumnName="EnableDesktopNotification" />
+                <ScalarProperty Name="NotificationEmail" ColumnName="NotificationEmail" />
+                <ScalarProperty Name="CurrentBranch" ColumnName="CurrentBranch" />
+                <ScalarProperty Name="IsUntrackedRepo" ColumnName="IsUntrackedRepo" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="ModifiedAt" ColumnName="ModifiedAt" />
+                <ScalarProperty Name="RecentCheck" ColumnName="RecentCheck" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSettings">
+            <EntityTypeMapping TypeName="GitMonitorModel.tblSetting">
+              <MappingFragment StoreEntitySet="tblSettings">
+                <ScalarProperty Name="tblSettingsID" ColumnName="tblSettingsID" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

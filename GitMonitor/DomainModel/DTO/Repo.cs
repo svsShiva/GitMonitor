@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace DomainModel.DTO
@@ -20,7 +21,7 @@ namespace DomainModel.DTO
         public long CurrentBranch { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime ModifiedAt { get; set; }
-        public System.DateTime RecentCheck { get; set; }
+        public Nullable<System.DateTime> RecentCheck { get; set; }
         public bool IsActive { get; set; }
     
         public virtual ICollection<Branch> Branches { get; set; }
