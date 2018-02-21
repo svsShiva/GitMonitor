@@ -14,7 +14,7 @@ namespace DataModel
     
     public partial class tblSetting
     {
-        public long tblSettingsID { get; set; }
+        public long tblSettingID { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
         public bool IsActive { get; set; }

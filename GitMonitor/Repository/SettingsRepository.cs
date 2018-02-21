@@ -7,15 +7,15 @@ namespace Repository
 {
     public class SettingsRepository
     {
-        public List<DM.Settings> GetAllSettings()
+        public List<DM.Setting> GetAllSettings()
         {
             using (GitMonitorEntities db = new GitMonitorEntities())
             {
                 return db.tblSettings
                          .Where(m => m.IsActive == true)
-                         .Select((m) => new DM.Settings
+                         .Select((m) => new DM.Setting
                          {
-                             SettingsID = m.tblSettingsID,
+                             SettingID = m.tblSettingID,
                              Key = m.Key,
                              Value = m.Value,
                              IsActive = m.IsActive

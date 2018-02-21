@@ -9,7 +9,7 @@ namespace DomainModel.DTO
         {
             this.Branches = new HashSet<Branch>();
         }
-    
+
         public long RepoID { get; set; }
         public string Name { get; set; }
         public string RepoUrl { get; set; }
@@ -17,14 +17,13 @@ namespace DomainModel.DTO
         public bool AutoTrack { get; set; }
         public bool EnableDesktopNotification { get; set; }
         public string NotificationEmail { get; set; }
-        public bool Untracked { get; set; }
-        public long CurrentBranch { get; set; }
+        public string CurrentBranch { get; set; }
+        public bool IsUntrackedRepo { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime ModifiedAt { get; set; }
         public Nullable<System.DateTime> RecentCheck { get; set; }
         public bool IsActive { get; set; }
-    
+
         public virtual ICollection<Branch> Branches { get; set; }
-        public virtual Branch Branch { get; set; }
     }
 }

@@ -36,9 +36,9 @@
         </EntityType>
         <EntityType Name="tblSettings">
           <Key>
-            <PropertyRef Name="tblSettingsID" />
+            <PropertyRef Name="tblSettingID" />
           </Key>
-          <Property Name="tblSettingsID" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tblSettingID" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Key" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
           <Property Name="Value" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
@@ -102,9 +102,9 @@
         </EntityType>
         <EntityType Name="tblSetting">
           <Key>
-            <PropertyRef Name="tblSettingsID" />
+            <PropertyRef Name="tblSettingID" />
           </Key>
-          <Property Name="tblSettingsID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tblSettingID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Key" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
@@ -170,7 +170,7 @@
           <EntitySetMapping Name="tblSettings">
             <EntityTypeMapping TypeName="GitMonitorModel.tblSetting">
               <MappingFragment StoreEntitySet="tblSettings">
-                <ScalarProperty Name="tblSettingsID" ColumnName="tblSettingsID" />
+                <ScalarProperty Name="tblSettingID" ColumnName="tblSettingID" />
                 <ScalarProperty Name="Key" ColumnName="Key" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />

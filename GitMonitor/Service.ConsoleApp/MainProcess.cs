@@ -15,7 +15,7 @@ namespace Service.ConsoleApp
         int _simultaneousCheckCount;
         Timer _timer;
         bool _isProcessExecuting;
-        List<Settings> _settings;
+        List<Setting> _settings;
 
         public MonitoringProcess()
         {

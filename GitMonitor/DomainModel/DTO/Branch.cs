@@ -1,14 +1,7 @@
-using System.Collections.Generic;
-
 namespace DomainModel.DTO
 {
     public partial class Branch
     {
-        public Branch()
-        {
-            this.Repos = new HashSet<Repo>();
-        }
-
         public long BranchID { get; set; }
         public string Name { get; set; }
         public long RepoID { get; set; }
@@ -17,6 +10,5 @@ namespace DomainModel.DTO
         public bool IsActive { get; set; }
 
         public virtual Repo Repo { get; set; }
-        public virtual ICollection<Repo> Repos { get; set; }
     }
 }
