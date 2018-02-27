@@ -5,17 +5,9 @@ namespace Service
 {
     partial class GitMonitorService : ServiceBase
     {
-        private FileSystemWatcher _watcher;
-
         public GitMonitorService()
         {
             InitializeComponent();
-
-            _watcher = new FileSystemWatcher();
-            _watcher.Filter = "*.git";
-            _watcher.Created += new FileSystemEventHandler(OnChanged);
-            _watcher.Changed += new FileSystemEventHandler(OnChanged);
-            _watcher.EnableRaisingEvents = true;
         }
 
         protected override void OnStart(string[] args)

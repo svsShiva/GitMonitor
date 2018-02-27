@@ -1,7 +1,8 @@
 ﻿using Service.ConsoleApp.Utilities;
 using System;
 using System.Globalization;
-using System.Threading;
+using System.Web.Http;
+using System.Web.Http.SelfHost;
 
 namespace Service.ConsoleApp
 {
@@ -21,12 +22,22 @@ namespace Service.ConsoleApp
 
                 CultureInfo.DefaultThreadCurrentCulture = culture;
 
-                MonitoringProcess monitoringProcess = new MonitoringProcess();
-                monitoringProcess.StartProcess();
+                FileMonitorUtility fileSystemWatcher = new FileMonitorUtility();
 
-                while (true)
+                TimerUtility monitoringProcess = new TimerUtility();
+                monitoringProcess.StartTimer();
+
+                HttpSelfHostConfiguration config = new HttpSelfHostConfiguration("http://localhost:8002");
+
+                config.Routes.MapHttpRoute(
+                    name: "GitMonitorAPI",
+                    routeTemplate: "{Api}/{controller}/{action}/{id}",
+                    defaults: new { id = RouteParameter.Optional });
+
+                using (HttpSelfHostServer server = new HttpSelfHostServer(config))
                 {
-                    Thread.Sleep(TimeSpan.FromHours(1));
+                    server.OpenAsync().Wait();
+                    Console.ReadLine();
                 }
             }
             catch (Exception ex)

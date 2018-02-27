@@ -8,7 +8,7 @@ namespace Service.ConsoleApp.Utilities
 {
     public class EmailUtility
     {
-        public bool SendEmail(string recipients, string subject, string body, string cc, 
+        public bool SendEmail(string recipients, string subject, string body, string cc,
                               List<Attachment> attachments = null, string folderPath = null)
         {
             try

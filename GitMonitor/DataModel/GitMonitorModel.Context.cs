@@ -18,6 +18,8 @@ namespace DataModel
         public GitMonitorEntities()
             : base(ConnectionBuilder.GetSqlConnection(), true)
         {
+            this.Configuration.LazyLoadingEnabled = false;
+            this.Configuration.ProxyCreationEnabled = false;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

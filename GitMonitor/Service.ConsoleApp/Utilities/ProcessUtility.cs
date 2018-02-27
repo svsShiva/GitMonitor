@@ -18,7 +18,14 @@ namespace Service.ConsoleApp.Utilities
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
-                    Arguments = $"/c" + command
+                    Arguments = $"/c" + command,
+
+#if DEBUG
+                    CreateNoWindow = false
+#else
+                    CreateNoWindow = true
+#endif
+
                 };
 
                 process.Start();
