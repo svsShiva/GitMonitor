@@ -217,5 +217,13 @@ namespace Repository
                 }
             }
         }
+
+        public void Update(DM.Repo repo)
+        {
+            using (GitMonitorEntities db = new GitMonitorEntities())
+            {
+
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Service.ConsoleApp.Utilities
             foreach (var item in allDrives)
             {
                 FileSystemWatcher watcher = new FileSystemWatcher(item.ToString());
-                watcher.Filter = "*.git";
+                watcher.Filter = "*/.git";
                 watcher.Created += Watcher_Created;
                 watcher.Deleted += Watcher_Deleted;
                 watcher.EnableRaisingEvents = true;
@@ -61,7 +61,7 @@ namespace Service.ConsoleApp.Utilities
                 {
                     try
                     {
-                        var gitDirectories = Directory.GetDirectories(dir, "*.git", SearchOption.AllDirectories);
+                        var gitDirectories = Directory.GetDirectories(dir, "*/.git", SearchOption.AllDirectories);
 
                         foreach (var item in gitDirectories)
                         {
