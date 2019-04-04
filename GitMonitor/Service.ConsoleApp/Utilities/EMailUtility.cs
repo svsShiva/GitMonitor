@@ -4,7 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Service.ConsoleApp.Utilities
+namespace GitMonitor.Service.ConsoleApp.Utilities
 {
     public class EmailUtility
     {

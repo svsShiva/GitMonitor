@@ -1,4 +1,4 @@
-﻿using Service.ConsoleApp.Utilities;
+﻿using GitMonitor.Service.ConsoleApp.Utilities;
 using System;
 using System.Globalization;
 using System.Web.Http;

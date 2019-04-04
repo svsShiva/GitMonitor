@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Repository;
-using DomainModel.DTO;
+using GitMonitor.Repository;
+using GitMonitor.DomainModel.DTO;
 using System.Configuration;
 using System.Timers;
 
-namespace Service.ConsoleApp.Utilities
+namespace GitMonitor.Service.ConsoleApp.Utilities
 {
     class TimerUtility
     {

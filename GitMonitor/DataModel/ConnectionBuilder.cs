@@ -2,7 +2,7 @@
 using System.Data.Entity.Core.EntityClient;
 using System.IO;
 
-namespace DataModel
+namespace GitMonitor.DataModel
 {
     internal class ConnectionBuilder
     {

@@ -1,12 +1,12 @@
-﻿using DomainModel.DTO;
+﻿using GitMonitor.DomainModel.DTO;
 using System;
 using System.Linq;
-using Service.ConsoleApp.Utilities;
+using GitMonitor.Service.ConsoleApp.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using System.Configuration;
 
-namespace Service.ConsoleApp.Utilities
+namespace GitMonitor.Service.ConsoleApp.Utilities
 {
     class GitUtility
     {

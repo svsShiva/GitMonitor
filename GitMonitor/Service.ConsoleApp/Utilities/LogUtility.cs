@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.IO;
 
-namespace Service.ConsoleApp.Utilities
+namespace GitMonitor.Service.ConsoleApp.Utilities
 {
     static class LogUtility
     {

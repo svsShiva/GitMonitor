@@ -1,4 +1,4 @@
-namespace DomainModel.DTO
+namespace GitMonitor.DomainModel.DTO
 {
     public partial class Branch
     {
@@ -11,9 +11,9 @@ namespace DomainModel.DTO
         public bool HasUpstream { get; set; }
         public string Remote { get; set; }
         public string TrackingBranch { get; set; }
-        public int AheadBy { get; set; }
-        public int BehindBy { get; set; }
-        
+        public long AheadBy { get; set; }
+        public long BehindBy { get; set; }
+
         public virtual Repo Repo { get; set; }
     }
 }

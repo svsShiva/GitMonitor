@@ -1,4 +1,4 @@
-namespace DomainModel.DTO
+namespace GitMonitor.DomainModel.DTO
 {
     public class Setting
     {

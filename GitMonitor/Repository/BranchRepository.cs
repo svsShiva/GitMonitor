@@ -1,9 +1,9 @@
-﻿using DataModel;
+﻿using GitMonitor.DataModel;
 using System.Collections.Generic;
 using System.Linq;
-using DM = DomainModel.DTO;
+using DM = GitMonitor.DomainModel.DTO;
 
-namespace Repository
+namespace GitMonitor.Repository
 {
     class BranchRepository
     {

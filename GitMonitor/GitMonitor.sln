@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModel", "DataModel\DataModel.csproj", "{E215F055-CAB6-4BFE-B152-92F397A021D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitMonitor.DataModel", "DataModel\GitMonitor.DataModel.csproj", "{E215F055-CAB6-4BFE-B152-92F397A021D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "DomainModel\DomainModel.csproj", "{07DE5CFE-104F-4056-B9AE-8497CD5B2767}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitMonitor.DomainModel", "DomainModel\GitMonitor.DomainModel.csproj", "{07DE5CFE-104F-4056-B9AE-8497CD5B2767}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{12B1C0BB-42B5-4C5B-A7F3-8AE3809E950E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitMonitor.Service", "Service\GitMonitor.Service.csproj", "{12B1C0BB-42B5-4C5B-A7F3-8AE3809E950E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.ConsoleApp", "Service.ConsoleApp\Service.ConsoleApp.csproj", "{5C76123F-0A28-4657-A2D4-049662709842}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitMonitor.Service.ConsoleApp", "Service.ConsoleApp\GitMonitor.Service.ConsoleApp.csproj", "{5C76123F-0A28-4657-A2D4-049662709842}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{558FD285-4545-40F4-9404-8570F5DE8DE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitMonitor.Repository", "Repository\GitMonitor.Repository.csproj", "{558FD285-4545-40F4-9404-8570F5DE8DE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

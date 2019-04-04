@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Service.ConsoleApp.Utilities
+namespace GitMonitor.Service.ConsoleApp.Utilities
 {
     internal class ProcessUtility
     {

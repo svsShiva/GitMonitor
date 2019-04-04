@@ -1,10 +1,10 @@
-﻿using Repository;
+﻿using GitMonitor.Repository;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace Service.ConsoleApp.Controllers
+namespace GitMonitor.Service.ConsoleApp.Controllers
 {
     public class RepoController : ApiController
     {

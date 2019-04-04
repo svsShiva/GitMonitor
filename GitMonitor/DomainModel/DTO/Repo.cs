@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DomainModel.DTO
+namespace GitMonitor.DomainModel.DTO
 {
     public class Repo
     {

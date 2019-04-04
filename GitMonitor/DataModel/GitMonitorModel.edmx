@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="GitMonitorModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=C:\Users\kishore.ithadi\Desktop\GitMonitor\GitMonitor\Service.ConsoleApp\DB\GitMonitor.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="GitMonitorModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=C:\Users\karthik.kasturi\Source\Repos\GitMonitor\GitMonitor\Service.ConsoleApp\DB\GitMonitor.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tblBranch">
           <Key>
             <PropertyRef Name="tblBranchID" />
@@ -15,6 +15,11 @@
           <Property Name="EnableDeskTopNotifications" Type="bit" Nullable="false" />
           <Property Name="AutoPull" Type="bit" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="HasUpstream" Type="bit" Nullable="false" />
+          <Property Name="Remote" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="TrackingBranch" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="AheadBy" Type="integer" Nullable="false" />
+          <Property Name="BehindBy" Type="integer" Nullable="false" />
         </EntityType>
         <EntityType Name="tblRepo">
           <Key>
@@ -64,8 +69,7 @@
             <End Role="tblBranch" EntitySet="tblBranch" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="GitMonitorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -80,6 +84,11 @@
           <Property Name="AutoPull" Type="Boolean" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="tblRepo" Relationship="Self.FK_tblBranch_0_0" FromRole="tblBranch" ToRole="tblRepo" />
+          <Property Name="HasUpstream" Type="Boolean" Nullable="false" />
+          <Property Name="Remote" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TrackingBranch" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="AheadBy" Type="Int64" Nullable="false" />
+          <Property Name="BehindBy" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="tblRepo">
           <Key>
@@ -139,6 +148,11 @@
           <EntitySetMapping Name="tblBranches">
             <EntityTypeMapping TypeName="GitMonitorModel.tblBranch">
               <MappingFragment StoreEntitySet="tblBranch">
+                <ScalarProperty Name="BehindBy" ColumnName="BehindBy" />
+                <ScalarProperty Name="AheadBy" ColumnName="AheadBy" />
+                <ScalarProperty Name="TrackingBranch" ColumnName="TrackingBranch" />
+                <ScalarProperty Name="Remote" ColumnName="Remote" />
+                <ScalarProperty Name="HasUpstream" ColumnName="HasUpstream" />
                 <ScalarProperty Name="tblBranchID" ColumnName="tblBranchID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="tblRepoID" ColumnName="tblRepoID" />

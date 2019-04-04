@@ -1,10 +1,10 @@
-﻿using DM = DomainModel.DTO;
-using Repository;
+﻿using DM = GitMonitor.DomainModel.DTO;
+using GitMonitor.Repository;
 using System.IO;
 using System.Collections.Generic;
 using System;
 
-namespace Service.ConsoleApp.Utilities
+namespace GitMonitor.Service.ConsoleApp.Utilities
 {
     class FileMonitorUtility
     {
