@@ -1,6 +1,7 @@
 ﻿using GitMonitor.Service.ConsoleApp.Utilities;
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.SelfHost;
 
@@ -22,12 +23,15 @@ namespace Service.ConsoleApp
 
                 CultureInfo.DefaultThreadCurrentCulture = culture;
 
-                FileMonitorUtility fileSystemWatcher = new FileMonitorUtility();
+                FileMonitorUtility fileSystemWatcher = null;
+
+                Task.Run(() => fileSystemWatcher = new FileMonitorUtility());
 
                 TimerUtility monitoringProcess = new TimerUtility();
-                monitoringProcess.StartTimer();
 
-                HttpSelfHostConfiguration config = new HttpSelfHostConfiguration("http://localhost:8002");
+                Task.Run(() => monitoringProcess.StartTimer());
+
+                HttpSelfHostConfiguration config = new HttpSelfHostConfiguration("http://localhost:8003");
 
                 config.Routes.MapHttpRoute(
                     name: "GitMonitorAPI",

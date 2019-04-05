@@ -3,6 +3,7 @@ using GitMonitor.Repository;
 using System.IO;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace GitMonitor.Service.ConsoleApp.Utilities
 {
@@ -34,7 +35,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                 RepoRepository repoRepository = new RepoRepository();
                 repoRepository.Add(repo);
 
-                GitUtility.RunTasks(repo);
+                GitUtility.RunTasks(repo, true);
             }
         }
 
@@ -50,30 +51,45 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
         public void GetAllRepos()
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
-            List<string> repos = new List<string>();
 
             foreach (var drive in allDrives)
             {
-                // root level directories
-                string[] allDirectories = Directory.GetDirectories(drive.ToString());
+                AddAllReposInDirectory(drive.ToString());
+            }
+        }
 
-                foreach (var dir in allDirectories)
+        private void GetCurrentUserRepos()
+        {
+            string userDirPath = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)).FullName;
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                userDirPath = Directory.GetParent(userDirPath).ToString();
+            }
+            AddAllReposInDirectory(userDirPath);
+        }
+
+        private void AddAllReposInDirectory(string directory)
+        {
+            List<string> repos = new List<string>();
+
+            string[] allDirectories = Directory.GetDirectories(directory);
+
+            foreach (var dir in allDirectories)
+            {
+                try
                 {
-                    try
-                    {
-                        var gitDirectories = Directory.GetDirectories(dir, "*/.git", SearchOption.AllDirectories);
+                    var gitDirectories = Directory.GetDirectories(dir, "*.git", SearchOption.AllDirectories).TakeWhile(x => x.EndsWith("\\.git"));
 
-                        foreach (var item in gitDirectories)
+                    foreach (var item in gitDirectories)
+                    {
+                        if (!item.Contains("$Recycle.Bin"))
                         {
-                            if (!item.Contains("$Recycle.Bin"))
-                            {
-                                repos.Add(item.Replace(".git", ""));
-                            }
+                            repos.Add(item.Replace(".git", ""));
                         }
                     }
-                    catch (Exception ex)
-                    { }
                 }
+                catch (Exception ex)
+                { }
             }
 
             RepoRepository repoRepository = new RepoRepository();

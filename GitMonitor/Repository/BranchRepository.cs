@@ -21,6 +21,11 @@ namespace GitMonitor.Repository
                         Name = m.Name,
                         EnableDeskTopNotifications = m.EnableDeskTopNotifications,
                         RepoID = m.tblRepoID,
+                        AheadBy = m.AheadBy,
+                        BehindBy = m.BehindBy,
+                        HasUpstream = m.HasUpstream,
+                        Remote = m.Remote,
+                        TrackingBranch = m.TrackingBranch
                     }).ToList();
             }
         }

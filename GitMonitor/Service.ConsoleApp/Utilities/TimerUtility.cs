@@ -96,7 +96,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                 int count = 0;
                 foreach (var item in items)
                 {
-                    actionList[count] = new Action(() => GitUtility.RunTasks(item));
+                    actionList[count] = new Action(() => GitUtility.RunTasks(item, false));
                     count++;
                 }
 

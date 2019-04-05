@@ -16,17 +16,14 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
         public static string GitStash { get { return string.Format(Git, "stash"); } }
         public static string GitPull { get { return string.Format(Git, "pull "); } }
 
-        public static void RunTasks(Repo repo)
+        public static void RunTasks(Repo repo, bool IgnoreRecentChanges)
         {
             try
             {
                 //Checking if any of the files in the repo got modified
-                //If the modified time is less than "LastModifiedRunInterval" then we will skip the process assuming the repo is in use
-                if (ChangesAreRecent(repo.WorkingDirectory))
-                {
-                    repo.RecentCheck = DateTime.Now;
-                    return;
-                }
+                //If the modified time is less than "LastModifiedRunInterval" then we will skip the autopull process assuming the repo is in use
+                bool autoPullInCycle = IgnoreRecentChanges || ChangesAreRecent(repo.WorkingDirectory, TimeSpan
+                                 .FromMinutes(Convert.ToInt16(ConfigurationManager.AppSettings["LastModifiedRunInterval"].ToString())));
 
                 // Getting information about all the branches and their changes from upstream
                 FetchCommand(repo);
@@ -38,7 +35,11 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                 {
                     // branchvvOP first element is the current branch
                     // Setting the current branch
-                    string currBranchName = branchVVOP[0].Substring(2, branchVVOP[0].IndexOf(' ', 2));
+                    string currBranchName = "";
+                    if (branchVVOP.Length != 0)
+                    {
+                        currBranchName = branchVVOP[0].Substring(0, branchVVOP[0].IndexOf(' '));
+                    }
                     if (currBranchName.Equals("(HEAD"))
                     {
                         string[] splits = branchVVOP[0].Split(' ');
@@ -82,19 +83,36 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                             // get remote, remotebranch, ahead/behind
                             SetStatus(branch, vvBranch);
 
-                            // 
-                            if (branch.AutoPull)
+                            // If the branch is set to be autopulled, autopull it.
+                            if (autoPullInCycle && !repo.IsUntrackedRepo && repo.AutoTrack && branch.AutoPull)
                             {
-                                //
+                                // fast-forward only
                                 if (branch.AheadBy == 0 && branch.BehindBy > 0)
                                 {
+                                    string op = null;
                                     if (branch.Name == repo.CurrentBranch)
                                     {
                                         StashCommand(repo);
+                                        // git pull remoteName trackingBranchName:localBranchName
+                                        op = PullCommand(repo, branch, GitPull);
+                                    }
+                                    else
+                                    {
+                                        // git fetch remoteName trackingBranchName:localBranchName
+                                        op = PullCommand(repo, branch, GitFetch);
+                                    }
+                                    string newStatus = BranchVVCommand(repo).FirstOrDefault(x => x.StartsWith(branch.Name));
+                                    if (newStatus == null)
+                                    {
+                                        branch.IsActive = false;
+                                    }
+                                    else
+                                    {
+                                        SetStatus(branch, newStatus);
                                     }
 
-                                    PullCommand(repo, branch);
                                 }
+                                // local branch is ahead of remote.
                                 else if (branch.AheadBy > 0 && branch.BehindBy == 0)
                                 {
                                     //Notify that you are ahead. Please push your changes
@@ -107,6 +125,8 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                         }
                     }
                 }
+                Repository.RepoRepository repository = new Repository.RepoRepository();
+                repository.Update(repo);
             }
             catch (Exception ex)
             {
@@ -154,53 +174,57 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
             }
         }
 
-        private static void PullCommand(Repo repo, Branch branch)
+        private static string PullCommand(Repo repo, Branch branch, string command)
         {
             try
             {
-                ProcessUtility.ExecuteCommand(repo.WorkingDirectory, GitPull + $"{branch.Remote} {branch.TrackingBranch}:{branch.Name}");
+                return ProcessUtility.ExecuteCommand(repo.WorkingDirectory, command + $" {branch.Remote} {branch.TrackingBranch}:{branch.Name}");
             }
             catch (Exception ex)
             {
                 LogUtility.LogMessage(ex);
             }
+            return null;
         }
-
-
 
         private static void SetStatus(Branch branch, string branchvvline)
         {
-            branch.AheadBy = 0;
-            branch.BehindBy = 0;
-
-            int brNameLimit = 0;
-
-            while (branchvvline[brNameLimit] != ' ') brNameLimit++;
-            while (branchvvline[brNameLimit] == ' ') brNameLimit++;
-            int commitEnd = branchvvline.IndexOf(' ', brNameLimit);
-
-            int upStreamEnd = branchvvline.IndexOf(' ', commitEnd + 1);
-
-            if (branchvvline[upStreamEnd - 1] == ':')
+            try
             {
-                int space1 = branchvvline.IndexOf(' ', upStreamEnd + 1);
-                int space2 = branchvvline.IndexOf(' ', space1 + 1);
-                string key = branchvvline.Substring(upStreamEnd + 1, space1 - upStreamEnd - 1);
-                int value = Convert.ToInt32(branchvvline.Substring(space1 + 1, space2 - space1 - 2));
-                if (key.Equals("ahead"))
+                int brNameLimit = 0;
+                // branchvvline will be of the following format:
+                // features         7eca8f7 [origin/features] New File Added from another dir
+                // {brName}        {commit#}  {tracking info}     {commit msg}
+                while (branchvvline[brNameLimit] != ' ') brNameLimit++;
+                while (branchvvline[brNameLimit] == ' ') brNameLimit++;
+
+                // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+                //                 ^brNameLimit
+                int commitEnd = branchvvline.IndexOf(' ', brNameLimit);
+
+                // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+                //                         ^commitEnd 
+
+                int upStreamEnd = branchvvline.IndexOf(' ', commitEnd + 1);
+
+                // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+                //                         ^commitEnd        ^upStreamEnd     
+
+                branch.AheadBy = 0;
+                branch.BehindBy = 0;
+
+                if (branchvvline[upStreamEnd - 1] == ':')
                 {
-                    branch.AheadBy = value;
-                }
-                else if (key.Equals("behind"))
-                {
-                    branch.BehindBy = value;
-                }
-                if (branchvvline[space2 - 1] == ',')
-                {
-                    int space3 = branchvvline.IndexOf(' ', space2 + 1);
-                    int space4 = branchvvline.IndexOf(' ', space3 + 1);
-                    key = branchvvline.Substring(space2 + 1, space3 - space2 - 1);
-                    value = Convert.ToInt32(branchvvline.Substring(space3 + 1, space4 - space3 - 2));
+                    //                               upStreamEnd v        v space2
+                    // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+                    //                                                 ^space1
+                    int space1 = branchvvline.IndexOf(' ', upStreamEnd + 1);
+                    int space2 = branchvvline.IndexOf(' ', space1 + 1);
+                    string key = branchvvline.Substring(upStreamEnd + 1, space1 - upStreamEnd - 1);
+                    int value = Convert.ToInt32(branchvvline.Substring(space1 + 1, space2 - space1 - 2));
+                    //                                            (key)
+                    // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+                    //                                                  ^(value = 1)
                     if (key.Equals("ahead"))
                     {
                         branch.AheadBy = value;
@@ -209,36 +233,71 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                     {
                         branch.BehindBy = value;
                     }
-                }
-            }
+                    // Possibility1:                                      v space2
+                    // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
 
-            string remotebranch = branchvvline.Substring(commitEnd + 2, upStreamEnd - commitEnd - 3);
-            branch.Remote = remotebranch.Split('/')[0];
-            branch.TrackingBranch = remotebranch.Split('/')[1];
+                    // Possibility2:                                      v space2
+                    // features         7eca8f7 [origin/features: ahead 1] New File Added from another dir
+                    if (branchvvline[space2 - 1] == ',')
+                    {
+                        //                                             space2 v         v space4
+                        // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+                        //                                                     space3^
+                        int space3 = branchvvline.IndexOf(' ', space2 + 1);
+                        int space4 = branchvvline.IndexOf(' ', space3 + 1);
+                        key = branchvvline.Substring(space2 + 1, space3 - space2 - 1);
+                        value = Convert.ToInt32(branchvvline.Substring(space3 + 1, space4 - space3 - 2));
+                        if (key.Equals("ahead"))
+                        {
+                            branch.AheadBy = value;
+                        }
+                        else if (key.Equals("behind"))
+                        {
+                            branch.BehindBy = value;
+                        }
+                    }
+                }
+
+                string remotebranch = branchvvline.Substring(commitEnd + 2, upStreamEnd - commitEnd - 3);
+                branch.Remote = remotebranch.Split('/')[0];
+                branch.TrackingBranch = remotebranch.Split('/')[1];
+            }
+            catch { }
         }
 
         private static IEnumerable<string> GetUpstreamsFromConfig(string workingDir)
         {
             string configop = File.ReadAllText(workingDir + ".git/config");
-            RemoveSpaces(configop);
+            configop = RemoveSpaces(configop);
 
             List<string> result = new List<string>();
             foreach (var line in configop.Split(new[] { "[branch\"" }, StringSplitOptions.RemoveEmptyEntries))
             {
-                int remoteIndex = line.IndexOf("remote=");
-                result.Add(line.Substring(remoteIndex, line.LastIndexOf('\"', 0, remoteIndex)));
+                int branchNameLimiter = line.IndexOf('\"', 0);
+                // Case occurs when there are no branches in the config file
+                if (branchNameLimiter == -1)
+                {
+                    branchNameLimiter = 0;
+                }
+                // checking if branch has a remote
+                int remoteIndex = line.IndexOf("remote=", branchNameLimiter);
+                if (remoteIndex != -1)
+                {
+                    result.Add(line.Substring(0, branchNameLimiter));
+                }
             }
 
             return result;
         }
 
-        private static void RemoveSpaces(string catop)
+        private static string RemoveSpaces(string catop)
         {
             int spaceIndex;
             while ((spaceIndex = catop.IndexOf(' ')) != -1)
             {
-                catop.Remove(spaceIndex, 1);
+                catop = catop.Remove(spaceIndex, 1);
             }
+            return catop;
         }
 
         private static void SetNewBranches(Repo repo, string[] branchVVOP)
@@ -252,7 +311,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
                 string branchName = opline.Split(' ')[0];
 
-                if (repo.Branches.Any(m => m.Name.Equals(branchName)))
+                if (!repo.Branches.Any(m => m.Name.Equals(branchName)))
                 {
                     repo.Branches.Add(new Branch
                     {
@@ -260,7 +319,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                         EnableDeskTopNotifications = false,
                         AutoPull = false,
                         IsActive = true,
-                        HasUpstream = false
+                        HasUpstream = true
                     });
                 }
             }
@@ -268,40 +327,22 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
         private static string[] FormatBrancVVOutPut(string[] list)
         {
-            for (int i = 0; i < list.Length; i++)
-            {
-                string currBranchName = string.Empty;
-                if (list[i][0] == '*')
-                {
-                    currBranchName = list[i].Substring(2, list[i].IndexOf(' ', 2));
-                    if (currBranchName.Equals("(HEAD"))
-                    {
-                        string[] splits = list[i].Split(' ');
-                        if (splits[2].Equals("detached"))
-                        {
-                            currBranchName += $" {splits[1]} {splits[2]} {splits[3]}";
-                            currBranchName = currBranchName.Substring(0, currBranchName.Length - 1);
-                        }
-                    }
-                }
-                list[i] = list[i].Substring(2);
-            }
-
+            list = list.TakeWhile(x => x != string.Empty).OrderByDescending(x => x[0]).Select(x => x.Substring(2)).ToArray();
             return list;
         }
 
-        private static bool ChangesAreRecent(string directory)
+        private static bool ChangesAreRecent(string directory, TimeSpan ignoreTime)
         {
-            if (Directory.GetLastAccessTime(directory) > DateTime.Now - TimeSpan
-                                 .FromMinutes(Convert.ToInt16(ConfigurationManager.AppSettings["LastModifiedRunInterval"].ToString())))
+            if (Directory.GetLastWriteTimeUtc(directory) > DateTime.UtcNow - ignoreTime)
             {
                 return true;
             }
 
-            string[] innerDirectories = Directory.GetDirectories(directory);
-            foreach (var innerDirectory in innerDirectories)
+            IEnumerable<string> nonGitFiles = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+                .Where(x => !x.StartsWith(directory + ".git\\")).ToList();
+            foreach (var file in nonGitFiles)
             {
-                if (ChangesAreRecent(innerDirectory))
+                if (File.GetLastWriteTimeUtc(file) > DateTime.UtcNow - ignoreTime)
                 {
                     return true;
                 }
