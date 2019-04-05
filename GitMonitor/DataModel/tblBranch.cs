@@ -12,38 +12,36 @@
 namespace GitMonitor.DataModel
 {
 
-using System;
+    using System;
     using System.Collections.Generic;
-    
-public partial class tblBranch
-{
 
-    public long tblBranchID { get; set; }
+    public partial class tblBranch
+    {
+        public long tblBranchID { get; set; }
 
-    public string Name { get; set; }
+        public string Name { get; set; }
 
-    public long tblRepoID { get; set; }
+        public long tblRepoID { get; set; }
 
-    public bool EnableDeskTopNotifications { get; set; }
+        public bool EnableDeskTopNotifications { get; set; }
 
-    public bool AutoPull { get; set; }
+        public bool AutoPull { get; set; }
 
-    public bool IsActive { get; set; }
+        public bool IsActive { get; set; }
 
-    public bool HasUpstream { get; set; }
+        public bool HasUpstream { get; set; }
 
-    public string Remote { get; set; }
+        public string Remote { get; set; }
 
-    public string TrackingBranch { get; set; }
+        public string TrackingBranch { get; set; }
 
-    public long AheadBy { get; set; }
+        public long AheadBy { get; set; }
 
-    public long BehindBy { get; set; }
-
+        public long BehindBy { get; set; }
 
 
-    public virtual tblRepo tblRepo { get; set; }
+        public virtual tblRepo tblRepo { get; set; }
 
-}
+    }
 
 }

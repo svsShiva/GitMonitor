@@ -20,16 +20,17 @@ using System.Data.Entity.Infrastructure;
 
 public partial class GitMonitorEntities : DbContext
 {
-    public GitMonitorEntities()
-        : base("name=GitMonitorEntities")
-    {
+        public GitMonitorEntities()
+                : base(ConnectionBuilder.GetSqlConnection(), true)
+        {
+            this.Configuration.LazyLoadingEnabled = false;
+            this.Configuration.ProxyCreationEnabled = false;
+        }
 
-    }
-
-    protected override void OnModelCreating(DbModelBuilder modelBuilder)
-    {
-        throw new UnintentionalCodeFirstException();
-    }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
 
 
     public virtual DbSet<tblBranch> tblBranches { get; set; }
