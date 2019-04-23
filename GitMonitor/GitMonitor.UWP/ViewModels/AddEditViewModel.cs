@@ -1,11 +1,11 @@
-using GitMonitor.UWP.DTO;
+﻿using GitMonitor.UWP.DTO;
 using System.Collections.Generic;
 
 namespace GitMonitor.UWP.ViewModels
 {
-    public class EditFormViewModel
+    public class AddEditViewModel
     {
-        public EditFormViewModel()
+        public AddEditViewModel()
         {
             Branches = new HashSet<Branch>();
             BranchesToNotify = new HashSet<Branch>();

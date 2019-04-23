@@ -1,6 +1,6 @@
 namespace GitMonitor.UWP.DTO
 {
-    public partial class Branch
+    public class Branch
     {
         public long BranchID { get; set; }
         public string Name { get; set; }

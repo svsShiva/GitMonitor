@@ -5,20 +5,19 @@
     xmlns:local="using:GitMonitor.UWP.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d" >
 
     <NavigationView x:Name="nvMainView" PaneDisplayMode="Top"
-    ItemInvoked="nvMainView_ItemInvoked"
+    ItemInvoked="nvMainView_ItemInvoked" IsBackButtonVisible="Collapsed"
     Loaded="nvMainView_Loaded">
 
         <NavigationView.MenuItems>
-            <NavigationViewItem Icon="AllApps" Content="Dashboard" Tag="Dashboard" />
-            <NavigationViewItem Icon="AllApps" Content="UntrackedRepos" Tag="UntrackedRepos"/>
+            <NavigationViewItem Icon="ProtectedDocument" Content="Dashboard" Tag="Dashboard" />
+            <NavigationViewItem Icon="Document" Content="UntrackedRepos" Tag="UntrackedRepos"/>
             <NavigationViewItem Icon="AddFriend" Content="EmailGroups" Tag="EmailGroups"/>
         </NavigationView.MenuItems>
 
-        <Frame x:Name="cfMainFrame">
+        <Frame x:Name="cfMainFrame" >
         </Frame>
     </NavigationView>
 </Page>

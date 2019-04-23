@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-       Loading="Page_Loading">
+    Loading="Page_Loading">
 
     <Page.Resources>
         <DataTemplate x:Key="refreshIconTemplate">
@@ -39,11 +38,11 @@
                                              Binding="{Binding WorkingDirectory}"/>
             <controls:DataGridTextColumn Header="Branches" IsReadOnly="True"
                                              Binding="{Binding BranchNames}"/>
-            <controls:DataGridTemplateColumn  CellTemplate="{StaticResource refreshIconTemplate}"/>
+            <controls:DataGridTemplateColumn Header="Refresh"  CellTemplate="{StaticResource refreshIconTemplate}"/>
 
-            <controls:DataGridTemplateColumn  CellTemplate="{StaticResource editIconTemplate}"/>
+            <controls:DataGridTemplateColumn Header="Edit"  CellTemplate="{StaticResource editIconTemplate}"/>
 
-            <controls:DataGridTemplateColumn  CellTemplate="{StaticResource deleteIconTemplate}"/>
+            <controls:DataGridTemplateColumn Header="Delete" CellTemplate="{StaticResource deleteIconTemplate}"/>
         </controls:DataGrid.Columns>
     </controls:DataGrid>
 </Page>

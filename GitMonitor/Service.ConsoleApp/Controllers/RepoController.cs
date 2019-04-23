@@ -6,7 +6,6 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using GitMonitor.DomainModel.DTO;
 using GitMonitor.Service.ConsoleApp.Utilities;
-using GitMonitor.DomainModel.ViewModels;
 
 namespace GitMonitor.Service.ConsoleApp.Controllers
 {
@@ -35,7 +34,7 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _repo.GetAllTrackedReposViewModel());
+                return Request.CreateResponse(HttpStatusCode.OK, _repo.GetAllTrackedRepos());
             }
             catch (Exception ex)
             {
@@ -47,7 +46,7 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _repo.GetAllUnTrackedReposViewModel());
+                return Request.CreateResponse(HttpStatusCode.OK, _repo.GetAllUnTrackedRepos());
             }
             catch (Exception ex)
             {
@@ -59,7 +58,7 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _repo.GetUIRepoByID(id));
+                return Request.CreateResponse(HttpStatusCode.OK, _repo.GetRepoByID(id));
             }
             catch (Exception ex)
             {
@@ -68,11 +67,12 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
         }
 
         [HttpPut]
-        public HttpResponseMessage PutEditFormViewModel(EditFormViewModel repo)
+        public HttpResponseMessage PutEditFormViewModel(Repo repo)
         {
             try
             {
-                _repo.UpdateFromUI(repo);
+                //TODO check the method and implement
+               // _repo.UpdateFromUI(repo);
 
                 Task.Run(() =>
                 {
@@ -106,13 +106,14 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
         {
             try
             {
+                var repo = _repo.GetRepoByID(id);
+
                 Task.Run(() =>
                 {
-                    var repo = _repo.GetRepoByID(id);
                     GitUtility.RunTasks(repo, true);
                 });
                
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK, repo);
             }
             catch (Exception ex)
             {

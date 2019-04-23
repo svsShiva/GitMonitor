@@ -45,8 +45,6 @@
     <Compile Include="DTO\Branch.cs" />
     <Compile Include="DTO\Repo.cs" />
     <Compile Include="StringUtility.cs" />
-    <Compile Include="ViewModels\EditFormViewModel.cs" />
-    <Compile Include="ViewModels\RepoViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

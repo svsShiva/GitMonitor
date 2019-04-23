@@ -1,4 +1,5 @@
-﻿using GitMonitor.UWP.ViewModels;
+﻿using GitMonitor.UWP.Pages.Dialogs;
+using GitMonitor.UWP.ViewModels;
 using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
@@ -77,9 +78,11 @@ namespace GitMonitor.UWP.Pages
 
         }
 
-        private void abbtnEdit_Click(object sender, RoutedEventArgs e)
+        private async void abbtnEdit_Click(object sender, RoutedEventArgs e)
         {
-
+            //TODO add reponame
+            AddEditRepoDialog addEditRepoDialog = new AddEditRepoDialog("Edit");
+            await addEditRepoDialog.ShowAsync();
         }
 
         private void abbtnDelete_Click(object sender, RoutedEventArgs e)
