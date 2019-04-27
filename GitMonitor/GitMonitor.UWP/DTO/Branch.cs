@@ -2,10 +2,16 @@ namespace GitMonitor.UWP.DTO
 {
     public class Branch
     {
+        public Branch()
+        {
+            Repo = new Repo();
+        }
+
         public long BranchID { get; set; }
         public string Name { get; set; }
         public long RepoID { get; set; }
-        public bool EnableDeskTopNotifications { get; set; }
+        public bool EnableDesktopNotifications { get; set; }
+        public bool EnableEmailNotifications { get; set; }
         public bool AutoPull { get; set; }
         public bool IsActive { get; set; }
         public bool HasUpstream { get; set; }

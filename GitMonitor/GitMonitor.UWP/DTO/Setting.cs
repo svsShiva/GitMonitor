@@ -8,3 +8,4 @@ namespace GitMonitor.UWP.DTO
         public bool IsActive { get; set; }
     }
 }
+

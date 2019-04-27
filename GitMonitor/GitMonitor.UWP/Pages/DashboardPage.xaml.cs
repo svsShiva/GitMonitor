@@ -1,4 +1,6 @@
-﻿using GitMonitor.UWP.Pages.Dialogs;
+﻿using GitMonitor.UWP.DTO;
+using GitMonitor.UWP.Pages.Dialogs;
+using GitMonitor.UWP.Utilities;
 using GitMonitor.UWP.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,60 +19,27 @@ namespace GitMonitor.UWP.Pages
         public DashboardPage()
         {
             this.InitializeComponent();
-
-            RepoViewModels = new List<RepoViewModel> {
-                new RepoViewModel
-                {
-                    Name = "repo1",
-                    CreatedAt = DateTime.Now,
-                    WorkingDirectory = "C:\\Users\\Shiva\\Repos",
-                    BranchNames = "Master (ahead - 0, behind - 1)"
-                },
-                new RepoViewModel
-                {
-                    Name = "repo2",
-                    CreatedAt = DateTime.Now,
-                    WorkingDirectory = "C:\\Users\\Shiva\\Repos",
-                    BranchNames = "Master (ahead - 2, behind - 1)"
-                },
-                new RepoViewModel
-                {
-                    Name = "repo3",
-                    CreatedAt = DateTime.Now,
-                    WorkingDirectory = "C:\\Users\\Shiva\\Repos",
-                    BranchNames = "Master (ahead - 3, behind - 1)"
-                },
-            };
         }
 
         public List<RepoViewModel> RepoViewModels { get; set; }
 
-        private void Page_Loading(FrameworkElement sender, object args)
-        {
-            RepoViewModels = new List<RepoViewModel> {
-                new RepoViewModel
-                {
-                    Name = "repo1",
-                    CreatedAt = DateTime.Now,
-                    WorkingDirectory = "C:\\Users\\Shiva\\Repos",
-                    BranchNames = "Master (ahead - 0, behind - 1)"
-                },
-                new RepoViewModel
-                {
-                    Name = "repo2",
-                    CreatedAt = DateTime.Now,
-                    WorkingDirectory = "C:\\Users\\Shiva\\Repos",
-                    BranchNames = "Master (ahead - 2, behind - 1)"
-                },
-                new RepoViewModel
-                {
-                    Name = "repo3",
-                    CreatedAt = DateTime.Now,
-                    WorkingDirectory = "C:\\Users\\Shiva\\Repos",
-                    BranchNames = "Master (ahead - 3, behind - 1)"
-                },
+        public List<Repo> Repos { get; set; }
 
-            };
+        private async void Page_Loading(FrameworkElement sender, object args)
+        {
+            try
+            {
+                APIUtility APIUtility = new APIUtility();
+
+                Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getGetAllTrackedRepos);
+
+                //RepoViewModels = ModelConversionUtility.RepoListToViewModelList(Repos);
+                dgDashboard.ItemsSource = Repos;
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
         }
 
         private void abbtnRefresh_Click(object sender, RoutedEventArgs e)
@@ -80,12 +49,21 @@ namespace GitMonitor.UWP.Pages
 
         private async void abbtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            //TODO add reponame
-            AddEditRepoDialog addEditRepoDialog = new AddEditRepoDialog("Edit");
-            await addEditRepoDialog.ShowAsync();
+            //TODO check for more optimised logic
+            AppBarButton item = (AppBarButton)sender;
+
+            Repo repo = (Repo)item.DataContext;
+
+            AddEditRepoDialog addEditRepoDialog = new AddEditRepoDialog("Edit - " + repo.Name, repo);
+            addEditRepoDialog.ShowAsync();
         }
 
         private void abbtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
 
         }

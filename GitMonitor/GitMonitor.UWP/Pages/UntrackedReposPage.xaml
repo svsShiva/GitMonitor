@@ -2,12 +2,33 @@
     x:Class="GitMonitor.UWP.Pages.UntrackedReposPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:GitMonitor.UWP.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d" Loading="Page_Loading">
 
-    <Grid>
+    <Page.Resources>
+        <DataTemplate x:Key="addIconTemplate">
+            <StackPanel>
+                <AppBarButton x:Uid="abbtnTrackRepo" Icon="Add" Click="abbtnTrackRepo_Click"/>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
 
-    </Grid>
+    <controls:DataGrid x:Name="dgUnTrackedRepos" AutoGenerateColumns="False">
+        <controls:DataGrid.Columns>
+
+            <controls:DataGridTextColumn Header="Name" IsReadOnly="True"
+                                             Binding="{Binding Name}"/>
+            <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
+                                             Binding="{Binding CreatedAt}"/>
+            <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
+                                             Binding="{Binding WorkingDirectory}"/>
+            <controls:DataGridTextColumn Header="Branches" IsReadOnly="True"
+                                             Binding="{Binding BranchNames}"/>
+            <controls:DataGridTemplateColumn Header="Track"  
+                                             CellTemplate="{StaticResource addIconTemplate}"/>
+
+        </controls:DataGrid.Columns>
+    </controls:DataGrid>
 </Page>

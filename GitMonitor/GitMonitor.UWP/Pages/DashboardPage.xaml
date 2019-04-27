@@ -2,7 +2,6 @@
     x:Class="GitMonitor.UWP.Pages.DashboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:GitMonitor.UWP.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
@@ -28,7 +27,7 @@
     </Page.Resources>
 
     <controls:DataGrid x:Name="dgDashboard" AutoGenerateColumns="False"
-                       ItemsSource="{x:Bind RepoViewModels}">
+                       ItemsSource="{x:Bind Repos}">
         <controls:DataGrid.Columns>
             <controls:DataGridTextColumn Header="Name" IsReadOnly="True"
                                              Binding="{Binding Name}"/>
@@ -38,6 +37,7 @@
                                              Binding="{Binding WorkingDirectory}"/>
             <controls:DataGridTextColumn Header="Branches" IsReadOnly="True"
                                              Binding="{Binding BranchNames}"/>
+
             <controls:DataGridTemplateColumn Header="Refresh"  CellTemplate="{StaticResource refreshIconTemplate}"/>
 
             <controls:DataGridTemplateColumn Header="Edit"  CellTemplate="{StaticResource editIconTemplate}"/>

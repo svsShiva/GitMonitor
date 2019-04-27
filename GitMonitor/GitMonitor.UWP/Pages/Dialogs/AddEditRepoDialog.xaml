@@ -12,18 +12,19 @@
 
     <StackPanel>
         <TextBlock Text="Name" />
-        <TextBox Text="{x:Bind AddEditViewModel.RepoName}"/>
+        <TextBox Text="{x:Bind Repo.Name}"/>
         <TextBlock Text="URL"/>
-        <TextBlock Text="http://github/..." />
+        <TextBlock Text="{x:Bind Repo.RepoUrl}"/>
         <TextBlock Text="Directory"/>
-        <TextBlock Text="c:\\users\\shiva\\..." />
+        <TextBlock Text="{x:Bind Repo.WorkingDirectory}" />
 
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="Branches To Autopull"  />
-            <HyperlinkButton Content="Refresh" x:Name="hlRefresh" Click="hlRefresh_Click"></HyperlinkButton>
+            <HyperlinkButton Content="Refresh" x:Name="hlRefresh" 
+                             Click="hlRefresh_Click"></HyperlinkButton>
         </StackPanel>
 
-        <ListView ItemsSource="{x:Bind AddEditViewModel.Branches}">
+        <ListView ItemsSource="{x:Bind Repo.Branches}">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="branch:Branch" >
                     <StackPanel Orientation="Vertical">
@@ -32,90 +33,25 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <CheckBox x:Name="cbEnableDesktopNoti" 
+                  Content="Enable Desktop Notifications" 
+                  IsChecked="{x:Bind Repo.EnableDesktopNotification}"></CheckBox>
 
         <CheckBox x:Name="cbEnableEmailNoti" 
                   Content="Enable Email Notifications" 
-                  IsChecked="{x:Bind AddEditViewModel.EnableDesktopNotification}"></CheckBox>
-                  
-         <ListView ItemsSource="{x:Bind AddEditViewModel.Branches}">
+                  IsChecked="{x:Bind Repo.EnableEmailNotification}"></CheckBox>
+
+        <ListView ItemsSource="{x:Bind Repo.Branches}">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="branch:Branch" >
                     <StackPanel Orientation="Vertical">
-                        <CheckBox Content="{x:Bind Name}" IsChecked="{x:Bind AutoPull}" />
+                        <CheckBox Content="{x:Bind Name}" 
+                                  IsChecked="{x:Bind EnableEmailNotifications}" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
-         </ListView>
+        </ListView>
 
     </StackPanel>
 </ContentDialog>
-
-
-<!--<ContentDialog
-    x:Class="DataGridApp.Pages.EditForm"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Title="Edit"
-    PrimaryButtonText="Cancel"
-    SecondaryButtonText="Save"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
-    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="1280" Height="800">
-
-    <Grid>
-        <ListView Name="MyListView" Width="400" Height="auto" Style="{ThemeResource gitMonitorPageStyle}" >
-            <ListView.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical" Margin="0,0,20,0">
-                        <TextBlock Text="Repository Name" Margin="0,10,0,0"/>
-                        <TextBox Text="Repo1" Margin="0,10,0,0" />
-                        <TextBlock Text="Repo URL" Margin="0,20,0,0"/>
-                        <TextBox Text="http://github/..."  Margin="0,10,0,0" IsReadOnly="True" />
-                        <TextBlock Text="Working Directory" Margin="0,20,0,0"/>
-                        <TextBox Text="c:\\users\\shiva\\..." Margin="0,10,0,0" IsReadOnly="True"/>
-                        <TextBlock Text="Branches To Autopull" Margin="0,25,0,0" />
-                        <AppBarButton HorizontalAlignment="Left" Icon="Refresh" VerticalAlignment="Top" Height="40" Width="66" Margin="0,10,0,0"/>
-                        <ListView>
-                            <ListView.HeaderTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Vertical" Margin="0,0,20,0" >
-                                        <CheckBox Content="CheckBox" IsChecked="True"/>
-                                        <CheckBox Content="CheckBox"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.HeaderTemplate>
-                        </ListView>
-                        <TextBlock Text="Branches To Notify" Margin="0,25,0,0"/>
-                        <ListView>
-                            <ListView.HeaderTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Vertical" Margin="0,0,20,0">
-                                        <CheckBox Content="CheckBox" IsChecked="True"/>
-                                        <CheckBox Content="CheckBox"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.HeaderTemplate>
-                        </ListView>
-                        <CheckBox Content="Enable Desktop Notification" IsChecked="True" Margin="0,15,0,0"/>
-                        <CheckBox Content="Enable Email Notification" Margin="0,20,0,0" />
-                        <TextBlock Text="Choose Email Groups" Margin="0,0,0,0"/>
-                        <ListView>
-                            <ListView.HeaderTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Vertical" Margin="0,0,20,10">
-                                        <CheckBox Content="CheckBox" IsChecked="True"/>
-                                        <CheckBox Content="CheckBox"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.HeaderTemplate>
-                        </ListView>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.HeaderTemplate>
-        </ListView>
-    </Grid>
-</ContentDialog>-->
-

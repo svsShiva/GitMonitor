@@ -16,6 +16,7 @@ namespace GitMonitor.UWP.DTO
         public string WorkingDirectory { get; set; }
         public bool AutoTrack { get; set; }
         public bool EnableDesktopNotification { get; set; }
+        public bool EnableEmailNotification { get; set; }
         public string NotificationEmail { get; set; }
         public string CurrentBranch { get; set; }
         public bool IsUntrackedRepo { get; set; }

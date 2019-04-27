@@ -10,9 +10,16 @@ namespace GitMonitor.UWP.Pages.Dialogs
 {
     public sealed partial class AddEditRepoDialog : ContentDialog
     {
-        public AddEditRepoDialog(string title)
+        public Repo Repo = null;
+
+        public AddEditRepoDialog(string title, Repo repo = null)
         {
             this.Title = title;
+
+            if (repo != null)
+            {
+                Repo = repo;
+            }
 
             this.InitializeComponent();
         }
@@ -31,8 +38,8 @@ namespace GitMonitor.UWP.Pages.Dialogs
             EnableDesktopNotification = true,
             BranchesToNotify = new List<Branch>
                    {
-                        new Branch{ Name="one",  EnableDeskTopNotifications = true},
-                        new Branch{ Name="three", EnableDeskTopNotifications = false}
+                        new Branch{ Name="one",  EnableDesktopNotifications = true},
+                        new Branch{ Name="three", EnableDesktopNotifications = false}
                    },
         };
 
