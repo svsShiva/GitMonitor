@@ -11,38 +11,63 @@
     <Page.Resources>
         <DataTemplate x:Key="refreshIconTemplate">
             <StackPanel>
-                <AppBarButton x:Uid="abbtnRefresh" Icon="Refresh" Click="abbtnDelete_Click"/>
+                <AppBarButton x:Uid="abbtnRefresh" Icon="Refresh" Click="abbtnRefresh_Click" 
+                              Style="{ThemeResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="editIconTemplate">
             <StackPanel>
-                <AppBarButton x:Uid="abbtnEdit" Icon="Edit" Click="abbtnEdit_Click"/>
+                <AppBarButton x:Uid="abbtnEdit" Icon="Edit" Click="abbtnEdit_Click" 
+                              Style="{ThemeResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="deleteIconTemplate">
             <StackPanel>
-                <AppBarButton x:Uid="abbtnDelete" Icon="Delete" Click="abbtnDelete_Click"/>
+                <AppBarButton x:Uid="abbtnDelete" Icon="UnPin" Click="abbtnDelete_Click" 
+                              Style="{ThemeResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
 
     <controls:DataGrid x:Name="dgDashboard" AutoGenerateColumns="False"
-                       ItemsSource="{x:Bind Repos}">
+                       ItemsSource="{x:Bind Repos}"
+                       AlternatingRowBackground="AliceBlue">
         <controls:DataGrid.Columns>
             <controls:DataGridTextColumn Header="Name" IsReadOnly="True"
                                              Binding="{Binding Name}"/>
+            
             <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
                                              Binding="{Binding CreatedAt}"/>
+            
             <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
                                              Binding="{Binding WorkingDirectory}"/>
-            <controls:DataGridTextColumn Header="Branches" IsReadOnly="True"
-                                             Binding="{Binding BranchNames}"/>
+            
+            <controls:DataGridTemplateColumn Header="Branches" IsReadOnly="True">
+                <controls:DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding CurrentBranch}"  
+                                HorizontalAlignment="Stretch">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <ListView ItemsSource="{Binding Branches}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </DataTemplate>
+                </controls:DataGridTemplateColumn.CellTemplate>
+            </controls:DataGridTemplateColumn>
 
             <controls:DataGridTemplateColumn Header="Refresh"  CellTemplate="{StaticResource refreshIconTemplate}"/>
 
             <controls:DataGridTemplateColumn Header="Edit"  CellTemplate="{StaticResource editIconTemplate}"/>
 
-            <controls:DataGridTemplateColumn Header="Delete" CellTemplate="{StaticResource deleteIconTemplate}"/>
+            <controls:DataGridTemplateColumn Header="UnTrack" CellTemplate="{StaticResource deleteIconTemplate}"/>
         </controls:DataGrid.Columns>
     </controls:DataGrid>
 </Page>

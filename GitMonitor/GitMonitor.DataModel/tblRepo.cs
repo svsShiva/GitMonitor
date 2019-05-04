@@ -14,7 +14,7 @@ namespace GitMonitor.DataModel
         public bool AutoTrack { get; set; }
         public bool EnableDesktopNotification { get; set; }
         public bool EnableEmailNotification { get; set; }
-        public string NotificationEmail { get; set; }
+        public string EmailGroupIDS { get; set; }
         public string CurrentBranch { get; set; }
         public bool IsUntrackedRepo { get; set; }
         public DateTime CreatedAt { get; set; }

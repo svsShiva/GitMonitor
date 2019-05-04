@@ -2,56 +2,82 @@
     x:Class="GitMonitor.UWP.Pages.Dialogs.AddEditRepoDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:branch="using:GitMonitor.UWP.DTO"
+    xmlns:DTO="using:GitMonitor.UWP.DTO"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     PrimaryButtonText="Save"
     SecondaryButtonText="Cancel"
-    PrimaryButtonClick="ContentDialog_SaveClick">
+    PrimaryButtonClick="ContentDialog_SaveClick"
+    x:Name="cdAddEditRepo"
+    Loading="CdAddEditRepo_Loading">
 
     <StackPanel>
         <TextBlock Text="Name" />
-        <TextBox Text="{x:Bind Repo.Name}"/>
+        <TextBox Text="{Binding Name, Mode=TwoWay}"/>
         <TextBlock Text="URL"/>
-        <TextBlock Text="{x:Bind Repo.RepoUrl}"/>
+        <TextBlock Text="{Binding RepoUrl}"/>
         <TextBlock Text="Directory"/>
-        <TextBlock Text="{x:Bind Repo.WorkingDirectory}" />
+        <TextBlock Text="{Binding WorkingDirectory}" />
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Branches To Autopull"  />
+            <TextBlock Text="Branches To Autopull"/>
             <HyperlinkButton Content="Refresh" x:Name="hlRefresh" 
                              Click="hlRefresh_Click"></HyperlinkButton>
         </StackPanel>
 
-        <ListView ItemsSource="{x:Bind Repo.Branches}">
+        <ListView ItemsSource="{Binding Branches}">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="branch:Branch" >
-                    <StackPanel Orientation="Vertical">
-                        <CheckBox Content="{x:Bind Name}" IsChecked="{x:Bind AutoPull}" />
-                    </StackPanel>
+                <DataTemplate x:DataType="DTO:Branch" >
+                    <CheckBox Content="{x:Bind Name}"
+                                  IsChecked="{x:Bind AutoPull, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
         <CheckBox x:Name="cbEnableDesktopNoti" 
                   Content="Enable Desktop Notifications" 
-                  IsChecked="{x:Bind Repo.EnableDesktopNotification}"></CheckBox>
+                  IsChecked="{Binding EnableDesktopNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <CheckBox x:Name="cbEnableEmailNoti" 
-                  Content="Enable Email Notifications" 
-                  IsChecked="{x:Bind Repo.EnableEmailNotification}"></CheckBox>
-
-        <ListView ItemsSource="{x:Bind Repo.Branches}">
+        <ListView ItemsSource="{Binding Branches}" IsEnabled="{Binding IsChecked,ElementName=cbEnableDesktopNoti}">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="branch:Branch" >
-                    <StackPanel Orientation="Vertical">
+                <DataTemplate x:DataType="DTO:Branch" >
                         <CheckBox Content="{x:Bind Name}" 
-                                  IsChecked="{x:Bind EnableEmailNotifications}" />
-                    </StackPanel>
+                                  IsChecked="{x:Bind EnableDesktopNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
+        <CheckBox x:Name="cbEnableEmailNoti" 
+                  Content="Enable Email Notifications" 
+                  IsChecked="{Binding EnableEmailNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <StackPanel Orientation="Horizontal">
+            <StackPanel>
+                <TextBlock Text="Branches"/>
+                <ListView ItemsSource="{Binding Branches}" IsEnabled="{Binding IsChecked,ElementName=cbEnableEmailNoti}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="DTO:Branch" >
+                                <CheckBox Content="{x:Bind Name}" 
+                                          IsChecked="{x:Bind EnableEmailNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+            
+            <StackPanel>
+                <TextBlock Text="Email Groups"/>
+                <ListView ItemsSource="{Binding EmailGroups, Mode=TwoWay}" IsEnabled="{Binding IsChecked,ElementName=cbEnableEmailNoti}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="DTO:EmailGroup" >
+                                <CheckBox Content="{x:Bind Name}" 
+                                          IsChecked="{x:Bind IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <AppBarButton x:Name="abbtnAddEmailGroup" Icon="Add" Style="{ThemeResource abbtnStyle}" 
+                Click="AbbtnAddEmailGroup_Click"/>
+            </StackPanel>
+        </StackPanel>
     </StackPanel>
 </ContentDialog>

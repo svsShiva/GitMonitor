@@ -29,7 +29,7 @@ namespace GitMonitor.UWP.Utilities
             return client;
         }
 
-        public async Task<T> Get<T>(string route)
+        internal async Task<T> Get<T>(string route)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace GitMonitor.UWP.Utilities
             }
         }
 
-        public async Task<U> Post<T, U>(T data, string route)
+        internal async Task<U> Post<T, U>(T data, string route)
         {
             try
             {
@@ -80,6 +80,32 @@ namespace GitMonitor.UWP.Utilities
                     {
                         var res = await response.Content.ReadAsStringAsync();
                         return JsonConvert.DeserializeObject<U>(res);
+                    }
+
+                    // Returning error message
+                    var message = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
+                    throw new Exception(message["Message"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        internal async void Delete(string route)
+        {
+            try
+            {
+                HttpClient client = CreateHttpClient(route);
+
+                using (client)
+                {
+                    HttpResponseMessage response = await client.DeleteAsync(route);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return;
                     }
 
                     // Returning error message
