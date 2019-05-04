@@ -210,51 +210,53 @@ namespace GitMonitor.Repository
 
         public void Update(DM.Repo repo)
         {
-            //TODO
-            //using (SQLiteConnection db = InitializeDB.Initialize())
-            //{
-            //    tblRepo tblRepoObj = db.Table<tblRepo>().Include("tblBranches")
-            //                           .FirstOrDefault(m => m.WorkingDirectory == repo.WorkingDirectory);
+            using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
+            {
+                tblRepo tblRepoObj = db.Table<tblRepo>()
+                                       .FirstOrDefault(m => m.WorkingDirectory == repo.WorkingDirectory);
 
-            //    if (tblRepoObj == null)
-            //    {
-            //        return;
-            //    }
+                if (tblRepoObj == null)
+                {
+                    //TODO throw exception
+                    return;
+                }
 
-            //    tblRepoObj.RecentCheck = DateTime.Now;
-            //    tblRepoObj.NotificationEmail = repo.NotificationEmail;
-            //    tblRepoObj.RecentCheck = DateTime.Now;
-            //    tblRepoObj.CurrentBranch = repo.CurrentBranch;
-            //    tblRepoObj.EnableDesktopNotification = repo.EnableDesktopNotification;
-            //    tblRepoObj.AutoTrack = repo.AutoTrack;
-            //    tblRepoObj.ModifiedAt = repo.ModifiedAt;
-            //    tblRepoObj.RepoUrl = repo.RepoUrl;
+                tblRepoObj.Name = repo.Name;
+                tblRepoObj.NotificationEmail = repo.NotificationEmail;
+                tblRepoObj.CurrentBranch = repo.CurrentBranch;
+                tblRepoObj.EnableDesktopNotification = repo.EnableDesktopNotification;
+                tblRepoObj.AutoTrack = repo.AutoTrack;
+                tblRepoObj.ModifiedAt = DateTime.Now;
+                tblRepoObj.RepoUrl = repo.RepoUrl;
+                tblRepoObj.EnableEmailNotification = repo.EnableEmailNotification;
+                tblRepoObj.IsUntrackedRepo = false;
 
-            //    foreach (var branch in repo.Branches)
-            //    {
-            //        var tblBranchObj = tblRepoObj.tblBranches
-            //                           .FirstOrDefault(m => m.tblBranchID == branch.BranchID);
+                foreach (var branch in repo.Branches)
+                {
+                    tblBranch tblBranchObj = db.Table<tblBranch>()
+                                       .FirstOrDefault(m => m.tblBranchID == branch.BranchID);
 
-            //        if (tblBranchObj == null)
-            //        {
-            //            tblBranchObj = new tblBranch();
-            //            //tblBranchObj.tblRepo = tblRepoObj; // Why is this line necessary?
-            //            tblRepoObj.tblBranches.Add(tblBranchObj);
-            //        }
+                    if (tblBranchObj == null)
+                    {
+                        tblBranchObj = new tblBranch();
+                    }
 
-            //        tblBranchObj.AutoPull = branch.AutoPull;
-            //        tblBranchObj.EnableDeskTopNotifications = branch.EnableDeskTopNotifications;
-            //        tblBranchObj.IsActive = branch.IsActive;
-            //        tblBranchObj.Name = branch.Name;
-            //        tblBranchObj.HasUpstream = branch.HasUpstream;
-            //        tblBranchObj.Remote = branch.Remote;
-            //        tblBranchObj.TrackingBranch = branch.TrackingBranch;
-            //        tblBranchObj.AheadBy = branch.AheadBy;
-            //        tblBranchObj.BehindBy = branch.BehindBy;
-            //    }
+                    tblBranchObj.AutoPull = branch.AutoPull;
+                    tblBranchObj.EnableDesktopNotifications = branch.EnableDesktopNotifications;
+                    tblBranchObj.IsActive = branch.IsActive;
+                    tblBranchObj.Name = branch.Name;
+                    tblBranchObj.HasUpstream = branch.HasUpstream;
+                    tblBranchObj.Remote = branch.Remote;
+                    tblBranchObj.TrackingBranch = branch.TrackingBranch;
+                    tblBranchObj.AheadBy = branch.AheadBy;
+                    tblBranchObj.BehindBy = branch.BehindBy;
+                    tblBranchObj.EnableEmailNotifications = repo.EnableEmailNotification;
 
-            // db.SaveChanges();
-            //}
+                    db.Update(tblBranchObj);
+                }
+
+                db.Update(tblRepoObj);
+            }
         }
 
         public DM.Repo GetRepoByID(long id)
@@ -321,6 +323,7 @@ namespace GitMonitor.Repository
                     if (rec != null)
                     {
                         rec.IsUntrackedRepo = true;
+                        db.Update(rec);
                     }
                 }
 
