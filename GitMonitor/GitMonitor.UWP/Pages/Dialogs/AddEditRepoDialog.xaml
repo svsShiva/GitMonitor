@@ -67,7 +67,7 @@
             
             <StackPanel>
                 <TextBlock Text="Email Groups"/>
-                <ListView ItemsSource="{Binding EmailGroups, Mode=TwoWay}" IsEnabled="{Binding IsChecked,ElementName=cbEnableEmailNoti}">
+                <ListView ItemsSource="{x:Bind EmailGroups, Mode=TwoWay}" IsEnabled="{Binding IsChecked,ElementName=cbEnableEmailNoti}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="DTO:EmailGroup" >
                                 <CheckBox Content="{x:Bind Name}" 

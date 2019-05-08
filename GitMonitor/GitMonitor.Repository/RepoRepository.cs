@@ -228,7 +228,10 @@ namespace GitMonitor.Repository
                 tblRepoObj.ModifiedAt = DateTime.Now;
                 tblRepoObj.RepoUrl = repo.RepoUrl;
                 tblRepoObj.EnableEmailNotification = repo.EnableEmailNotification;
-                tblRepoObj.IsUntrackedRepo = false;
+                tblRepoObj.IsUntrackedRepo = repo.IsUntrackedRepo;
+                tblRepoObj.RecentCheck = DateTime.Now;
+
+                repo.RecentCheck = tblRepoObj.RecentCheck;
 
                 foreach (var branch in repo.Branches)
                 {

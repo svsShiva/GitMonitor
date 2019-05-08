@@ -1,10 +1,10 @@
 ﻿using GitMonitor.UWP.DTO;
 using GitMonitor.UWP.Pages.Dialogs;
 using GitMonitor.UWP.Utilities;
-using GitMonitor.UWP.ViewModels;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using System;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -22,26 +22,48 @@ namespace GitMonitor.UWP.Pages
 
         public List<Repo> Repos { get; set; }
 
-
         private async void Page_Loading(FrameworkElement sender, object args)
         {
-            APIUtility APIUtility = new APIUtility();
+            try
+            {
+                APIUtility APIUtility = new APIUtility();
 
-            Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getGetAllUnTrackedRepos);
+                Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getGetAllUnTrackedRepos);
 
-            //RepoViewModels = ModelConversionUtility.RepoListToViewModelList(Repos);
-            dgUnTrackedRepos.ItemsSource = Repos;
+                dgUnTrackedRepos.ItemsSource = Repos;
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
         }
 
-        private void abbtnTrackRepo_Click(object sender, RoutedEventArgs e)
+        private async void abbtnTrackRepo_Click(object sender, RoutedEventArgs e)
         {
-            //TODO check for more optimised logic
-            AppBarButton item = (AppBarButton)sender;
+            try
+            {
+                //TODO check for more optimised logic
+                AppBarButton item = (AppBarButton)sender;
 
-            Repo repo = (Repo)item.DataContext;
+                Repo repo = (Repo)item.DataContext;
 
-            AddEditRepoDialog addEditRepoDialog = new AddEditRepoDialog("Track Repo", repo);
-            addEditRepoDialog.ShowAsync();
+                APIUtility APIUtility = new APIUtility();
+
+                APIUtility.Put(repo, RouteUtility._getUpdateRepo);
+
+                Repos.Remove(repo);
+                dgUnTrackedRepos.ItemsSource = null;
+                dgUnTrackedRepos.ItemsSource = Repos;
+
+                string message = string.Format(StringUtility._repoTrackedSucessfully, repo.Name);
+
+                await new MessageDialog(message).ShowAsync();
+
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
         }
     }
 }

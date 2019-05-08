@@ -41,27 +41,9 @@
             
             <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
                                              Binding="{Binding WorkingDirectory}"/>
-            
-            <controls:DataGridTemplateColumn Header="Branches" IsReadOnly="True">
-                <controls:DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Button Content="{Binding CurrentBranch}"  
-                                HorizontalAlignment="Stretch">
-                            <Button.Flyout>
-                                <Flyout>
-                                    <ListView ItemsSource="{Binding Branches}">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Name}"/>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                    </DataTemplate>
-                </controls:DataGridTemplateColumn.CellTemplate>
-            </controls:DataGridTemplateColumn>
+
+            <controls:DataGridTextColumn Header="Recent Check" IsReadOnly="True"
+                                             Binding="{Binding RecentCheck}"/>
 
             <controls:DataGridTemplateColumn Header="Refresh"  CellTemplate="{StaticResource refreshIconTemplate}"/>
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -60,8 +61,11 @@ namespace GitMonitor.UWP.Pages
 
                 Repo obj = ((FrameworkElement)sender).DataContext as Repo;
 
-                Repo repo = Repos.First(m => m.RepoID == obj.RepoID);
-                repo = await APIUtility.Get<Repo>(string.Format(RouteUtility._getRefreshRepo, obj.RepoID));
+                Repo oldRepoObj = Repos.First(m => m.RepoID == obj.RepoID);
+                Repo newRepoObj = await APIUtility.Get<Repo>(string.Format(RouteUtility._getRefreshRepo, obj.RepoID));
+
+                Repos.Remove(oldRepoObj);
+                Repos.Add(newRepoObj);
 
                 dgDashboard.ItemsSource = null;
                 dgDashboard.ItemsSource = Repos;
@@ -93,16 +97,26 @@ namespace GitMonitor.UWP.Pages
         {
             try
             {
-                APIUtility APIUtility = new APIUtility();
-
                 Repo obj = ((FrameworkElement)sender).DataContext as Repo;
 
-                APIUtility.Delete(string.Format(RouteUtility._getStopTrackingRepo, obj.RepoID));
+                ConfirmationDialog confirmationDialog = new ConfirmationDialog(string.Format(StringUtility._repoUnTrackedConfirmation, obj.Name));
 
-                Repos.Remove(obj);
+                confirmationDialog.DataContext = obj;
 
-                dgDashboard.ItemsSource = null;
-                dgDashboard.ItemsSource = Repos;
+                ContentDialogResult contentDialogResult = await confirmationDialog.ShowAsync();
+
+                if (contentDialogResult == ContentDialogResult.Primary)
+                {
+                    APIUtility APIUtility = new APIUtility();
+                    APIUtility.Delete(string.Format(RouteUtility._getStopTrackingRepo, obj.RepoID));
+
+                    Repos.Remove(obj);
+                    dgDashboard.ItemsSource = null;
+                    dgDashboard.ItemsSource = Repos;
+
+                    string message = string.Format(StringUtility._repoUntrackedSucessfully, obj.Name);
+                    await new MessageDialog(message).ShowAsync();
+                }
             }
             catch (Exception ex)
             {

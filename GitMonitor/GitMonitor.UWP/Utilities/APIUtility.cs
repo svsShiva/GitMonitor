@@ -118,5 +118,39 @@ namespace GitMonitor.UWP.Utilities
                 throw;
             }
         }
+
+        internal async void Put<T>(T data, string route)
+        {
+            try
+            {
+                StringContent content = null;
+
+                if (data != null)
+                {
+                    string jsonData = JsonConvert.SerializeObject(data);
+                    content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                }
+
+                HttpClient client = CreateHttpClient(route);
+
+                using (client)
+                {
+                    HttpResponseMessage response = await client.PutAsync(route, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return;
+                    }
+
+                    // Returning error message
+                    var message = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
+                    throw new Exception(message["Message"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
