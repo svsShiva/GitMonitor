@@ -10,8 +10,8 @@ namespace GitMonitor.DomainModel.DTO
         public long BranchID { get; set; }
         public string Name { get; set; }
         public long RepoID { get; set; }
-        public bool EnableDesktopNotifications { get; set; }
-        public bool EnableEmailNotifications { get; set; }
+        public bool EnableDesktopNotification { get; set; }
+        public bool EnableEmailNotification { get; set; }
         public bool AutoPull { get; set; }
         public bool IsActive { get; set; }
         public bool HasUpstream { get; set; }

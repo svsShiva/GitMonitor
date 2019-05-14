@@ -68,7 +68,7 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
                     GitUtility.RunTasks(repo, false);
                 });
 
-                return Request.CreateResponse(HttpStatusCode.OK, repo.RepoID);
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch
             {
@@ -95,11 +95,7 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
             try
             {
                 var repo = _repo.GetRepoByID(id);
-
-                Task.Run(() =>
-                {
-                    GitUtility.RunTasks(repo, true);
-                });
+                GitUtility.RunTasks(repo, true);
 
                 return Request.CreateResponse(HttpStatusCode.OK, repo);
             }

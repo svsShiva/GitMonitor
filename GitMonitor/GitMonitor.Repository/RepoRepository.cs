@@ -37,18 +37,16 @@ namespace GitMonitor.Repository
                                 AutoPull = n.AutoPull,
                                 IsActive = n.IsActive,
                                 Name = n.Name,
-                                EnableDesktopNotifications = n.EnableDesktopNotifications,
-                                EnableEmailNotifications = n.EnableEmailNotifications,
+                                EnableDesktopNotification = n.EnableDesktopNotification,
+                                EnableEmailNotification = n.EnableEmailNotification,
                                 RepoID = n.tblRepoID,
                                 AheadBy = n.AheadBy,
                                 BehindBy = n.BehindBy,
                                 HasUpstream = n.HasUpstream,
                                 Remote = n.Remote,
                                 TrackingBranch = n.TrackingBranch
-
                             }).Where(o => o.RepoID == m.tblRepoID).ToList()
-                        }
-                        )
+                        })
                         .ToList();
                 }
             }
@@ -87,8 +85,8 @@ namespace GitMonitor.Repository
                                 AutoPull = n.AutoPull,
                                 IsActive = n.IsActive,
                                 Name = n.Name,
-                                EnableDesktopNotifications = n.EnableDesktopNotifications,
-                                EnableEmailNotifications = n.EnableEmailNotifications,
+                                EnableDesktopNotification = n.EnableDesktopNotification,
+                                EnableEmailNotification = n.EnableEmailNotification,
                                 RepoID = n.tblRepoID,
                                 AheadBy = n.AheadBy,
                                 BehindBy = n.BehindBy,
@@ -210,51 +208,65 @@ namespace GitMonitor.Repository
 
         public void Update(DM.Repo repo)
         {
-            //TODO
-            //using (SQLiteConnection db = InitializeDB.Initialize())
-            //{
-            //    tblRepo tblRepoObj = db.Table<tblRepo>().Include("tblBranches")
-            //                           .FirstOrDefault(m => m.WorkingDirectory == repo.WorkingDirectory);
+            using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
+            {
+                //TODO check for working directory logic
+                tblRepo tblRepoObj = db.Table<tblRepo>()
+                                       .FirstOrDefault(m => m.WorkingDirectory == repo.WorkingDirectory);
 
-            //    if (tblRepoObj == null)
-            //    {
-            //        return;
-            //    }
+                if (tblRepoObj == null)
+                {
+                    //TODO throw exception
+                    return;
+                }
 
-            //    tblRepoObj.RecentCheck = DateTime.Now;
-            //    tblRepoObj.NotificationEmail = repo.NotificationEmail;
-            //    tblRepoObj.RecentCheck = DateTime.Now;
-            //    tblRepoObj.CurrentBranch = repo.CurrentBranch;
-            //    tblRepoObj.EnableDesktopNotification = repo.EnableDesktopNotification;
-            //    tblRepoObj.AutoTrack = repo.AutoTrack;
-            //    tblRepoObj.ModifiedAt = repo.ModifiedAt;
-            //    tblRepoObj.RepoUrl = repo.RepoUrl;
+                tblRepoObj.Name = repo.Name;
+                tblRepoObj.EmailGroupIDS = repo.EmailGroupIDS;
+                tblRepoObj.CurrentBranch = repo.CurrentBranch;
+                tblRepoObj.EnableDesktopNotification = repo.EnableDesktopNotification;
+                tblRepoObj.AutoTrack = repo.AutoTrack;
+                tblRepoObj.ModifiedAt = DateTime.Now;
+                tblRepoObj.RepoUrl = repo.RepoUrl;
+                tblRepoObj.EnableEmailNotification = repo.EnableEmailNotification;
+                tblRepoObj.IsUntrackedRepo = repo.IsUntrackedRepo;
+                tblRepoObj.RecentCheck = DateTime.Now;
 
-            //    foreach (var branch in repo.Branches)
-            //    {
-            //        var tblBranchObj = tblRepoObj.tblBranches
-            //                           .FirstOrDefault(m => m.tblBranchID == branch.BranchID);
+                repo.RecentCheck = tblRepoObj.RecentCheck;
 
-            //        if (tblBranchObj == null)
-            //        {
-            //            tblBranchObj = new tblBranch();
-            //            //tblBranchObj.tblRepo = tblRepoObj; // Why is this line necessary?
-            //            tblRepoObj.tblBranches.Add(tblBranchObj);
-            //        }
+                foreach (var branch in repo.Branches)
+                {
+                    tblBranch tblBranchObj = db.Table<tblBranch>()
+                                       .FirstOrDefault(m => m.Name == branch.Name);
 
-            //        tblBranchObj.AutoPull = branch.AutoPull;
-            //        tblBranchObj.EnableDeskTopNotifications = branch.EnableDeskTopNotifications;
-            //        tblBranchObj.IsActive = branch.IsActive;
-            //        tblBranchObj.Name = branch.Name;
-            //        tblBranchObj.HasUpstream = branch.HasUpstream;
-            //        tblBranchObj.Remote = branch.Remote;
-            //        tblBranchObj.TrackingBranch = branch.TrackingBranch;
-            //        tblBranchObj.AheadBy = branch.AheadBy;
-            //        tblBranchObj.BehindBy = branch.BehindBy;
-            //    }
+                    if (tblBranchObj == null)
+                    {
+                        tblBranchObj = new tblBranch();
+                    }
 
-            // db.SaveChanges();
-            //}
+                    tblBranchObj.tblRepoID = repo.RepoID;
+                    tblBranchObj.AutoPull = branch.AutoPull;
+                    tblBranchObj.EnableDesktopNotification = branch.EnableDesktopNotification;
+                    tblBranchObj.EnableEmailNotification = repo.EnableEmailNotification;
+                    tblBranchObj.IsActive = branch.IsActive;
+                    tblBranchObj.Name = branch.Name;
+                    tblBranchObj.HasUpstream = branch.HasUpstream;
+                    tblBranchObj.Remote = branch.Remote;
+                    tblBranchObj.TrackingBranch = branch.TrackingBranch;
+                    tblBranchObj.AheadBy = branch.AheadBy;
+                    tblBranchObj.BehindBy = branch.BehindBy;
+
+                    if (tblBranchObj.tblBranchID == 0)
+                    {
+                        db.Insert(tblBranchObj);
+                    }
+                    else
+                    {
+                        db.Update(tblBranchObj);
+                    }
+                }
+
+                db.Update(tblRepoObj);
+            }
         }
 
         public DM.Repo GetRepoByID(long id)
@@ -265,7 +277,7 @@ namespace GitMonitor.Repository
                 {
                     //TODO need to update branches logic, inner Query
                     return db.Table<tblRepo>()
-                        .Where(m => m.IsActive && !m.IsUntrackedRepo)
+                        .Where(m => m.tblRepoID == id)
                         .Select((m) => new DM.Repo
                         {
                             RepoID = m.tblRepoID,
@@ -285,8 +297,8 @@ namespace GitMonitor.Repository
                                 AutoPull = n.AutoPull,
                                 IsActive = n.IsActive,
                                 Name = n.Name,
-                                EnableDesktopNotifications = n.EnableDesktopNotifications,
-                                EnableEmailNotifications = n.EnableEmailNotifications,
+                                EnableDesktopNotification = n.EnableDesktopNotification,
+                                EnableEmailNotification = n.EnableEmailNotification,
                                 RepoID = n.tblRepoID,
                                 AheadBy = n.AheadBy,
                                 BehindBy = n.BehindBy,
@@ -321,6 +333,7 @@ namespace GitMonitor.Repository
                     if (rec != null)
                     {
                         rec.IsUntrackedRepo = true;
+                        db.Update(rec);
                     }
                 }
 

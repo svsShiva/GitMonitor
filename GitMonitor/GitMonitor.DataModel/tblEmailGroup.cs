@@ -11,6 +11,6 @@ namespace GitMonitor.DataModel
         public string Name { get; set; }
         public string Emails { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool IsActive { get; set; }
+        public DateTime LastModifiedAt { get; set; }
     }
 }

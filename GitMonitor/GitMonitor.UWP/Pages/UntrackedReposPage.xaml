@@ -24,8 +24,6 @@
                                              Binding="{Binding CreatedAt}"/>
             <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
                                              Binding="{Binding WorkingDirectory}"/>
-            <controls:DataGridTextColumn Header="Branches" IsReadOnly="True"
-                                             Binding="{Binding BranchNames}"/>
             <controls:DataGridTemplateColumn Header="Track"  
                                              CellTemplate="{StaticResource addIconTemplate}"/>
 

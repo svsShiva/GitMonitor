@@ -7,7 +7,7 @@ namespace GitMonitor.DomainModel.DTO
     {
         public Repo()
         {
-            this.Branches = new HashSet<Branch>();
+            this.Branches = new List<Branch>();
         }
 
         public long RepoID { get; set; }
@@ -17,7 +17,7 @@ namespace GitMonitor.DomainModel.DTO
         public bool AutoTrack { get; set; }
         public bool EnableDesktopNotification { get; set; }
         public bool EnableEmailNotification { get; set; }
-        public string NotificationEmail { get; set; }
+        public string EmailGroupIDS { get; set; }
         public string CurrentBranch { get; set; }
         public bool IsUntrackedRepo { get; set; }
         public System.DateTime CreatedAt { get; set; }

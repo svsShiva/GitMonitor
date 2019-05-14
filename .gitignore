@@ -322,3 +322,12 @@ ASALocalRun/
 # MSBuild Binary and Structured Log
 *.binlog
 
+
+
+
+#Custom excemptions
+
+# DB file
+*.db
+*.db-shm
+*.db-wal

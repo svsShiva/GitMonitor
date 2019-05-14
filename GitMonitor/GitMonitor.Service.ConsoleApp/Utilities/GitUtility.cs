@@ -318,8 +318,8 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                     repo.Branches.Add(new Branch
                     {
                         Name = branchName,
-                        EnableDesktopNotifications = false,
-                        EnableEmailNotifications = false,
+                        EnableDesktopNotification = false,
+                        EnableEmailNotification = false,
                         AutoPull = false,
                         IsActive = true,
                         HasUpstream = true
