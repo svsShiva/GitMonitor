@@ -102,8 +102,14 @@
     <Compile Include="Pages\DashboardPage.xaml.cs">
       <DependentUpon>DashboardPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Dialogs\AddEditEmailGroupDialog.xaml.cs">
+      <DependentUpon>AddEditEmailGroupDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Dialogs\AddEditRepoDialog.xaml.cs">
       <DependentUpon>AddEditRepoDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\BranchesDialog.xaml.cs">
+      <DependentUpon>BranchesDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Dialogs\ConfirmationDialog.xaml.cs">
       <DependentUpon>ConfirmationDialog.xaml</DependentUpon>
@@ -161,9 +167,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Dialogs\AddEditEmailGroupDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Dialogs\AddEditRepoDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\BranchesDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Dialogs\ConfirmationDialog.xaml">
       <SubType>Designer</SubType>
@@ -192,6 +206,14 @@
     <Page Include="Pages\UntrackedReposPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ContentDialogStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\PageStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

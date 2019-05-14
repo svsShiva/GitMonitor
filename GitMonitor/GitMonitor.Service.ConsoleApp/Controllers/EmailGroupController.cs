@@ -29,7 +29,7 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPost]
         public HttpResponseMessage AddEmailGroup(EmailGroup emailGroup)
         {
             try

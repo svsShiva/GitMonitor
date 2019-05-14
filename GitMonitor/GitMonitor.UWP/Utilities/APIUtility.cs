@@ -119,7 +119,7 @@ namespace GitMonitor.UWP.Utilities
             }
         }
 
-        internal async void Put<T>(T data, string route)
+        internal async Task Put<T>(T data, string route)
         {
             try
             {

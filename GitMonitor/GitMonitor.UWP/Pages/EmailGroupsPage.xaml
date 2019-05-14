@@ -4,9 +4,51 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Loading="Page_Loading" >
 
-    <Grid>
+    <Page.Resources>
+        <DataTemplate x:Key="editIconTemplate">
+            <AppBarButton x:Uid="abbtnEdit" Icon="Edit" Click="abbtnEdit_Click" 
+                          Style="{StaticResource abbtnStyle}"/>
+        </DataTemplate>
 
-    </Grid>
+        <DataTemplate x:Key="deleteIconTemplate">
+            <AppBarButton x:Uid="abbtnDelete" Icon="Delete" Click="abbtnDelete_Click" 
+                          Style="{StaticResource abbtnStyle}"/>
+        </DataTemplate>
+    </Page.Resources>
+
+    <StackPanel>
+
+        <Button Name="btnAdddEmailGroup"
+                Click="btnAddEmailGroup_Click"
+                Content="Addd Email Group" />
+
+        <controls:DataGrid x:Name="dgEmailGroups" Style="{StaticResource dgStyle}" >
+            <controls:DataGrid.Columns>
+
+                <controls:DataGridTextColumn Header="Group Name" IsReadOnly="True"
+                                             Binding="{Binding Name}"/>
+
+                <controls:DataGridTextColumn Header="Emails" IsReadOnly="True"
+                                             Binding="{Binding Emails}">
+                </controls:DataGridTextColumn>
+
+                <controls:DataGridTextColumn Header="Creation Date"
+                                             Binding="{Binding CreatedAt}"/>
+
+                <controls:DataGridTextColumn Header="Last Modified" IsReadOnly="True"
+                                             Binding="{Binding LastModifiedAt}"/>
+
+                <controls:DataGridTemplateColumn Header="Edit"  
+                                                 CellTemplate="{StaticResource editIconTemplate}"/>
+
+                <controls:DataGridTemplateColumn Header="Delete"  
+                                                 CellTemplate="{StaticResource deleteIconTemplate}"/>
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+
+    </StackPanel>
 </Page>

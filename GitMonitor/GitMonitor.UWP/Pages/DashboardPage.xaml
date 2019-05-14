@@ -12,25 +12,26 @@
         <DataTemplate x:Key="refreshIconTemplate">
             <StackPanel>
                 <AppBarButton x:Uid="abbtnRefresh" Icon="Refresh" Click="abbtnRefresh_Click" 
-                              Style="{ThemeResource abbtnStyle}"/>
+                              Style="{StaticResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="editIconTemplate">
             <StackPanel>
                 <AppBarButton x:Uid="abbtnEdit" Icon="Edit" Click="abbtnEdit_Click" 
-                              Style="{ThemeResource abbtnStyle}"/>
+                              Style="{StaticResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="deleteIconTemplate">
             <StackPanel>
                 <AppBarButton x:Uid="abbtnDelete" Icon="UnPin" Click="abbtnDelete_Click" 
-                              Style="{ThemeResource abbtnStyle}"/>
+                              Style="{StaticResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
 
-    <controls:DataGrid x:Name="dgDashboard" AutoGenerateColumns="False"
+    <controls:DataGrid x:Name="dgDashboard"
                        ItemsSource="{x:Bind Repos}"
+                       Style="{StaticResource dgStyle}"
                        AlternatingRowBackground="AliceBlue">
         <controls:DataGrid.Columns>
             <controls:DataGridTextColumn Header="Name" IsReadOnly="True"
@@ -41,6 +42,16 @@
             
             <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
                                              Binding="{Binding WorkingDirectory}"/>
+
+            <controls:DataGridTemplateColumn Header="Branches" IsReadOnly="True">
+                <controls:DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding CurrentBranch}" Click="btnBranches_Click"
+                                HorizontalAlignment="Stretch">
+                        </Button>
+                    </DataTemplate>
+                </controls:DataGridTemplateColumn.CellTemplate>
+            </controls:DataGridTemplateColumn>
 
             <controls:DataGridTextColumn Header="Recent Check" IsReadOnly="True"
                                              Binding="{Binding RecentCheck}"/>

@@ -1,0 +1,35 @@
+﻿<ContentDialog
+    x:Class="GitMonitor.UWP.Pages.Dialogs.AddEditEmailGroupDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    PrimaryButtonText="Save"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_SaveClick">
+
+    <StackPanel>
+        <TextBlock Text="Group Name"/>
+        <TextBox Style="{StaticResource tbStyle}"  Text="{Binding Name, Mode=TwoWay}"/>
+        <TextBlock Text="Emails"/>
+        <ListView x:Name="lvEmails" ItemsSource="{x:Bind EmailList}" MaxHeight="200">
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <RelativePanel MinWidth="250">
+                        <TextBlock Text="{Binding}" 
+                                   RelativePanel.AlignLeftWithPanel="True" 
+                                   MaxWidth="200"
+                                   RelativePanel.AlignVerticalCenterWithPanel="True"/>
+                        <AppBarButton Icon="delete"  Click="abbtnDelete_Click" 
+                                      RelativePanel.AlignRightWithPanel="True" 
+                                      Style="{StaticResource abbtnStyle}"/>
+                    </RelativePanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBlock Text="Add Email"/>
+        <TextBox Name ="tbEmail" Text="{Binding Emails, Mode=TwoWay}" Style="{StaticResource tbStyle}"/>
+        <Button Content="Add" Click="btnAdd_Click" Style="{StaticResource btnStyle}"/>
+    </StackPanel>
+</ContentDialog>

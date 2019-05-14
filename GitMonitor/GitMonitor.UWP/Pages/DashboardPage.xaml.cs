@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -117,6 +116,22 @@ namespace GitMonitor.UWP.Pages
                     string message = string.Format(StringUtility._repoUntrackedSucessfully, obj.Name);
                     await new MessageDialog(message).ShowAsync();
                 }
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void btnBranches_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Repo repo = ((FrameworkElement)sender).DataContext as Repo;
+
+                BranchesDialog branchesDialog = new BranchesDialog(repo.Branches);
+
+                await branchesDialog.ShowAsync();
             }
             catch (Exception ex)
             {

@@ -10,12 +10,14 @@
     <Page.Resources>
         <DataTemplate x:Key="addIconTemplate">
             <StackPanel>
-                <AppBarButton x:Uid="abbtnTrackRepo" Icon="Add" Click="abbtnTrackRepo_Click"/>
+                <AppBarButton x:Uid="abbtnTrackRepo" Icon="Add" Click="abbtnTrackRepo_Click"
+                              Style="{StaticResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
 
-    <controls:DataGrid x:Name="dgUnTrackedRepos" AutoGenerateColumns="False">
+    <controls:DataGrid x:Name="dgUnTrackedRepos"
+                       Style="{StaticResource dgStyle}">
         <controls:DataGrid.Columns>
 
             <controls:DataGridTextColumn Header="Name" IsReadOnly="True"
