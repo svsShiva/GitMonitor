@@ -46,10 +46,10 @@ namespace GitMonitor.UWP.Utilities
 
                     // Returning error message
                     var message = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
-                    throw new Exception(message["Message"]);
+                    throw new CustomExceptionUtility(message["Message"]);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
@@ -83,11 +83,11 @@ namespace GitMonitor.UWP.Utilities
                     }
 
                     // Returning error message
-                    var message = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
-                    throw new Exception(message["Message"]);
+                    //var message = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
+                    throw new CustomExceptionUtility("abc");
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
@@ -110,10 +110,10 @@ namespace GitMonitor.UWP.Utilities
 
                     // Returning error message
                     var message = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
-                    throw new Exception(message["Message"]);
+                    throw new CustomExceptionUtility(message["Message"]);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
@@ -144,10 +144,10 @@ namespace GitMonitor.UWP.Utilities
 
                     // Returning error message
                     var message = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
-                    throw new Exception(message["Message"]);
+                    throw new CustomExceptionUtility(message["Message"]);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }

@@ -5,7 +5,7 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using GitMonitor.DomainModel.DTO;
 using GitMonitor.Service.ConsoleApp.Utilities;
-using GitMonitor.DomainModel;
+using System;
 
 namespace GitMonitor.Service.ConsoleApp.Controllers
 {
@@ -26,9 +26,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, _repo.GetAllTrackedRepos());
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -38,9 +38,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, _repo.GetAllUnTrackedRepos());
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -50,9 +50,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, _repo.GetRepoByID(id));
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -70,9 +70,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -83,9 +83,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, _repo.StopTrackingRepo(id));
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -99,9 +99,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.OK, repo);
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

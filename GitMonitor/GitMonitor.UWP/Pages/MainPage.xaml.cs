@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -14,6 +16,14 @@ namespace GitMonitor.UWP.Pages
         public MainPage()
         {
             this.InitializeComponent();
+
+            //TitleBar Customization
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+
+            Window.Current.SetTitleBar(AppTitleBar);
         }
 
         private void nvMainView_Loaded(object sender, RoutedEventArgs e)

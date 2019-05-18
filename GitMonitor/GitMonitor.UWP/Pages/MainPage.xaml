@@ -6,17 +6,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <NavigationView x:Name="nvMainView" PaneDisplayMode="Top"
-    ItemInvoked="nvMainView_ItemInvoked" IsBackButtonVisible="Collapsed"
-    Loaded="nvMainView_Loaded">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" x:Name="AppTitleBar" Background="Transparent" Height="35">
+            <AppBarButton Icon="MoveToFolder" Style="{StaticResource abbtnStyle}"/>
+            <TextBlock Text="GitMonitor" VerticalAlignment="Center"></TextBlock>
+        </StackPanel>
 
-        <NavigationView.MenuItems>
-            <NavigationViewItem Icon="ProtectedDocument" Content="Dashboard" Tag="Dashboard" />
-            <NavigationViewItem Icon="Document" Content="UntrackedRepos" Tag="UntrackedRepos"/>
-            <NavigationViewItem Icon="AddFriend" Content="EmailGroups" Tag="EmailGroups"/>
-        </NavigationView.MenuItems>
+        <NavigationView x:Name="nvMainView" PaneDisplayMode="Top"
+                        ItemInvoked="nvMainView_ItemInvoked" 
+                        IsBackButtonVisible="Collapsed"
+                        Loaded="nvMainView_Loaded">
 
-        <Frame x:Name="cfMainFrame" >
-        </Frame>
-    </NavigationView>
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="ProtectedDocument" Content="Dashboard" Tag="Dashboard" />
+                <NavigationViewItem Icon="Document" Content="UntrackedRepos" Tag="UntrackedRepos"/>
+                <NavigationViewItem Icon="AddFriend" Content="EmailGroups" Tag="EmailGroups"/>
+            </NavigationView.MenuItems>
+
+            <Frame x:Name="cfMainFrame" Padding="3,5,3,3">
+            </Frame>
+        </NavigationView>
+    </StackPanel>
+
 </Page>

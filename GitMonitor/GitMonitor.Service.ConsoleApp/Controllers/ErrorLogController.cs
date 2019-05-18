@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using GitMonitor.DomainModel.DTO;
 using GitMonitor.DomainModel;
+using System;
 
 namespace GitMonitor.Service.ConsoleApp.Controllers
 {
@@ -22,9 +23,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, _errorRepo.GetErrorLog());
             }
-            catch
+            catch(Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -35,9 +36,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
                 ErrorRepo.AddErrorLog(errorLog);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

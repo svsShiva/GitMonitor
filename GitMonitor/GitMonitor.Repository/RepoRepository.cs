@@ -29,6 +29,7 @@ namespace GitMonitor.Repository
                             IsActive = m.IsActive,
                             EnableDesktopNotification = m.EnableDesktopNotification,
                             EnableEmailNotification = m.EnableEmailNotification,
+                            EmailGroupIDS = m.EmailGroupIDS,
                             CurrentBranch = m.CurrentBranch,
                             Branches = db.Table<tblBranch>().Where(n => n.tblRepoID == m.tblRepoID)
                             .Select((n) => new DM.Branch
@@ -77,6 +78,7 @@ namespace GitMonitor.Repository
                             IsActive = m.IsActive,
                             EnableDesktopNotification = m.EnableDesktopNotification,
                             EnableEmailNotification = m.EnableEmailNotification,
+                            EmailGroupIDS = m.EmailGroupIDS,
                             CurrentBranch = m.CurrentBranch,
                             Branches = db.Table<tblBranch>().Where(n => n.tblRepoID == m.tblRepoID)
                             .Select((n) => new DM.Branch
@@ -289,6 +291,7 @@ namespace GitMonitor.Repository
                             WorkingDirectory = m.WorkingDirectory,
                             IsActive = m.IsActive,
                             EnableDesktopNotification = m.EnableDesktopNotification,
+                            EmailGroupIDS = m.EmailGroupIDS,
                             CurrentBranch = m.CurrentBranch,
                             Branches = db.Table<tblBranch>().Where(n => n.tblRepoID == m.tblRepoID)
                             .Select((n) => new DM.Branch

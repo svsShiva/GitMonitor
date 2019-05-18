@@ -1,4 +1,5 @@
 ﻿using GitMonitor.DataModel;
+using GitMonitor.DomainModel;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace GitMonitor.Repository
             }
         }
 
-        public void Add(DM.EmailGroup emailGroup)
+        public DM.EmailGroup Add(DM.EmailGroup emailGroup)
         {
             try
             {
@@ -46,17 +47,24 @@ namespace GitMonitor.Repository
 
                     if (rec != null)
                     {
-                        //TODO custom exception handling
-                        //Control will return
+                        throw new Exception(StringUtility._nameExists);
                     }
 
-                    db.Insert(new tblEmailGroup
+                    tblEmailGroup tblEmailGroup = new tblEmailGroup
                     {
                         Name = emailGroup.Name,
                         Emails = emailGroup.Emails,
                         LastModifiedAt = DateTime.Now,
                         CreatedAt = DateTime.Now
-                    });
+                    };
+
+                    db.Insert(tblEmailGroup);
+
+                    emailGroup.LastModifiedAt = tblEmailGroup.LastModifiedAt;
+                    emailGroup.CreatedAt = tblEmailGroup.CreatedAt;
+                    emailGroup.EmailGroupID = tblEmailGroup.tblEmailGroupID;
+
+                    return emailGroup;
                 }
             }
             catch (Exception ex)

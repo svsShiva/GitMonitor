@@ -9,9 +9,15 @@
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_SaveClick">
 
-    <StackPanel>
+    <StackPanel  Spacing="3">
+
         <TextBlock Text="Group Name"/>
-        <TextBox Style="{StaticResource tbStyle}"  Text="{Binding Name, Mode=TwoWay}"/>
+        <TextBox Style="{StaticResource tbStyle}" x:Name="tbGroupName"
+                 Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 TextChanged="tbGroupName_TextChanged"/>
+
+        <TextBlock x:Name="tbGroupNameVal" Foreground="Red" Text="{Binding NameVal, Mode=TwoWay}"/>
+
         <TextBlock Text="Emails"/>
         <ListView x:Name="lvEmails" ItemsSource="{x:Bind EmailList}" MaxHeight="200">
             <ListView.ItemTemplate>
@@ -28,8 +34,15 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
         <TextBlock Text="Add Email"/>
-        <TextBox Name ="tbEmail" Text="{Binding Emails, Mode=TwoWay}" Style="{StaticResource tbStyle}"/>
+
+        <TextBox Name ="tbEmail"
+                 Style="{StaticResource tbStyle}" TextChanged="tbEmail_TextChanged"/>
+
+        <TextBlock Name="tbEmailVal" Foreground="Red"
+                   Text="{Binding EmailVal, Mode=TwoWay}"/>
+
         <Button Content="Add" Click="btnAdd_Click" Style="{StaticResource btnStyle}"/>
     </StackPanel>
 </ContentDialog>

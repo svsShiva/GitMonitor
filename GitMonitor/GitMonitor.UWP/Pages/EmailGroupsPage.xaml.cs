@@ -72,6 +72,10 @@ namespace GitMonitor.UWP.Pages
                 dgEmailGroups.ItemsSource = null;
                 dgEmailGroups.ItemsSource = EmailGroups;
             }
+            catch (CustomExceptionUtility ex)
+            {
+                await new ErrorDialog(StringUtility._unexpectedError).ShowAsync();
+            }
             catch (Exception ex)
             {
                 await new ErrorDialog(ex).ShowAsync();
@@ -82,10 +86,13 @@ namespace GitMonitor.UWP.Pages
         {
             try
             {
-                AddEditEmailGroupDialog addEditEmailGroupDialog = 
-                    new AddEditEmailGroupDialog("Add Email Group", null);
+                AddEditEmailGroupDialog addEditEmailGroupDialog =
+                    new AddEditEmailGroupDialog("Add Email Group", null, EmailGroups);
 
                 await addEditEmailGroupDialog.ShowAsync();
+
+                dgEmailGroups.ItemsSource = null;
+                dgEmailGroups.ItemsSource = EmailGroups;
             }
             catch (Exception ex)
             {

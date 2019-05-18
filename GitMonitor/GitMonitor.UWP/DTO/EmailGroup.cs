@@ -15,14 +15,30 @@ namespace GitMonitor.UWP.DTO
         }
 
         private long _emailGroupID;
-        private string _name;
-        private string _emails;
+        private string _name = string.Empty;
+        private string _emails = string.Empty;
         private DateTime _createdAt;
         private bool _isActive;
+        private DateTime _lastModifiedAt;
 
         //For UI
         private bool _isSelected;
 
+        public DateTime LastModifiedAt
+        {
+            get
+            {
+                return _lastModifiedAt;
+            }
+            set
+            {
+                if (value != _lastModifiedAt)
+                {
+                    _lastModifiedAt = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public long EmailGroupID
         {
             get

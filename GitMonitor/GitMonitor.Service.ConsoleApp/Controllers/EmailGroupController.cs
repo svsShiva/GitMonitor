@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GitMonitor.DomainModel.DTO;
-using GitMonitor.DomainModel;
+using System;
 
 namespace GitMonitor.Service.ConsoleApp.Controllers
 {
@@ -18,14 +18,7 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
 
         public HttpResponseMessage GetAllEmailGroups()
         {
-            try
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, _emailGroup.GetAllEmailGroups());
-            }
-            catch
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
-            }
+            return Request.CreateResponse(HttpStatusCode.OK, _emailGroup.GetAllEmailGroups());
         }
 
 
@@ -34,16 +27,14 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
         {
             try
             {
-                _emailGroup.Add(emailGroup);
-
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK, _emailGroup.Add(emailGroup));
             }
-            catch
+            catch(Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        
+
         public HttpResponseMessage DeleteEmailGroup(long id)
         {
             try
@@ -52,13 +43,13 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
-        [HttpPut]   
+        [HttpPut]
         public HttpResponseMessage UpdateEmailGroup(EmailGroup emailGroup)
         {
             try
@@ -67,9 +58,9 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch
+            catch(Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, StringUtility._unexpectedError);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

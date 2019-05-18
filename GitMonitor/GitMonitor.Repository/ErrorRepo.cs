@@ -37,8 +37,7 @@ namespace GitMonitor.Repository
             tblErrorLog.LogTime = DateTime.Now;
             tblErrorLog.Description = errorLog != null ?
                                       errorLog.Description :
-                                      exception.InnerException +
-                                      exception.StackTrace +
+                                      exception.StackTrace != null ? exception.StackTrace : string.Empty +
                                       exception.InnerException != null ? exception.InnerException.Message : string.Empty;
 
             using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())

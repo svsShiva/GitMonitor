@@ -20,27 +20,39 @@
         </DataTemplate>
     </Page.Resources>
 
-    <StackPanel>
+    <StackPanel Spacing="5" >
 
         <Button Name="btnAdddEmailGroup"
                 Click="btnAddEmailGroup_Click"
-                Content="Addd Email Group" />
+                Content="Addd Email Group"
+                HorizontalAlignment="Right"/>
 
-        <controls:DataGrid x:Name="dgEmailGroups" Style="{StaticResource dgStyle}" >
-            <controls:DataGrid.Columns>
+        <controls:DataGrid x:Name="dgEmailGroups" Style="{StaticResource dgStyle}">
+
+            <controls:DataGrid.Columns >
 
                 <controls:DataGridTextColumn Header="Group Name" IsReadOnly="True"
                                              Binding="{Binding Name}"/>
 
-                <controls:DataGridTextColumn Header="Emails" IsReadOnly="True"
-                                             Binding="{Binding Emails}">
-                </controls:DataGridTextColumn>
+                <controls:DataGridTemplateColumn Header="Emails" IsReadOnly="True">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Emails}"
+                                       VerticalAlignment="Center"
+                                       ToolTipService.Placement="Bottom"
+                                       ToolTipService.ToolTip="{Binding Emails}"
+                                       Padding="5"/>
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
 
-                <controls:DataGridTextColumn Header="Creation Date"
+                <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
                                              Binding="{Binding CreatedAt}"/>
 
                 <controls:DataGridTextColumn Header="Last Modified" IsReadOnly="True"
-                                             Binding="{Binding LastModifiedAt}"/>
+                                             Binding="{Binding LastModifiedAt, 
+                                             Mode=TwoWay,
+                                             UpdateSourceTrigger=PropertyChanged}"/>
 
                 <controls:DataGridTemplateColumn Header="Edit"  
                                                  CellTemplate="{StaticResource editIconTemplate}"/>
