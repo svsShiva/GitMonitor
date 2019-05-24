@@ -16,5 +16,8 @@
         internal static string _getUpdateEmailGroup = _baseRoute + @"/EmailGroup/UpdateEmailGroup";
         internal static string _getAddEmailGroup = _baseRoute + @"/EmailGroup/AddEmailGroup";
         internal static string _getDeleteEmailGroup = _baseRoute + @"/EmailGroup/DeleteEmailGroup?id={0}";
+
+        internal static string _getGetAllSetting = _baseRoute + @"/Setting/GetAllSetting";
+        internal static string _getUpdateSetting = _baseRoute + @"/Setting/UpdateSetting";
     }
 }

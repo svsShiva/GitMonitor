@@ -27,40 +27,40 @@
                 Content="Addd Email Group"
                 HorizontalAlignment="Right"/>
 
-        <controls:DataGrid x:Name="dgEmailGroups" Style="{StaticResource dgStyle}">
+            <controls:DataGrid x:Name="dgEmailGroups" Style="{StaticResource dgStyle}">
 
-            <controls:DataGrid.Columns >
+                <controls:DataGrid.Columns >
 
-                <controls:DataGridTextColumn Header="Group Name" IsReadOnly="True"
+                    <controls:DataGridTextColumn Header="Group Name" IsReadOnly="True"
                                              Binding="{Binding Name}"/>
 
-                <controls:DataGridTemplateColumn Header="Emails" IsReadOnly="True">
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Emails}"
+                    <controls:DataGridTemplateColumn Header="Emails" IsReadOnly="True">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Emails}"
                                        VerticalAlignment="Center"
                                        ToolTipService.Placement="Bottom"
                                        ToolTipService.ToolTip="{Binding Emails}"
                                        Padding="5"/>
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
 
-                <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
+                    <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
                                              Binding="{Binding CreatedAt}"/>
 
-                <controls:DataGridTextColumn Header="Last Modified" IsReadOnly="True"
+                    <controls:DataGridTextColumn Header="Last Modified" IsReadOnly="True"
                                              Binding="{Binding LastModifiedAt, 
                                              Mode=TwoWay,
                                              UpdateSourceTrigger=PropertyChanged}"/>
 
-                <controls:DataGridTemplateColumn Header="Edit"  
+                    <controls:DataGridTemplateColumn Header="Edit"  
                                                  CellTemplate="{StaticResource editIconTemplate}"/>
 
-                <controls:DataGridTemplateColumn Header="Delete"  
+                    <controls:DataGridTemplateColumn Header="Delete"  
                                                  CellTemplate="{StaticResource deleteIconTemplate}"/>
-            </controls:DataGrid.Columns>
-        </controls:DataGrid>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
 
     </StackPanel>
 </Page>

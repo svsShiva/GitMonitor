@@ -61,16 +61,26 @@ namespace GitMonitor.UWP.Pages
         {
             try
             {
-                APIUtility APIUtility = new APIUtility();
-
                 EmailGroup obj = ((FrameworkElement)sender).DataContext as EmailGroup;
 
-                APIUtility.Delete(string.Format(RouteUtility._getDeleteEmailGroup, obj.EmailGroupID));
+                ConfirmationDialog confirmationDialog = new ConfirmationDialog(string.Format(StringUtility._emailGroupDeletionConfirmation, obj.Name));
 
-                EmailGroups.Remove(obj);
+                ContentDialogResult contentDialogResult = await confirmationDialog.ShowAsync();
 
-                dgEmailGroups.ItemsSource = null;
-                dgEmailGroups.ItemsSource = EmailGroups;
+                if (contentDialogResult == ContentDialogResult.Primary)
+                {
+                    APIUtility APIUtility = new APIUtility();
+
+                    APIUtility.Delete(string.Format(RouteUtility._getDeleteEmailGroup, obj.EmailGroupID));
+
+                    EmailGroups.Remove(obj);
+
+                    dgEmailGroups.ItemsSource = null;
+                    dgEmailGroups.ItemsSource = EmailGroups;
+
+                    string message = string.Format(StringUtility._emailGroupDeletedSucessfully, obj.Name);
+                    await new MessageDialog(message).ShowAsync();
+                }
             }
             catch (CustomExceptionUtility ex)
             {

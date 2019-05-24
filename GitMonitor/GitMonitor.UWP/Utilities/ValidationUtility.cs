@@ -31,5 +31,22 @@ namespace GitMonitor.UWP.Utilities
 
             return string.Empty;
         }
+
+        internal static string ValidateInterval(string value)
+        {
+            if (value.Length != 0)
+            {
+                if (!Regex.IsMatch(value, StringUtility._numberRegularExpression))
+                {
+                    return StringUtility._invalidInterval;
+                }
+                return string.Empty;
+            }
+            else
+            {
+                return StringUtility._emptyInterval;
+            }
+        }
+
     }
 }

@@ -1,0 +1,46 @@
+﻿using GitMonitor.Repository;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using GitMonitor.DomainModel.DTO;
+using System;
+
+namespace GitMonitor.Service.ConsoleApp.Controllers
+{
+    public class SettingController : ApiController
+    {
+        SettingsRepository _settingsRepository;
+
+        public SettingController()
+        {
+            _settingsRepository = new SettingsRepository();
+        }
+
+        public HttpResponseMessage GetAllSetting()
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, _settingsRepository.GetAllSettings());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        public HttpResponseMessage UpdateSetting(Setting setting)
+        {
+            try
+            {
+                _settingsRepository.Update(setting);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+    }
+}

@@ -4,7 +4,7 @@ using GitMonitor.UWP.DTO;
 using Windows.UI.Xaml;
 using GitMonitor.UWP.Utilities;
 using System;
-using System.Threading.Tasks;
+using System.Linq;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -14,6 +14,8 @@ namespace GitMonitor.UWP.Pages.Dialogs
     {
         public List<EmailGroup> EmailGroups;
 
+        private List<string> _emailGroups;
+
         public AddEditRepoDialog(string title, Repo repo = null)
         {
             this.Title = title;
@@ -21,18 +23,32 @@ namespace GitMonitor.UWP.Pages.Dialogs
             if (repo != null)
             {
                 DataContext = repo;
+
+                _emailGroups = repo.EmailGroupIDS != null ? 
+                                    repo.EmailGroupIDS.Split(';').ToList() : 
+                                    new List<string>();
             }
-           
+
+            GetEmailGroups();
+
             this.InitializeComponent();
         }
 
-        private async void CdAddEditRepo_Loading(FrameworkElement sender, object args)
+        private async void GetEmailGroups()
         {
             try
             {
                 APIUtility APIUtility = new APIUtility();
 
                 EmailGroups = await APIUtility.Get<List<EmailGroup>>(RouteUtility._getGetAllEmailGroups);
+
+                foreach(EmailGroup emailGroup in EmailGroups)
+                {
+                    if(_emailGroups.Contains(emailGroup.EmailGroupID.ToString()))
+                    {
+                        emailGroup.IsSelected = true;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -46,17 +62,21 @@ namespace GitMonitor.UWP.Pages.Dialogs
             {
                 Repo repo = DataContext as Repo;
 
+                repo.EmailGroupIDS = string.Empty;
+
                 foreach (EmailGroup emailGroup in EmailGroups)
                 {
                     if (emailGroup.IsSelected == true)
                     {
-                        repo.EmailGroupIDS += emailGroup.Emails;
+                        repo.EmailGroupIDS += emailGroup.EmailGroupID + ";";
                     }
                 }
 
+                repo.EmailGroupIDS = repo.EmailGroupIDS.TrimEnd(';');
+
                 APIUtility APIUtility = new APIUtility();
 
-               // APIUtility.Put(repo, RouteUtility._getUpdateRepo);
+                await APIUtility.Put(repo, RouteUtility._getUpdateRepo);
             }
             catch (Exception ex)
             {

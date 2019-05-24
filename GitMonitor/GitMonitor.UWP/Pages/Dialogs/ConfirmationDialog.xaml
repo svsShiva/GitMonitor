@@ -7,7 +7,7 @@
     mc:Ignorable="d"
     Title="Confirmation!"
     PrimaryButtonText="Yes"
-    SecondaryButtonText="Cancle">
+    SecondaryButtonText="Cancel">
 
     <TextBlock x:Name="tbMessage" />
 

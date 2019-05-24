@@ -6,8 +6,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" x:Name="AppTitleBar" Background="Transparent" Height="35">
+    <Page.Resources>
+        <Style TargetType="NavigationViewItem" x:Name="nviStyle">
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" x:Name="AppTitleBar" Background="Transparent" Grid.Row="0">
             <AppBarButton Icon="MoveToFolder" Style="{StaticResource abbtnStyle}"/>
             <TextBlock Text="GitMonitor" VerticalAlignment="Center"></TextBlock>
         </StackPanel>
@@ -15,17 +27,25 @@
         <NavigationView x:Name="nvMainView" PaneDisplayMode="Top"
                         ItemInvoked="nvMainView_ItemInvoked" 
                         IsBackButtonVisible="Collapsed"
-                        Loaded="nvMainView_Loaded">
+                        Loaded="nvMainView_Loaded"
+                        Grid.Row="1">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="ProtectedDocument" Content="Dashboard" Tag="Dashboard" />
-                <NavigationViewItem Icon="Document" Content="UntrackedRepos" Tag="UntrackedRepos"/>
-                <NavigationViewItem Icon="AddFriend" Content="EmailGroups" Tag="EmailGroups"/>
+                <NavigationViewItem Icon="ProtectedDocument" Content="Dashboard" Tag="Dashboard" Style="{StaticResource nviStyle}"/>
+                <NavigationViewItem Icon="Document" Content="UntrackedRepos" Tag="UntrackedRepos"  Style="{StaticResource nviStyle}"/>
+                <NavigationViewItem Icon="AddFriend" Content="EmailGroups" Tag="EmailGroups"  Style="{StaticResource nviStyle}"/>
             </NavigationView.MenuItems>
-
-            <Frame x:Name="cfMainFrame" Padding="3,5,3,3">
-            </Frame>
         </NavigationView>
-    </StackPanel>
-
+        
+        <ScrollViewer Grid.Row="2">
+            <Frame x:Name="cfMainFrame" 
+                   Padding="3,5,18,5"
+                   Width="Auto"
+                   Height="Auto"
+                   VerticalAlignment="Stretch"
+                   HorizontalAlignment="Stretch"
+                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+                   ScrollViewer.VerticalScrollBarVisibility="Hidden" />   
+        </ScrollViewer>
+    </Grid>
 </Page>

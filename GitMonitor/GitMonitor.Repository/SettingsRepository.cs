@@ -16,15 +16,39 @@ namespace GitMonitor.Repository
                 using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
                 {
                     return db.Table<tblSetting>()
-                             .Where(m => m.IsActive == true)
                              .Select((m) => new DM.Setting
                              {
                                  SettingID = m.tblSettingID,
                                  Key = m.Key,
                                  Value = m.Value,
-                                 IsActive = m.IsActive
                              }
                     ).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorRepo.AddErrorLog(exception: ex);
+                throw;
+            }
+        }
+
+        public void Update(DM.Setting setting)
+        {
+            try
+            {
+                using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
+                {
+                    tblSetting tblSetting = db.Table<tblSetting>()
+                                                    .FirstOrDefault(m => m.Key == setting.Key);
+
+                    if (tblSetting != null)
+                    {
+
+                        tblSetting.Key = setting.Key;
+                        tblSetting.Value = setting.Value;
+
+                        db.Update(tblSetting);
+                    }
                 }
             }
             catch (Exception ex)
