@@ -28,7 +28,7 @@ namespace GitMonitor.UWP.Pages
             {
                 APIUtility APIUtility = new APIUtility();
 
-                Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getGetAllUnTrackedRepos);
+                Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getAllUnTrackedRepos);
 
                 dgUnTrackedRepos.ItemsSource = Repos;
             }
@@ -49,7 +49,7 @@ namespace GitMonitor.UWP.Pages
 
                 APIUtility APIUtility = new APIUtility();
 
-                APIUtility.Put(repo, RouteUtility._getUpdateRepo);
+                await APIUtility.Put(repo, RouteUtility._updateRepo);
 
                 Repos.Remove(repo);
                 dgUnTrackedRepos.ItemsSource = null;

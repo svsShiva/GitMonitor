@@ -32,22 +32,23 @@ namespace GitMonitor.Repository
             }
         }
 
-        public void Update(DM.Setting setting)
+        public void Update(List<DM.Setting> settings)
         {
             try
             {
                 using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
                 {
-                    tblSetting tblSetting = db.Table<tblSetting>()
-                                                    .FirstOrDefault(m => m.Key == setting.Key);
-
-                    if (tblSetting != null)
+                    foreach (var item in settings)
                     {
+                        tblSetting tblSetting = db.Table<tblSetting>()
+                                                        .FirstOrDefault(m => m.Key == item.Key);
 
-                        tblSetting.Key = setting.Key;
-                        tblSetting.Value = setting.Value;
+                        if (tblSetting != null)
+                        {
+                            tblSetting.Value = item.Value;
 
-                        db.Update(tblSetting);
+                            db.Update(tblSetting);
+                        }
                     }
                 }
             }

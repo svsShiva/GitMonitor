@@ -28,7 +28,7 @@ namespace GitMonitor.UWP.Pages
             {
                 APIUtility APIUtility = new APIUtility();
 
-                EmailGroups = await APIUtility.Get<List<EmailGroup>>(RouteUtility._getGetAllEmailGroups);
+                EmailGroups = await APIUtility.Get<List<EmailGroup>>(RouteUtility._getAllEmailGroups);
 
                 dgEmailGroups.ItemsSource = EmailGroups;
             }
@@ -71,7 +71,7 @@ namespace GitMonitor.UWP.Pages
                 {
                     APIUtility APIUtility = new APIUtility();
 
-                    APIUtility.Delete(string.Format(RouteUtility._getDeleteEmailGroup, obj.EmailGroupID));
+                    APIUtility.Delete(string.Format(RouteUtility._deleteEmailGroup, obj.EmailGroupID));
 
                     EmailGroups.Remove(obj);
 

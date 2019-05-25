@@ -9,40 +9,42 @@
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_SaveClick">
 
-    <StackPanel  Spacing="3">
+    <ScrollViewer VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled">
+        <StackPanel  Spacing="3">
 
-        <TextBlock Text="Group Name"/>
-        <TextBox Style="{StaticResource tbStyle}" x:Name="tbGroupName"
+            <TextBlock Text="Group Name"/>
+            <TextBox Style="{StaticResource tbStyle}" x:Name="tbGroupName"
                  Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                  TextChanged="tbGroupName_TextChanged"/>
 
-        <TextBlock x:Name="tbGroupNameVal" Foreground="Red" Text="{Binding NameVal, Mode=TwoWay}"/>
+            <TextBlock x:Name="tbGroupNameVal" Foreground="Red" Text="{Binding NameVal, Mode=TwoWay}"/>
 
-        <TextBlock Text="Emails"/>
-        <ListView x:Name="lvEmails" ItemsSource="{x:Bind EmailList}" MaxHeight="200">
-            <ListView.ItemTemplate>
-                <DataTemplate >
-                    <RelativePanel MinWidth="250">
-                        <TextBlock Text="{Binding}" 
+            <TextBlock Text="Emails"/>
+            <ListView x:Name="lvEmails" ItemsSource="{x:Bind EmailList}" MaxHeight="200">
+                <ListView.ItemTemplate>
+                    <DataTemplate >
+                        <RelativePanel MinWidth="250">
+                            <TextBlock Text="{Binding}" 
                                    RelativePanel.AlignLeftWithPanel="True" 
                                    MaxWidth="200"
                                    RelativePanel.AlignVerticalCenterWithPanel="True"/>
-                        <AppBarButton Icon="delete"  Click="abbtnDelete_Click" 
+                            <AppBarButton Icon="delete"  Click="abbtnDelete_Click" 
                                       RelativePanel.AlignRightWithPanel="True" 
                                       Style="{StaticResource abbtnStyle}"/>
-                    </RelativePanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                        </RelativePanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-        <TextBlock Text="Add Email"/>
+            <TextBlock Text="Add Email"/>
 
-        <TextBox Name ="tbEmail"
+            <TextBox Name ="tbEmail"
                  Style="{StaticResource tbStyle}" TextChanged="tbEmail_TextChanged"/>
 
-        <TextBlock Name="tbEmailVal" Foreground="Red"
+            <TextBlock Name="tbEmailVal" Foreground="Red"
                    Text="{Binding EmailVal, Mode=TwoWay}"/>
 
-        <Button Content="Add" Click="btnAdd_Click" Style="{StaticResource btnStyle}"/>
-    </StackPanel>
+            <Button Content="Add" Click="btnAdd_Click" Style="{StaticResource btnStyle}"/>
+        </StackPanel>
+    </ScrollViewer>
 </ContentDialog>

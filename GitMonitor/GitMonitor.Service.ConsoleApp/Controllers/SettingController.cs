@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using GitMonitor.DomainModel.DTO;
 using System;
+using System.Collections.Generic;
 
 namespace GitMonitor.Service.ConsoleApp.Controllers
 {
@@ -29,11 +30,11 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
         }
 
         [HttpPut]
-        public HttpResponseMessage UpdateSetting(Setting setting)
+        public HttpResponseMessage UpdateSetting(List<Setting> settings)
         {
             try
             {
-                _settingsRepository.Update(setting);
+                _settingsRepository.Update(settings);
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }

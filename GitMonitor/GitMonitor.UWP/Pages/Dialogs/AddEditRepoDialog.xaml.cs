@@ -40,7 +40,7 @@ namespace GitMonitor.UWP.Pages.Dialogs
             {
                 APIUtility APIUtility = new APIUtility();
 
-                EmailGroups = await APIUtility.Get<List<EmailGroup>>(RouteUtility._getGetAllEmailGroups);
+                EmailGroups = await APIUtility.Get<List<EmailGroup>>(RouteUtility._getAllEmailGroups);
 
                 foreach(EmailGroup emailGroup in EmailGroups)
                 {
@@ -76,7 +76,7 @@ namespace GitMonitor.UWP.Pages.Dialogs
 
                 APIUtility APIUtility = new APIUtility();
 
-                await APIUtility.Put(repo, RouteUtility._getUpdateRepo);
+                await APIUtility.Put(repo, RouteUtility._updateRepo);
             }
             catch (Exception ex)
             {
@@ -97,7 +97,7 @@ namespace GitMonitor.UWP.Pages.Dialogs
 
                 APIUtility APIUtility = new APIUtility();
 
-                DataContext = await APIUtility.Get<Repo>(string.Format(RouteUtility._getRefreshRepo, repo.RepoID));
+                DataContext = await APIUtility.Get<Repo>(string.Format(RouteUtility._refreshRepo, repo.RepoID));
             }
             catch (Exception ex)
             {

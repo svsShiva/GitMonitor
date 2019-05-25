@@ -99,6 +99,7 @@
     <Compile Include="DTO\EmailGroup.cs" />
     <Compile Include="DTO\ErrorLog.cs" />
     <Compile Include="DTO\Repo.cs" />
+    <Compile Include="Enums\SettingEnum.cs" />
     <Compile Include="Utilities\CustomExceptionUtility.cs" />
     <Compile Include="Pages\DashboardPage.xaml.cs">
       <DependentUpon>DashboardPage.xaml</DependentUpon>
@@ -135,6 +136,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\APIUtility.cs" />
+    <Compile Include="Utilities\LogUtility.cs" />
     <Compile Include="Utilities\ModelConversionUtility.cs" />
     <Compile Include="Utilities\RouteUtility.cs" />
     <Compile Include="Utilities\StringUtility.cs" />

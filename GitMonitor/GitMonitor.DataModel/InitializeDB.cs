@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using System.IO;
+using GitMonitor.DomainModel.Enums;
 
 namespace GitMonitor.DataModel
 {
@@ -22,9 +23,16 @@ namespace GitMonitor.DataModel
                     db.CreateTable<tblBranch>();
                     db.CreateTable<tblErrorLog>();
                     db.CreateTable<tblEmailGroup>();
+
+                    //Seed Data
+                    db.Insert(new tblSetting { Key = SettingEnum.Interval.ToString(), Value = "5" });
+                    db.Insert(new tblSetting { Key = SettingEnum.EnableDesktopNotifications.ToString(), Value = "True" });
+                    db.Insert(new tblSetting { Key = SettingEnum.EnableEmailNotifications.ToString(), Value = "False" });
+                    db.Insert(new tblSetting { Key = SettingEnum.MinInterval.ToString(), Value = "5" });
+                    db.Insert(new tblSetting { Key = SettingEnum.MaxInterval.ToString(), Value = "60" });
                 }
             }
-            catch (System.Exception ex)
+            catch
             {
                 throw;
             }

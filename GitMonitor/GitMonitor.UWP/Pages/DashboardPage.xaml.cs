@@ -29,7 +29,7 @@ namespace GitMonitor.UWP.Pages
             {
                 APIUtility APIUtility = new APIUtility();
 
-                Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getGetAllTrackedRepos);
+                Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getAllTrackedRepos);
 
                 dgDashboard.ItemsSource = null;
                 dgDashboard.ItemsSource = Repos;
@@ -61,7 +61,7 @@ namespace GitMonitor.UWP.Pages
                 Repo obj = ((FrameworkElement)sender).DataContext as Repo;
 
                 Repo oldRepoObj = Repos.First(m => m.RepoID == obj.RepoID);
-                Repo newRepoObj = await APIUtility.Get<Repo>(string.Format(RouteUtility._getRefreshRepo, obj.RepoID));
+                Repo newRepoObj = await APIUtility.Get<Repo>(string.Format(RouteUtility._refreshRepo, obj.RepoID));
 
                 Repos.Remove(oldRepoObj);
                 Repos.Add(newRepoObj);
@@ -100,14 +100,12 @@ namespace GitMonitor.UWP.Pages
 
                 ConfirmationDialog confirmationDialog = new ConfirmationDialog(string.Format(StringUtility._repoUnTrackedConfirmation, obj.Name));
 
-                confirmationDialog.DataContext = obj;
-
                 ContentDialogResult contentDialogResult = await confirmationDialog.ShowAsync();
 
                 if (contentDialogResult == ContentDialogResult.Primary)
                 {
                     APIUtility APIUtility = new APIUtility();
-                    APIUtility.Delete(string.Format(RouteUtility._getStopTrackingRepo, obj.RepoID));
+                    APIUtility.Delete(string.Format(RouteUtility._stopTrackingRepo, obj.RepoID));
 
                     Repos.Remove(obj);
                     dgDashboard.ItemsSource = null;

@@ -105,12 +105,12 @@ namespace GitMonitor.UWP.Pages.Dialogs
 
                 if (_emailGroup.EmailGroupID <= 0)
                 {
-                    EmailGroup emailGroup = await APIUtility.Post<EmailGroup, EmailGroup>(obj, RouteUtility._getAddEmailGroup);
+                    EmailGroup emailGroup = await APIUtility.Post<EmailGroup, EmailGroup>(obj, RouteUtility._addEmailGroup);
                     _emailGroups.Add(emailGroup);
                 }
                 else
                 {
-                    await APIUtility.Put(obj, RouteUtility._getUpdateEmailGroup);
+                    await APIUtility.Put(obj, RouteUtility._updateEmailGroup);
                     obj.LastModifiedAt = DateTime.Now;
                 }
             }
