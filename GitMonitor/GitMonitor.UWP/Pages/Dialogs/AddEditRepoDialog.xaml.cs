@@ -104,10 +104,5 @@ namespace GitMonitor.UWP.Pages.Dialogs
                 await new ErrorDialog(ex).ShowAsync();
             }
         }
-
-        private void AbbtnAddEmailGroup_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

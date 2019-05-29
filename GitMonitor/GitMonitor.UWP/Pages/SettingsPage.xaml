@@ -16,9 +16,11 @@
         <TextBlock Name="tbIntervalVal" Foreground="Red" />
 
         <CheckBox x:Name="cbEnableDesktopNoti" 
+                  Content="Enable Desktop Notifications"
                   Style="{StaticResource cbStyle}"/>
 
         <CheckBox x:Name="cbEnableEmailNoti"
+                  Content="Enable Email Notifications"
                   Style="{StaticResource cbStyle}"/>
 
         <Button Name="btnSave" Content="Save" Style="{StaticResource btnStyle}" 

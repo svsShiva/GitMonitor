@@ -16,10 +16,10 @@
             <controls:DataGridTextColumn Header="Branch Name" IsReadOnly="True"
                                                  Binding="{Binding Name}"/>
 
-            <controls:DataGridTextColumn Header="AheadBy" IsReadOnly="True"
+            <controls:DataGridTextColumn Header="Ahead By" IsReadOnly="True"
                                              Binding="{Binding AheadBy}" />
 
-            <controls:DataGridTextColumn Header="BehindBy" IsReadOnly="True"
+            <controls:DataGridTextColumn Header="Behind By" IsReadOnly="True"
                                              Binding="{Binding BehindBy}" />
 
         </controls:DataGrid.Columns>

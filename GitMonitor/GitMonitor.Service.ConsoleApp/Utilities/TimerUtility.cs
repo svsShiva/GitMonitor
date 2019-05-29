@@ -6,6 +6,7 @@ using GitMonitor.Repository;
 using GitMonitor.DomainModel.DTO;
 using System.Configuration;
 using System.Timers;
+using GitMonitor.DomainModel.Enums;
 
 namespace GitMonitor.Service.ConsoleApp.Utilities
 {
@@ -22,13 +23,18 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
             {
                 _isProcessExecuting = false;
 
+                _settings = new SettingsRepository().GetAllSettings();
+
                 _simultaneousCheckCount = Convert.ToInt16(ConfigurationManager.AppSettings["SimultaneousCheckCount"].ToString());
 
                 _timer = new System.Timers.Timer();
                 _timer.Enabled = true;
                 _timer.Interval = TimeSpan
-                                 .FromMinutes(Convert.ToInt16(ConfigurationManager.AppSettings["RunInterval"].ToString()))
-                                 .TotalMilliseconds;
+                                          .FromMinutes(Convert.ToInt16(
+                                                       _settings.Where(m => m.Key == SettingEnum.Interval.ToString())
+                                          .FirstOrDefault().Value)
+                                                       )
+                                          .TotalMilliseconds;
 
                 _timer.Elapsed += Timer_Elapsed;
             }
@@ -56,11 +62,9 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
             {
                 if (!_isProcessExecuting)
                 {
-                    _settings = new SettingsRepository().GetAllSettings();
-
                     _timer.Interval = TimeSpan
                                           .FromMinutes(Convert.ToInt16(
-                                                       _settings.Where(m => m.Key == "Interval")
+                                                       _settings.Where(m => m.Key == SettingEnum.Interval.ToString())
                                           .FirstOrDefault().Value)
                                                        )
                                           .TotalMilliseconds;
@@ -69,9 +73,9 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
                     RepoRepository repoRepository = new RepoRepository();
                     List<Repo> list = repoRepository.GetAllTrackedRepos();
-                    list.AddRange(repoRepository.GetAllUnTrackedRepos());
+                    //list.AddRange(repoRepository.GetAllUnTrackedRepos());
 
-                    for (int i = 0; i < list.Count - 1; i++)
+                    for (int i = 0; i < list.Count; i++)
                     {
                         CheckRepoStatus(list.Skip(_simultaneousCheckCount * i)
                                             .Take(_simultaneousCheckCount).ToList());
@@ -102,6 +106,9 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
                 // this will run the actions in parallel and wait till all the actions gets completed
                 Parallel.Invoke(actionList);
+
+                // Notification & Email service
+                NotificationUtility.SendNotification();
             }
             catch (Exception ex)
             {

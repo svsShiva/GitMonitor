@@ -31,6 +31,13 @@ namespace GitMonitor.UWP.Pages
 
                 Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getAllTrackedRepos);
 
+                foreach(Repo repo in Repos)
+                {
+                    repo.IsAhead = repo.Branches.Any(m => m.AheadBy > 0);
+                    repo.IsBehind = repo.Branches.Any(m => m.BehindBy > 0);
+                    repo.IsUptoDate = repo.Branches.Any(m => m.AheadBy == 0 && m.BehindBy == 0);
+                }
+
                 dgDashboard.ItemsSource = null;
                 dgDashboard.ItemsSource = Repos;
             }
@@ -121,7 +128,7 @@ namespace GitMonitor.UWP.Pages
             }
         }
 
-        private async void btnBranches_Click(object sender, RoutedEventArgs e)
+        private async void hlBranches_Click(object sender, RoutedEventArgs e)
         {
             try
             {

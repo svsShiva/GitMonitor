@@ -87,7 +87,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                             SetStatus(branch, vvBranch);
 
                             // If the branch is set to be autopulled, autopull it.
-                            if (autoPullInCycle && !repo.IsUntrackedRepo && repo.AutoTrack && branch.AutoPull)
+                            if (autoPullInCycle && !repo.IsUntrackedRepo && branch.AutoPull)
                             {
                                 // fast-forward only
                                 if (branch.AheadBy == 0 && branch.BehindBy > 0)
@@ -113,16 +113,6 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                                     {
                                         SetStatus(branch, newStatus);
                                     }
-
-                                }
-                                // local branch is ahead of remote.
-                                else if (branch.AheadBy > 0 && branch.BehindBy == 0)
-                                {
-                                    //Notify that you are ahead. Please push your changes
-                                }
-                                else if (branch.AheadBy > 0 && branch.BehindBy > 0)
-                                {
-                                    //Notify that you have diverged. Please merge manually.
                                 }
                             }
                         }
@@ -212,8 +202,8 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                 // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
                 //                         ^commitEnd        ^upStreamEnd     
 
-                branch.AheadBy = 0;
-                branch.BehindBy = 0;
+                //branch.AheadBy = 0;
+                //branch.BehindBy = 0;
 
                 if (branchvvline[upStreamEnd - 1] == ':')
                 {
@@ -229,11 +219,19 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                     //                                                  ^(value = 1)
                     if (key.Equals("ahead"))
                     {
-                        branch.AheadBy = value;
+                        if(branch.AheadBy != value)
+                        {
+                            branch.AheadBy = value;
+                            branch.SendNotification = true;
+                        }
                     }
                     else if (key.Equals("behind"))
                     {
-                        branch.BehindBy = value;
+                        if (branch.BehindBy != value)
+                        {
+                            branch.BehindBy = value;
+                            branch.SendNotification = true;
+                        }
                     }
                     // Possibility1:                                      v space2
                     // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
@@ -251,11 +249,19 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                         value = Convert.ToInt32(branchvvline.Substring(space3 + 1, space4 - space3 - 2));
                         if (key.Equals("ahead"))
                         {
-                            branch.AheadBy = value;
+                            if (branch.AheadBy != value)
+                            {
+                                branch.AheadBy = value;
+                                branch.SendNotification = true;
+                            }
                         }
                         else if (key.Equals("behind"))
                         {
-                            branch.BehindBy = value;
+                            if (branch.BehindBy != value)
+                            {
+                                branch.BehindBy = value;
+                                branch.SendNotification = true;
+                            }
                         }
                     }
                 }

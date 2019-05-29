@@ -23,55 +23,56 @@
             <TextBlock Text="{Binding WorkingDirectory}" />
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Branches To Autopull"
-                       VerticalAlignment="Center"/>
+                <TextBlock Text="Branches To Autopull "
+                           VerticalAlignment="Center"/>
 
-                <HyperlinkButton Content="Refresh" x:Name="hlRefresh" 
-                             Click="hlRefresh_Click"
-                             Foreground="{ThemeResource TextControlSelectionHighlightColor}"/>
+                <HyperlinkButton Content="Refresh"
+                                 x:Name="hlRefresh" 
+                                 Click="hlRefresh_Click"
+                                 Foreground="{ThemeResource TextControlSelectionHighlightColor}"/>
             </StackPanel>
 
             <ListView ItemsSource="{Binding Branches}" MaxHeight="80">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="DTO:Branch" >
                         <CheckBox Content="{x:Bind Name}"
-                              Style="{StaticResource cbStyle}"
-                              IsChecked="{x:Bind AutoPull, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                  Style="{StaticResource cbStyle}"
+                                  IsChecked="{x:Bind AutoPull, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
             <CheckBox x:Name="cbEnableDesktopNoti" 
-                  Content="Enable Desktop Notifications" 
-                  Style="{StaticResource cbStyle}"
-                  IsChecked="{Binding EnableDesktopNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                      Content="Enable Desktop Notifications" 
+                      Style="{StaticResource cbStyle}"
+                      IsChecked="{Binding EnableDesktopNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <ListView ItemsSource="{Binding Branches}" MaxHeight="80"
-                  IsEnabled="{Binding IsChecked,ElementName=cbEnableDesktopNoti}">
+                       IsEnabled="{Binding IsChecked,ElementName=cbEnableDesktopNoti}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="DTO:Branch" >
                         <CheckBox Content="{x:Bind Name}"
-                              Style="{StaticResource cbStyle}"
-                              IsChecked="{x:Bind EnableDesktopNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                  Style="{StaticResource cbStyle}"
+                                  IsChecked="{x:Bind EnableDesktopNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
             <CheckBox x:Name="cbEnableEmailNoti" 
-                  Content="Enable Email Notifications" 
-                  Style="{StaticResource cbStyle}"
-                  IsChecked="{Binding EnableEmailNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                      Content="Enable Email Notifications" 
+                      Style="{StaticResource cbStyle}"
+                      IsChecked="{Binding EnableEmailNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <StackPanel Orientation="Horizontal">
                 <StackPanel>
                     <TextBlock Text="Branches"/>
                     <ListView ItemsSource="{Binding Branches}" MaxHeight="80"
-                          IsEnabled="{Binding IsChecked,ElementName=cbEnableEmailNoti}">
+                              IsEnabled="{Binding IsChecked,ElementName=cbEnableEmailNoti}">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="DTO:Branch">
                                 <CheckBox Content="{x:Bind Name}" 
-                                      Style="{StaticResource cbStyle}"
-                                      IsChecked="{x:Bind EnableEmailNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                          Style="{StaticResource cbStyle}"
+                                          IsChecked="{x:Bind EnableEmailNotification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -80,19 +81,15 @@
                 <StackPanel>
                     <TextBlock Text="Email Groups"/>
                     <ListView ItemsSource="{x:Bind EmailGroups, Mode=TwoWay}" MaxHeight="80"
-                          IsEnabled="{Binding IsChecked,ElementName=cbEnableEmailNoti}">
+                              IsEnabled="{Binding IsChecked,ElementName=cbEnableEmailNoti}">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="DTO:EmailGroup" >
                                 <CheckBox Content="{x:Bind Name}" 
-                                      Style="{StaticResource cbStyle}"
-                                      IsChecked="{x:Bind IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                          Style="{StaticResource cbStyle}"
+                                          IsChecked="{x:Bind IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-
-                    <AppBarButton x:Name="abbtnAddEmailGroup" Icon="Add"
-                              Style="{ThemeResource abbtnStyle}" 
-                              Click="AbbtnAddEmailGroup_Click"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

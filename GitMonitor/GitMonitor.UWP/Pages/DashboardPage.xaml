@@ -27,34 +27,52 @@
                               Style="{StaticResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
+        <Style TargetType="Border" x:Name="bdStyle">
+            <Setter Property="Height" Value="10"/>
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="2,0,0,0"/>
+        </Style>
     </Page.Resources>
 
     <controls:DataGrid x:Name="dgDashboard"
                        ItemsSource="{x:Bind Repos}"
-                       Style="{StaticResource dgStyle}"
-                       AlternatingRowBackground="AliceBlue">
+                       Style="{StaticResource dgStyle}">
         <controls:DataGrid.Columns>
-            <controls:DataGridTextColumn Header="Name" IsReadOnly="True"
-                                             Binding="{Binding Name}"/>
-            
-            <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
-                                             Binding="{Binding CreatedAt}"/>
-            
-            <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
-                                             Binding="{Binding WorkingDirectory}"/>
-
-            <controls:DataGridTemplateColumn Header="Branches" IsReadOnly="True">
+            <controls:DataGridTemplateColumn Header="Name" IsReadOnly="True">
                 <controls:DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding CurrentBranch}" Click="btnBranches_Click"
-                                HorizontalAlignment="Stretch">
-                        </Button>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                    Padding="10,0,0,0">
+                            <HyperlinkButton Content="{Binding Name}" 
+                                             Click="hlBranches_Click"
+                                             Foreground="Blue">
+                            </HyperlinkButton>
+                            
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Name="spStatus">
+                                <Border Background="Red" 
+                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsBehind}"/>
+                                <Border Background="Orange"
+                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsAhead}"/>
+                                <Border Background="Green"
+                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsUptoDate}"/>
+                            </StackPanel>
+                        </StackPanel>
                     </DataTemplate>
                 </controls:DataGridTemplateColumn.CellTemplate>
             </controls:DataGridTemplateColumn>
 
+            <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
+                                         Binding="{Binding CreatedAt}"/>
+            
+            <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
+                                         Binding="{Binding WorkingDirectory}"/>
+
+            <controls:DataGridTextColumn Header="Current Branch" IsReadOnly="True"
+                                         Binding="{Binding CurrentBranch}"/>
+
             <controls:DataGridTextColumn Header="Recent Check" IsReadOnly="True"
-                                             Binding="{Binding RecentCheck}"/>
+                                         Binding="{Binding RecentCheck}"/>
 
             <controls:DataGridTemplateColumn Header="Refresh"  CellTemplate="{StaticResource refreshIconTemplate}"/>
 

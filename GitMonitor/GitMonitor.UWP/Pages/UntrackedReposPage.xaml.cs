@@ -46,6 +46,7 @@ namespace GitMonitor.UWP.Pages
                 AppBarButton item = (AppBarButton)sender;
 
                 Repo repo = (Repo)item.DataContext;
+                repo.IsUntrackedRepo = false;
 
                 APIUtility APIUtility = new APIUtility();
 

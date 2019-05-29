@@ -79,6 +79,9 @@ namespace GitMonitor.UWP.DTO
         public DateTime ModifiedAt { get; set; }
         public DateTime? RecentCheck { get; set; }
         public bool IsActive { get; set; }
+        public bool IsAhead { get; set; }
+        public bool IsBehind { get; set; }
+        public bool IsUptoDate { get; set; }
 
         public virtual List<Branch> Branches { get; set; }
     }

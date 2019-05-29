@@ -19,6 +19,7 @@ namespace GitMonitor.DomainModel.DTO
         public string TrackingBranch { get; set; }
         public long AheadBy { get; set; }
         public long BehindBy { get; set; }
+        public bool SendNotification { get; set; }
 
         public virtual Repo Repo { get; set; }
     }

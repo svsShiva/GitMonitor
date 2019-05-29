@@ -31,6 +31,7 @@ namespace GitMonitor.Repository
                             EnableEmailNotification = m.EnableEmailNotification,
                             EmailGroupIDS = m.EmailGroupIDS,
                             CurrentBranch = m.CurrentBranch,
+                            IsUntrackedRepo = m.IsUntrackedRepo,
                             Branches = db.Table<tblBranch>().Where(n => n.tblRepoID == m.tblRepoID)
                             .Select((n) => new DM.Branch
                             {
@@ -45,7 +46,8 @@ namespace GitMonitor.Repository
                                 BehindBy = n.BehindBy,
                                 HasUpstream = n.HasUpstream,
                                 Remote = n.Remote,
-                                TrackingBranch = n.TrackingBranch
+                                TrackingBranch = n.TrackingBranch,
+                                SendNotification = n.SendNotification
                             }).Where(o => o.RepoID == m.tblRepoID).ToList()
                         })
                         .ToList();
@@ -80,6 +82,7 @@ namespace GitMonitor.Repository
                             EnableEmailNotification = m.EnableEmailNotification,
                             EmailGroupIDS = m.EmailGroupIDS,
                             CurrentBranch = m.CurrentBranch,
+                            IsUntrackedRepo = m.IsUntrackedRepo,
                             Branches = db.Table<tblBranch>().Where(n => n.tblRepoID == m.tblRepoID)
                             .Select((n) => new DM.Branch
                             {
@@ -238,7 +241,7 @@ namespace GitMonitor.Repository
                 foreach (var branch in repo.Branches)
                 {
                     tblBranch tblBranchObj = db.Table<tblBranch>()
-                                       .FirstOrDefault(m => m.Name == branch.Name);
+                                       .FirstOrDefault(m => m.tblBranchID == branch.BranchID);
 
                     if (tblBranchObj == null)
                     {
@@ -248,7 +251,7 @@ namespace GitMonitor.Repository
                     tblBranchObj.tblRepoID = repo.RepoID;
                     tblBranchObj.AutoPull = branch.AutoPull;
                     tblBranchObj.EnableDesktopNotification = branch.EnableDesktopNotification;
-                    tblBranchObj.EnableEmailNotification = repo.EnableEmailNotification;
+                    tblBranchObj.EnableEmailNotification = branch.EnableEmailNotification;
                     tblBranchObj.IsActive = branch.IsActive;
                     tblBranchObj.Name = branch.Name;
                     tblBranchObj.HasUpstream = branch.HasUpstream;
@@ -256,6 +259,7 @@ namespace GitMonitor.Repository
                     tblBranchObj.TrackingBranch = branch.TrackingBranch;
                     tblBranchObj.AheadBy = branch.AheadBy;
                     tblBranchObj.BehindBy = branch.BehindBy;
+                    tblBranchObj.SendNotification = branch.SendNotification;
 
                     if (tblBranchObj.tblBranchID == 0)
                     {
@@ -291,6 +295,7 @@ namespace GitMonitor.Repository
                             WorkingDirectory = m.WorkingDirectory,
                             IsActive = m.IsActive,
                             EnableDesktopNotification = m.EnableDesktopNotification,
+                            EnableEmailNotification = m.EnableEmailNotification,
                             EmailGroupIDS = m.EmailGroupIDS,
                             CurrentBranch = m.CurrentBranch,
                             Branches = db.Table<tblBranch>().Where(n => n.tblRepoID == m.tblRepoID)
