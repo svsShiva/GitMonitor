@@ -79,6 +79,7 @@
     <Compile Include="Controllers\SettingController.cs" />
     <Compile Include="Utilities\FileMonitorUtility.cs" />
     <Compile Include="Controllers\RepoController.cs" />
+    <Compile Include="Utilities\NotificationUtility.cs" />
     <Compile Include="Utilities\SocketUtility.cs" />
     <Compile Include="Utilities\ProcessUtility.cs" />
     <Compile Include="Utilities\DesktopNotificationUtility.cs" />

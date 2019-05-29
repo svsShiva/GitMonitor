@@ -27,58 +27,69 @@
                               Style="{StaticResource abbtnStyle}"/>
             </StackPanel>
         </DataTemplate>
-        <Style TargetType="Border" x:Name="bdStyle">
-            <Setter Property="Height" Value="10"/>
-            <Setter Property="Width" Value="10"/>
-            <Setter Property="CornerRadius" Value="10"/>
-            <Setter Property="Margin" Value="2,0,0,0"/>
-        </Style>
     </Page.Resources>
 
-    <controls:DataGrid x:Name="dgDashboard"
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="4" Opacity="0.6" HorizontalAlignment="Right" Margin="0,0,0,8">
+           
+            <Border Background="Red" Style="{StaticResource bdStyle}" Visibility="{Binding IsBehind}"/>
+            <TextBlock Text="Behind" VerticalAlignment="Center"/>
+            <Border Background="Orange" Style="{StaticResource bdStyle}" Visibility="{Binding IsAhead}"/>
+            <TextBlock Text="Ahead" VerticalAlignment="Center"/>
+            <Border Background="Green" Style="{StaticResource bdStyle}" Visibility="{Binding IsUptoDate}"/>
+            <TextBlock Text="UptoDate" VerticalAlignment="Center"/>
+            
+            <TextBox Name="RepoName" Width="300" Margin="20,0,0,0" PlaceholderText="Search repository" 
+                 TextChanged="tbRepoName_TextChanged"/>
+
+           
+        </StackPanel>
+
+        <controls:DataGrid x:Name="dgDashboard"
                        ItemsSource="{x:Bind Repos}"
                        Style="{StaticResource dgStyle}">
-        <controls:DataGrid.Columns>
-            <controls:DataGridTemplateColumn Header="Name" IsReadOnly="True">
-                <controls:DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+            <controls:DataGrid.Columns>
+                <controls:DataGridTemplateColumn Header="Name" IsReadOnly="True">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                                     Padding="10,0,0,0">
-                            <HyperlinkButton Content="{Binding Name}" 
+                                <HyperlinkButton Content="{Binding Name}" 
                                              Click="hlBranches_Click"
                                              Foreground="Blue">
-                            </HyperlinkButton>
-                            
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Name="spStatus">
-                                <Border Background="Red" 
-                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsBehind}"/>
-                                <Border Background="Orange"
-                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsAhead}"/>
-                                <Border Background="Green"
-                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsUptoDate}"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </controls:DataGridTemplateColumn.CellTemplate>
-            </controls:DataGridTemplateColumn>
+                                </HyperlinkButton>
 
-            <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Border Background="Red" 
+                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsBehind}"/>
+                                    <Border Background="Orange"
+                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsAhead}"/>
+                                    <Border Background="Green"
+                                        Style="{StaticResource bdStyle}" Visibility="{Binding IsUptoDate}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+
+                <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
                                          Binding="{Binding CreatedAt}"/>
-            
-            <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
+
+                <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
                                          Binding="{Binding WorkingDirectory}"/>
 
-            <controls:DataGridTextColumn Header="Current Branch" IsReadOnly="True"
+                <controls:DataGridTextColumn Header="Current Branch" IsReadOnly="True"
                                          Binding="{Binding CurrentBranch}"/>
 
-            <controls:DataGridTextColumn Header="Recent Check" IsReadOnly="True"
+                <controls:DataGridTextColumn Header="Recent Check" IsReadOnly="True"
                                          Binding="{Binding RecentCheck}"/>
 
-            <controls:DataGridTemplateColumn Header="Refresh"  CellTemplate="{StaticResource refreshIconTemplate}"/>
+                <controls:DataGridTemplateColumn Header="Refresh"  CellTemplate="{StaticResource refreshIconTemplate}"/>
 
-            <controls:DataGridTemplateColumn Header="Edit"  CellTemplate="{StaticResource editIconTemplate}"/>
+                <controls:DataGridTemplateColumn Header="Edit"  CellTemplate="{StaticResource editIconTemplate}"/>
 
-            <controls:DataGridTemplateColumn Header="UnTrack" CellTemplate="{StaticResource deleteIconTemplate}"/>
-        </controls:DataGrid.Columns>
-    </controls:DataGrid>
+                <controls:DataGridTemplateColumn Header="UnTrack" CellTemplate="{StaticResource deleteIconTemplate}"/>
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+    </StackPanel>
 </Page>

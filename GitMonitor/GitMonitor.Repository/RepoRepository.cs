@@ -47,7 +47,8 @@ namespace GitMonitor.Repository
                                 HasUpstream = n.HasUpstream,
                                 Remote = n.Remote,
                                 TrackingBranch = n.TrackingBranch,
-                                SendNotification = n.SendNotification
+                                SendDesktopNoti = n.SendDesktopNoti,
+                                SendEmailNoti = n.SendEmailNoti
                             }).Where(o => o.RepoID == m.tblRepoID).ToList()
                         })
                         .ToList();
@@ -259,7 +260,8 @@ namespace GitMonitor.Repository
                     tblBranchObj.TrackingBranch = branch.TrackingBranch;
                     tblBranchObj.AheadBy = branch.AheadBy;
                     tblBranchObj.BehindBy = branch.BehindBy;
-                    tblBranchObj.SendNotification = branch.SendNotification;
+                    tblBranchObj.SendEmailNoti = branch.SendEmailNoti;
+                    tblBranchObj.SendDesktopNoti = branch.SendDesktopNoti;
 
                     if (tblBranchObj.tblBranchID == 0)
                     {
@@ -354,230 +356,90 @@ namespace GitMonitor.Repository
             }
         }
 
-        //public List<DM.Repo> GetAllDeletedRepos()
-        //{
-        //    //TODO need to check for usage, 0 references
-        //    //TODO need to update branches logic, inner Query
-        //    using (SQLiteConnection db = InitializeDB.Initialize())
-        //    {
-        //        return db.Table<tblRepo>()
-        //            .Where(m => !m.IsActive)
-        //            .Select((m) => new DM.Repo
-        //            {
-        //                RepoID = m.tblRepoID,
-        //                Name = m.Name,
-        //                AutoTrack = m.AutoTrack,
-        //                CreatedAt = m.CreatedAt,
-        //                ModifiedAt = m.ModifiedAt,
-        //                RecentCheck = m.RecentCheck,
-        //                WorkingDirectory = m.WorkingDirectory,
-        //                IsActive = m.IsActive,
-        //                EnableDesktopNotification = m.EnableDesktopNotification,
-        //                CurrentBranch = m.CurrentBranch,
-        //                Branches = db.Table<tblBranch>().Where(n => n.tblRepoID == m.tblRepoID)
-        //                .Select((n) => new DM.Branch
-        //                {
-        //                    BranchID = n.tblBranchID,
-        //                    AutoPull = n.AutoPull,
-        //                    IsActive = n.IsActive,
-        //                    Name = n.Name,
-        //                    EnableDeskTopNotifications = n.EnableDeskTopNotifications,
-        //                    RepoID = n.tblRepoID,
-        //                    AheadBy = n.AheadBy,
-        //                    BehindBy = n.BehindBy,
-        //                    HasUpstream = n.HasUpstream,
-        //                    Remote = n.Remote,
-        //                    TrackingBranch = n.TrackingBranch
-        //                }).Where(o => o.RepoID == m.tblRepoID).ToList()
-        //            }
-        //            )
-        //            .ToList();
-        //    }
-        //}
+        public List<DM.Repo> GetReposForNotifications()
+        {
+            try
+            {
+                using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
+                {
+                    return db.Table<tblRepo>()
+                        .Where(m => (m.IsActive && !m.IsUntrackedRepo) && (m.EnableDesktopNotification || m.EnableEmailNotification))
+                        .Select((m) => new DM.Repo
+                        {
+                            RepoID = m.tblRepoID,
+                            Name = m.Name,
+                            AutoTrack = m.AutoTrack,
+                            CreatedAt = m.CreatedAt,
+                            ModifiedAt = m.ModifiedAt,
+                            RecentCheck = m.RecentCheck,
+                            WorkingDirectory = m.WorkingDirectory,
+                            IsActive = m.IsActive,
+                            EnableDesktopNotification = m.EnableDesktopNotification,
+                            EnableEmailNotification = m.EnableEmailNotification,
+                            EmailGroupIDS = m.EmailGroupIDS,
+                            CurrentBranch = m.CurrentBranch,
+                            IsUntrackedRepo = m.IsUntrackedRepo,
+                            Branches = db.Table<tblBranch>().Where(o => o.tblRepoID == m.tblRepoID && (m.EnableDesktopNotification || m.EnableEmailNotification))
+                            .Select((n) => new DM.Branch
+                            {
+                                BranchID = n.tblBranchID,
+                                AutoPull = n.AutoPull,
+                                IsActive = n.IsActive,
+                                Name = n.Name,
+                                EnableDesktopNotification = n.EnableDesktopNotification,
+                                EnableEmailNotification = n.EnableEmailNotification,
+                                RepoID = n.tblRepoID,
+                                AheadBy = n.AheadBy,
+                                BehindBy = n.BehindBy,
+                                HasUpstream = n.HasUpstream,
+                                Remote = n.Remote,
+                                TrackingBranch = n.TrackingBranch,
+                                SendEmailNoti = n.SendEmailNoti,
+                                SendDesktopNoti = n.SendDesktopNoti
+                            }).ToList()
+                        })
+                        .ToList().Where(m => m.Branches.Any(n => n.SendDesktopNoti || n.SendEmailNoti)).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorRepo.AddErrorLog(exception: ex);
+                throw;
+            }
+        }
 
-        //public void UpdateFromUI(DMVM.EditFormViewModel repo)
-        //{
-        //    using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
-        //    {
-        //        tblRepo tblRepoObj = db.tblRepoes.Include("tblBranches")
-        //                               .FirstOrDefault(m => m.WorkingDirectory == repo.WorkingDirectory);
+        public void UpdateNotiFlag(long repoID, bool isDesktopNoti)
+        {
+            try
+            {
+                using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
+                {
+                    List<tblBranch> tblBranches = db.Table<tblBranch>()
+                                                    .Where(m => m.tblRepoID == repoID)
+                                                    .ToList();
 
-        //        if (tblRepoObj == null)
-        //        {
-        //            throw new Exception("Record not found");
-        //        }
-
-        //        tblRepoObj.Name = repo.RepoName;
-        //        tblRepoObj.EnableDesktopNotification = repo.EnableDesktopNotification;
-        //        tblRepoObj.AutoTrack = repo.AutoTrack;
-        //        tblRepoObj.RepoUrl = repo.RepoURL;
-        //        tblRepoObj.IsUntrackedRepo = false;
-
-        //        foreach (var branch in repo.Branches)
-        //        {
-        //            var tblBranchObj = tblRepoObj.tblBranches
-        //                              .FirstOrDefault(m => m.tblBranchID == branch.BranchID);
-
-        //            tblBranchObj.AutoPull = branch.AutoPull;
-        //            tblBranchObj.EnableDeskTopNotifications = branch.EnableDeskTopNotifications;
-        //        }
-
-        //        db.SaveChanges();
-        //    }
-        //}
-
-        //public List<DMVM.RepoViewModel> GetAllUnTrackedReposViewModel()
-        //{
-        //    List<DM.Repo> repos = GetAllUnTrackedRepos();
-        //    List<DMVM.RepoViewModel> repoViewModelList = new List<DMVM.RepoViewModel>();
-
-        //    foreach (var repo in repos)
-        //    {
-        //        string str = string.Empty;
-        //        DMVM.RepoViewModel repoViewModel = new DMVM.RepoViewModel();
-        //        repoViewModel.RepoID = repo.RepoID;
-        //        repoViewModel.AutoTrack = repo.AutoTrack;
-        //        repoViewModel.CreatedAt = repo.CreatedAt;
-        //        repoViewModel.CurrentBranch = repo.CurrentBranch;
-        //        repoViewModel.IsUntrackedRepo = repo.IsUntrackedRepo;
-        //        repoViewModel.ModifiedAt = repo.ModifiedAt;
-        //        repoViewModel.Name = repo.Name;
-        //        repoViewModel.WorkingDirectory = repo.WorkingDirectory;
-        //        repoViewModel.RecentCheck = repo.RecentCheck;
-
-        //        if (repo.Branches.Count > 0)
-        //        {
-        //            foreach (var branch in repo.Branches)
-        //            {
-        //                str += "\n" + branch.Name;
-        //                if (branch.HasUpstream)
-        //                    str += $" (ahead {branch.AheadBy}, behind {branch.BehindBy})";
-        //            }
-        //        }
-        //        else
-        //        {
-        //            str = "\nCould not detect any branches";
-        //        }
-
-        //        repoViewModel.BranchNames = str.Substring(1);
-        //        repoViewModelList.Add(repoViewModel);
-        //    }
-        //    return repoViewModelList;
-        //}
-
-
-        //public DMVM.EditFormViewModel GetUIRepoByID(long id)
-        //{
-        //    using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
-        //    {
-        //        return db.tblRepoes
-        //            .Where(m => m.IsActive && m.tblRepoID == id)
-        //            .Select((m) => new DMVM.EditFormViewModel
-        //            {
-        //                RepoID = m.tblRepoID,
-        //                RepoName = m.Name,
-        //                AutoTrack = m.AutoTrack,
-        //                WorkingDirectory = m.WorkingDirectory,
-        //                EnableDesktopNotification = m.EnableDesktopNotification,
-        //                Branches = m.tblBranches.Select((n) => new DM.Branch
-        //                {
-        //                    BranchID = n.tblBranchID,
-        //                    AutoPull = n.AutoPull,
-        //                    IsActive = n.IsActive,
-        //                    Name = n.Name,
-        //                    EnableDeskTopNotifications = n.EnableDeskTopNotifications,
-        //                    RepoID = n.tblRepoID,
-        //                    AheadBy = n.AheadBy,
-        //                    BehindBy = n.BehindBy,
-        //                    HasUpstream = n.HasUpstream,
-        //                    Remote = n.Remote,
-        //                    TrackingBranch = n.TrackingBranch
-
-        //                }).Where(o => o.RepoID == m.tblRepoID).ToList()
-        //            }
-        //            )
-        //            .FirstOrDefault();
-        //    }
-        //}
-
-        //public List<DMVM.RepoViewModel> GetAllTrackedReposViewModel()
-        //{
-        //    List<DM.Repo> repos = GetAllTrackedRepos();
-        //    List<DMVM.RepoViewModel> repoViewModelList = new List<DMVM.RepoViewModel>();
-
-        //    foreach (var repo in repos)
-        //    {
-        //        string str = string.Empty;
-        //        DMVM.RepoViewModel repoViewModel = new DMVM.RepoViewModel();
-        //        repoViewModel.RepoID = repo.RepoID;
-        //        repoViewModel.AutoTrack = repo.AutoTrack;
-        //        repoViewModel.CreatedAt = repo.CreatedAt;
-        //        repoViewModel.CurrentBranch = repo.CurrentBranch;
-        //        repoViewModel.IsUntrackedRepo = repo.IsUntrackedRepo;
-        //        repoViewModel.ModifiedAt = repo.ModifiedAt;
-        //        repoViewModel.Name = repo.Name;
-        //        repoViewModel.WorkingDirectory = repo.WorkingDirectory;
-        //        repoViewModel.RecentCheck = repo.RecentCheck;
-
-        //        if (repo.Branches.Count > 0)
-        //        {
-        //            foreach (var branch in repo.Branches)
-        //            {
-        //                str += "\n" + branch.Name;
-        //                if (branch.HasUpstream)
-        //                    str += $" (ahead {branch.AheadBy}, behind {branch.BehindBy})";
-        //            }
-        //        }
-        //        else
-        //        {
-        //            str = "\nCould not detect any branches";
-        //        }
-        //        repoViewModel.BranchNames = str.Substring(1);
-
-        //        repoViewModelList.Add(repoViewModel);
-        //    }
-
-        //    return repoViewModelList;
-        //}
-
-        //public List<DM.Repo> GetAllActiveRepos()
-        //{
-        //    using (SQLiteConnection db = InitializeDB.Initialize())
-        //    {
-        //        //TODO need to update branches logic, inner Query
-        //        return db.Table<tblRepo>()
-        //            .Where(m => m.IsActive)
-        //            .Select((m) => new DM.Repo
-        //            {
-        //                RepoID = m.tblRepoID,
-        //                Name = m.Name,
-        //                AutoTrack = m.AutoTrack,
-        //                CreatedAt = m.CreatedAt,
-        //                ModifiedAt = m.ModifiedAt,
-        //                RecentCheck = m.RecentCheck,
-        //                WorkingDirectory = m.WorkingDirectory,
-        //                IsActive = m.IsActive,
-        //                EnableDesktopNotification = m.EnableDesktopNotification,
-        //                CurrentBranch = m.CurrentBranch,
-        //                Branches = db.Table<tblBranch>().Where(n => n.tblRepoID == m.tblRepoID)
-        //                .Select((n) => new DM.Branch
-        //                {
-        //                    BranchID = n.tblBranchID,
-        //                    AutoPull = n.AutoPull,
-        //                    IsActive = n.IsActive,
-        //                    Name = n.Name,
-        //                    EnableDeskTopNotifications = n.EnableDeskTopNotifications,
-        //                    RepoID = n.tblRepoID,
-        //                    AheadBy = n.AheadBy,
-        //                    BehindBy = n.BehindBy,
-        //                    HasUpstream = n.HasUpstream,
-        //                    Remote = n.Remote,
-        //                    TrackingBranch = n.TrackingBranch
-        //                }).Where(o => o.RepoID == m.tblRepoID).ToList()
-        //            }
-        //            )
-        //            .ToList();
-        //    }
-        //}
+                    foreach (var branch in tblBranches)
+                    {
+                        if (branch != null)
+                        {
+                            if (branch.SendDesktopNoti && isDesktopNoti)
+                            {
+                                branch.SendDesktopNoti = false;
+                            }
+                            else if (branch.SendEmailNoti)
+                            {
+                                branch.SendEmailNoti = false;
+                            }
+                            db.Update(branch);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorRepo.AddErrorLog(exception: ex);
+                throw;
+            }
+        }
     }
 }

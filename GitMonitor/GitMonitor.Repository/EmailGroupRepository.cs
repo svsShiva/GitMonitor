@@ -74,6 +74,29 @@ namespace GitMonitor.Repository
             }
         }
 
+        public string GetEmailGroupByIDS(string emailGroupIDS)
+        {
+            try
+            {
+                using (SQLiteConnection db = InitializeDB.GetSQLiteConnection())
+                {
+                    string emails = string.Empty;
+
+                    foreach (var item in emailGroupIDS.Split(';'))
+                    {
+                        emails = emails + db.Table<tblEmailGroup>().Where(m => m.tblEmailGroupID.ToString() == item).FirstOrDefault().Emails + ";";
+                    }
+
+                    return emails.TrimEnd(';');
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorRepo.AddErrorLog(exception: ex);
+                throw;
+            }
+        }
+
         public void Delete(long id)
         {
             try

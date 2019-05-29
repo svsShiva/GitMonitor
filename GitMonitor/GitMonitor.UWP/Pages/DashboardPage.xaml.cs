@@ -31,7 +31,7 @@ namespace GitMonitor.UWP.Pages
 
                 Repos = await APIUtility.Get<List<Repo>>(RouteUtility._getAllTrackedRepos);
 
-                foreach(Repo repo in Repos)
+                foreach (Repo repo in Repos)
                 {
                     repo.IsAhead = repo.Branches.Any(m => m.AheadBy > 0);
                     repo.IsBehind = repo.Branches.Any(m => m.BehindBy > 0);
@@ -137,6 +137,25 @@ namespace GitMonitor.UWP.Pages
                 BranchesDialog branchesDialog = new BranchesDialog(repo.Branches);
 
                 await branchesDialog.ShowAsync();
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void tbRepoName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (RepoName.Text.Length != 0)
+                {
+                    dgDashboard.ItemsSource = Repos.Where(m => m.Name.ToLower().Contains(RepoName.Text)).ToList();
+                }
+                else
+                {
+                    dgDashboard.ItemsSource = Repos;
+                }
             }
             catch (Exception ex)
             {

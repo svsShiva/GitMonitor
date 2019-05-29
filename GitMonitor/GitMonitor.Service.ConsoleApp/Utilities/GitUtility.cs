@@ -219,10 +219,11 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                     //                                                  ^(value = 1)
                     if (key.Equals("ahead"))
                     {
-                        if(branch.AheadBy != value)
+                        if (branch.AheadBy != value)
                         {
                             branch.AheadBy = value;
-                            branch.SendNotification = true;
+                            branch.SendEmailNoti = true;
+                            branch.SendDesktopNoti = true;
                         }
                     }
                     else if (key.Equals("behind"))
@@ -230,7 +231,8 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                         if (branch.BehindBy != value)
                         {
                             branch.BehindBy = value;
-                            branch.SendNotification = true;
+                            branch.SendEmailNoti = true;
+                            branch.SendDesktopNoti = true;
                         }
                     }
                     // Possibility1:                                      v space2
@@ -252,7 +254,8 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                             if (branch.AheadBy != value)
                             {
                                 branch.AheadBy = value;
-                                branch.SendNotification = true;
+                                branch.SendEmailNoti = true;
+                                branch.SendDesktopNoti = true;
                             }
                         }
                         else if (key.Equals("behind"))
@@ -260,7 +263,8 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                             if (branch.BehindBy != value)
                             {
                                 branch.BehindBy = value;
-                                branch.SendNotification = true;
+                                branch.SendEmailNoti = true;
+                                branch.SendDesktopNoti = true;
                             }
                         }
                     }

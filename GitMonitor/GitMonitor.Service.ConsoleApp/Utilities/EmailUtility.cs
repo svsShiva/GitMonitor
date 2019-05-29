@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Mail;
-using System.Configuration;
+﻿using System.Net.Mail;
 using System.IO;
 using System.Collections.Generic;
 
@@ -8,7 +6,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 {
     public class EmailUtility
     {
-        public bool SendEmail(string recipients, string subject, string body, string cc,
+        public static bool SendEmail(string recipients, string subject, string body, string cc = null,
                               List<Attachment> attachments = null, string folderPath = null)
         {
             try
@@ -17,20 +15,9 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                 {
                     using (MailMessage message = new MailMessage())
                     {
-                        if (Convert.ToBoolean(ConfigurationManager.AppSettings["IsProduction"]))
+                        foreach (var item in recipients.Split(';'))
                         {
-                            foreach (var item in recipients.Split(';'))
-                            {
-                                message.To.Add(new MailAddress(item));
-                            }
-                        }
-                        else
-                        {
-                            var tempRecipients = ConfigurationManager.AppSettings["TestMail"];
-                            foreach (var item in tempRecipients.Split(';'))
-                            {
-                                message.To.Add(new MailAddress(item));
-                            }
+                            message.To.Add(new MailAddress(item));
                         }
 
                         message.Subject = subject;
