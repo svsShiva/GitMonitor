@@ -22,7 +22,10 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                 string emails = string.Empty;
 
                 //TODO: check all the settings related to smtp are available
-                bool isSMTPsettingsAvailable = true;
+                bool isSMTPsettingsAvailable = settings.Find(m => m.Key == SettingEnum.SMTPEmail.ToString()).Value.Length > 0 &&
+                                               settings.Find(m => m.Key == SettingEnum.SMTPHost.ToString()).Value.Length > 0 &&
+                                               settings.Find(m => m.Key == SettingEnum.SMTPPort.ToString()).Value.Length > 0 &&
+                                               settings.Find(m => m.Key == SettingEnum.SMTPPassword.ToString()).Value.Length > 0;
 
                 if (isEmailNotifyEnabled || isDesktopNotifyEnabled)
                 {

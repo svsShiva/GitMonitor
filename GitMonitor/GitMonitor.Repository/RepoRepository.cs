@@ -178,7 +178,7 @@ namespace GitMonitor.Repository
             }
         }
 
-        public void AddMultiple(List<string> repos)
+        public void AddMultiple(Dictionary<string, string> repos)
         {
             try
             {
@@ -188,11 +188,12 @@ namespace GitMonitor.Repository
 
                     foreach (var repo in repos)
                     {
-                        if (!DBRepos.Any(m => m.WorkingDirectory == repo))
+                        if (!DBRepos.Any(m => m.WorkingDirectory == repo.Key))
                         {
                             db.Insert(new tblRepo
                             {
-                                WorkingDirectory = repo,
+                                WorkingDirectory = repo.Key,
+                                Name = repo.Value,
                                 IsActive = true,
                                 CreatedAt = DateTime.Now,
                                 AutoTrack = false,

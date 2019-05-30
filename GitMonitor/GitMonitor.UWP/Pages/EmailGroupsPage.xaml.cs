@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using GitMonitor.UWP.Utilities;
+using System.Linq;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -103,6 +104,27 @@ namespace GitMonitor.UWP.Pages
 
                 dgEmailGroups.ItemsSource = null;
                 dgEmailGroups.ItemsSource = EmailGroups;
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void tbSearchEmailGroup_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (tbSearchEmailGroup.Text.Length != 0)
+                {
+                    dgEmailGroups.ItemsSource = EmailGroups
+                                                .Where(m => m.Name.ToLower().Contains(tbSearchEmailGroup.Text) || m.Emails.ToLower().Contains(tbSearchEmailGroup.Text))
+                                                .ToList();
+                }
+                else
+                {
+                    dgEmailGroups.ItemsSource = EmailGroups;
+                }
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using System;
+using System.Linq;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -60,6 +61,25 @@ namespace GitMonitor.UWP.Pages
 
                 await new MessageDialog(message).ShowAsync();
 
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void tbSearchRepoByName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (tbSearchRepoByName.Text.Length != 0)
+                {
+                    dgUnTrackedRepos.ItemsSource = Repos.Where(m => m.Name.ToLower().Contains(tbSearchRepoByName.Text)).ToList();
+                }
+                else
+                {
+                    dgUnTrackedRepos.ItemsSource = Repos;
+                }
             }
             catch (Exception ex)
             {

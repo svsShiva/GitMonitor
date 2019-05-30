@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GitMonitor.UWP.Utilities
+﻿namespace GitMonitor.UWP.Utilities
 {
     internal static class StringUtility
     {
@@ -43,5 +41,7 @@ namespace GitMonitor.UWP.Utilities
         internal static string _settingSavedSuccessfully = @"Changes saved successfully";
 
         internal static string _InvalidRange = @"Value shoud be between {0} and {1}";
+
+        internal static string _emptyPassword = @"Password cannot not be empty";
     }
 }

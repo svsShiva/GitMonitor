@@ -73,6 +73,11 @@ namespace GitMonitor.UWP.Pages
                 Repos.Remove(oldRepoObj);
                 Repos.Add(newRepoObj);
 
+                //Updating branch status
+                newRepoObj.IsAhead = newRepoObj.Branches.Any(m => m.AheadBy > 0);
+                newRepoObj.IsBehind = newRepoObj.Branches.Any(m => m.BehindBy > 0);
+                newRepoObj.IsUptoDate = newRepoObj.Branches.Any(m => m.AheadBy == 0 && m.BehindBy == 0);
+
                 dgDashboard.ItemsSource = null;
                 dgDashboard.ItemsSource = Repos;
             }
@@ -144,13 +149,13 @@ namespace GitMonitor.UWP.Pages
             }
         }
 
-        private async void tbRepoName_TextChanged(object sender, TextChangedEventArgs e)
+        private async void tbSearchRepoByName_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
-                if (RepoName.Text.Length != 0)
+                if (tbSearchRepoByName.Text.Length != 0)
                 {
-                    dgDashboard.ItemsSource = Repos.Where(m => m.Name.ToLower().Contains(RepoName.Text)).ToList();
+                    dgDashboard.ItemsSource = Repos.Where(m => m.Name.ToLower().Contains(tbSearchRepoByName.Text)).ToList();
                 }
                 else
                 {

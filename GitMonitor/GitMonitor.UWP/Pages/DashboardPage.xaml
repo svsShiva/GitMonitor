@@ -30,7 +30,7 @@
     </Page.Resources>
 
     <StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="4" Opacity="0.6" HorizontalAlignment="Right" Margin="0,0,0,8">
+        <StackPanel Orientation="Horizontal" Spacing="5" Opacity="0.6" HorizontalAlignment="Right" Margin="0,0,0,8">
            
             <Border Background="Red" Style="{StaticResource bdStyle}" Visibility="{Binding IsBehind}"/>
             <TextBlock Text="Behind" VerticalAlignment="Center"/>
@@ -39,10 +39,8 @@
             <Border Background="Green" Style="{StaticResource bdStyle}" Visibility="{Binding IsUptoDate}"/>
             <TextBlock Text="UptoDate" VerticalAlignment="Center"/>
             
-            <TextBox Name="RepoName" Width="300" Margin="20,0,0,0" PlaceholderText="Search repository" 
-                 TextChanged="tbRepoName_TextChanged"/>
-
-           
+            <TextBox Name="tbSearchRepoByName" Width="300" Margin="20,0,0,0" PlaceholderText="Search repository" 
+                 TextChanged="tbSearchRepoByName_TextChanged"/>
         </StackPanel>
 
         <controls:DataGrid x:Name="dgDashboard"
@@ -53,7 +51,7 @@
                     <controls:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
-                                    Padding="10,0,0,0">
+                                    Padding="10,0,10,0">
                                 <HyperlinkButton Content="{Binding Name}" 
                                              Click="hlBranches_Click"
                                              Foreground="Blue">
