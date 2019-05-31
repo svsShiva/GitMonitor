@@ -11,6 +11,10 @@
         SMTPPassword = 6,
         SMTPHost = 7,
         SMTPPort = 8,
-        SMTPEnableSsl = 9
+        SMTPEnableSsl = 9,
+        EnableLog = 10,
+        SimultaneousCheckCount = 11,
+        LastModifiedRunInterval = 12,
+        LogPath = 13
     }
 }

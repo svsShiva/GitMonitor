@@ -11,6 +11,7 @@
         internal static string _updateRepo = _baseRoute + @"/Repo/UpdateRepo";
         internal static string _stopTrackingRepo = _baseRoute + @"/Repo/StopTrackingRepo?id={0}";
         internal static string _refreshRepo = _baseRoute + @"/Repo/RefreshRepo?id={0}";
+        internal static string _syncRepo = _baseRoute + @"/Repo/SyncRepo?id={0}";
 
         internal static string _getAllEmailGroups = _baseRoute + @"/EmailGroup/GetAllEmailGroups";
         internal static string _updateEmailGroup = _baseRoute + @"/EmailGroup/UpdateEmailGroup";

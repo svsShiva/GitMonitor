@@ -1,4 +1,6 @@
 ﻿using GitMonitor.DataModel;
+using GitMonitor.DomainModel;
+using GitMonitor.DomainModel.Enums;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -45,7 +47,17 @@ namespace GitMonitor.Repository
 
                         if (tblSetting != null)
                         {
-                            tblSetting.Value = item.Value;
+                            if (item.Key == SettingEnum.SMTPPassword.ToString()) 
+                            {
+                                if (item.Value != string.Empty)
+                                {
+                                    tblSetting.Value = EncryptDecryptUtility.Encrypt(item.Value);
+                                }
+                            }
+                            else
+                            {
+                                tblSetting.Value = item.Value;
+                            }
 
                             db.Update(tblSetting);
                         }

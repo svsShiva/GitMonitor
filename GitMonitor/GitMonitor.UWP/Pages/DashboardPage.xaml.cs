@@ -7,13 +7,8 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace GitMonitor.UWP.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class DashboardPage : Page
     {
         public DashboardPage()
@@ -22,8 +17,8 @@ namespace GitMonitor.UWP.Pages
         }
 
         public List<Repo> Repos { get; set; }
-
-        public async void LoadData()
+        
+        private async void Page_Loading(FrameworkElement sender, object args)
         {
             try
             {
@@ -47,39 +42,32 @@ namespace GitMonitor.UWP.Pages
             }
         }
 
-        private async void Page_Loading(FrameworkElement sender, object args)
+        private async void RefreshSyncRepo(long id, string route)
         {
-            try
-            {
-                LoadData();
-            }
-            catch (Exception ex)
-            {
-                await new ErrorDialog(ex).ShowAsync();
-            }
+            APIUtility APIUtility = new APIUtility();
+
+            Repo oldRepoObj = Repos.First(m => m.RepoID == id);
+            Repo newRepoObj = await APIUtility.Get<Repo>(string.Format(route, id));
+
+            Repos.Remove(oldRepoObj);
+            Repos.Add(newRepoObj);
+
+            //Updating branch status
+            newRepoObj.IsAhead = newRepoObj.Branches.Any(m => m.AheadBy > 0);
+            newRepoObj.IsBehind = newRepoObj.Branches.Any(m => m.BehindBy > 0);
+            newRepoObj.IsUptoDate = newRepoObj.Branches.Any(m => m.AheadBy == 0 && m.BehindBy == 0);
+
+            dgDashboard.ItemsSource = null;
+            dgDashboard.ItemsSource = Repos;
         }
 
         private async void abbtnRefresh_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                APIUtility APIUtility = new APIUtility();
-
                 Repo obj = ((FrameworkElement)sender).DataContext as Repo;
 
-                Repo oldRepoObj = Repos.First(m => m.RepoID == obj.RepoID);
-                Repo newRepoObj = await APIUtility.Get<Repo>(string.Format(RouteUtility._refreshRepo, obj.RepoID));
-
-                Repos.Remove(oldRepoObj);
-                Repos.Add(newRepoObj);
-
-                //Updating branch status
-                newRepoObj.IsAhead = newRepoObj.Branches.Any(m => m.AheadBy > 0);
-                newRepoObj.IsBehind = newRepoObj.Branches.Any(m => m.BehindBy > 0);
-                newRepoObj.IsUptoDate = newRepoObj.Branches.Any(m => m.AheadBy == 0 && m.BehindBy == 0);
-
-                dgDashboard.ItemsSource = null;
-                dgDashboard.ItemsSource = Repos;
+                RefreshSyncRepo(obj.RepoID, RouteUtility._refreshRepo);
             }
             catch (Exception ex)
             {
@@ -161,6 +149,20 @@ namespace GitMonitor.UWP.Pages
                 {
                     dgDashboard.ItemsSource = Repos;
                 }
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void abbtnSync_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Repo obj = ((FrameworkElement)sender).DataContext as Repo;
+
+                RefreshSyncRepo(obj.RepoID, RouteUtility._syncRepo);
             }
             catch (Exception ex)
             {

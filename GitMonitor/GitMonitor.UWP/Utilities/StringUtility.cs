@@ -37,5 +37,7 @@
         internal static string _InvalidRange = @"Value shoud be between {0} and {1}";
 
         internal static string _emptyField = @"This field cannot not be empty";
+
+        internal static string _proxyPassword = @"encrypted";
     }
 }

@@ -48,6 +48,7 @@
             </TextBlock>
             <PasswordBox Name="pbSMTPPassword" 
                          Width="250"
+                         Password="encrypted"
                          HorizontalAlignment="Left"
                          PasswordChanged="tbPassword_PasswordChanged"/>
             <TextBlock Name="tbPasswordVal" Foreground="Red" />

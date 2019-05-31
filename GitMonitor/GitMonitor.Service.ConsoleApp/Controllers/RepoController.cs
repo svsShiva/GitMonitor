@@ -104,5 +104,21 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet]
+        public HttpResponseMessage SyncRepo(long id)
+        {
+            try
+            {
+                var repo = _repo.GetRepoByID(id);
+                GitUtility.RunTasks(repo, true, true);
+
+                return Request.CreateResponse(HttpStatusCode.OK, repo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

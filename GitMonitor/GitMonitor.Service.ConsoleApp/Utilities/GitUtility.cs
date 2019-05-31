@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Configuration;
+using GitMonitor.DomainModel.Enums;
 
 namespace GitMonitor.Service.ConsoleApp.Utilities
 {
@@ -19,14 +20,17 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
         public static string GitPull { get { return string.Format(Git, "pull "); } }
 
-        public static void RunTasks(Repo repo, bool IgnoreRecentChanges)
+        public static void RunTasks(Repo repo, bool IgnoreRecentChanges, bool IgnoreAutopullToSyncRepo = false)
         {
             try
             {
                 //Checking if any of the files in the repo got modified
                 //If the modified time is less than "LastModifiedRunInterval" then we will skip the autopull process assuming the repo is in use
                 bool autoPullInCycle = IgnoreRecentChanges || ChangesAreRecent(repo.WorkingDirectory, TimeSpan
-                                 .FromMinutes(Convert.ToInt16(ConfigurationManager.AppSettings["LastModifiedRunInterval"].ToString())));
+                                       .FromMinutes(Convert.ToInt16(new Repository.SettingsRepository()
+                                                           .GetAllSettings()
+                                                           .Find(m => m.Key == SettingEnum.LastModifiedRunInterval
+                                                           .ToString()).Value)));
 
                 // Getting information about all the branches and their changes from upstream
                 FetchCommand(repo);
@@ -87,7 +91,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                             SetStatus(branch, vvBranch);
 
                             // If the branch is set to be autopulled, autopull it.
-                            if (autoPullInCycle && !repo.IsUntrackedRepo && branch.AutoPull)
+                            if (autoPullInCycle && !repo.IsUntrackedRepo && (branch.AutoPull || IgnoreAutopullToSyncRepo))
                             {
                                 // fast-forward only
                                 if (branch.AheadBy == 0 && branch.BehindBy > 0)

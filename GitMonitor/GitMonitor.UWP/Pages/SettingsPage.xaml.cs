@@ -47,10 +47,6 @@ namespace GitMonitor.UWP.Pages
                     {
                         tbSMTPEmail.Text = setting.Value;
                     }
-                    else if (setting.Key == SettingEnum.SMTPPassword.ToString())
-                    {
-                        pbSMTPPassword.Password = setting.Value;
-                    }
                     else if (setting.Key == SettingEnum.SMTPHost.ToString())
                     {
                         tbSMTPHost.Text = setting.Value;
@@ -83,12 +79,18 @@ namespace GitMonitor.UWP.Pages
                 {
                     APIUtility APIUtility = new APIUtility();
 
+                    string password = string.Empty;
+                    if (pbSMTPPassword.Password != StringUtility._proxyPassword)
+                    {
+                        password = pbSMTPPassword.Password;
+                    }
+
                     List<Setting> settings = new List<Setting>();
                     settings.Add(new Setting { Key = SettingEnum.Interval.ToString(), Value = tbInterval.Text });
                     settings.Add(new Setting { Key = SettingEnum.EnableDesktopNotifications.ToString(), Value = cbEnableDesktopNoti.IsChecked.ToString() });
                     settings.Add(new Setting { Key = SettingEnum.EnableEmailNotifications.ToString(), Value = cbEnableEmailNoti.IsChecked.ToString() });
                     settings.Add(new Setting { Key = SettingEnum.SMTPEmail.ToString(), Value = tbSMTPEmail.Text });
-                    settings.Add(new Setting { Key = SettingEnum.SMTPPassword.ToString(), Value = pbSMTPPassword.Password });
+                    settings.Add(new Setting { Key = SettingEnum.SMTPPassword.ToString(), Value = password });
                     settings.Add(new Setting { Key = SettingEnum.SMTPHost.ToString(), Value = tbSMTPHost.Text });
                     settings.Add(new Setting { Key = SettingEnum.SMTPPort.ToString(), Value = tbSMTPPort.Text });
                     settings.Add(new Setting { Key = SettingEnum.SMTPEnableSsl.ToString(), Value = cbSMTPEnableSsl.IsChecked.ToString() });

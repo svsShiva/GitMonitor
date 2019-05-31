@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using GitMonitor.Repository;
 using GitMonitor.DomainModel.DTO;
-using System.Configuration;
 using System.Timers;
 using GitMonitor.DomainModel.Enums;
 
@@ -25,7 +24,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
                 _settings = new SettingsRepository().GetAllSettings();
 
-                _simultaneousCheckCount = Convert.ToInt16(ConfigurationManager.AppSettings["SimultaneousCheckCount"].ToString());
+                _simultaneousCheckCount = Convert.ToInt16(_settings.Find(m => m.Key == SettingEnum.SimultaneousCheckCount.ToString()).Value);
 
                 _timer = new System.Timers.Timer();
                 _timer.Enabled = true;

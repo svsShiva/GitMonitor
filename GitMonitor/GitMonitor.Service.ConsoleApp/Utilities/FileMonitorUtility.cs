@@ -91,13 +91,13 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
         private void AddAllReposInDirectory(string directory)
         {
-            try
+            Dictionary<string, string> repos = new Dictionary<string, string>();
+
+            string[] allDirectories = Directory.GetDirectories(directory);
+
+            foreach (var dir in allDirectories)
             {
-                Dictionary<string, string> repos = new Dictionary<string, string>();
-
-                string[] allDirectories = Directory.GetDirectories(directory);
-
-                foreach (var dir in allDirectories)
+                try
                 {
                     var gitDirectories = Directory.GetDirectories(dir, "*.git", SearchOption.AllDirectories).TakeWhile(x => x.EndsWith("\\.git"));
 
@@ -109,14 +109,13 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                }
+            }
 
-                RepoRepository repoRepository = new RepoRepository();
-                repoRepository.AddMultiple(repos);
-            }
-            catch
-            {
-                throw;
-            }
+            RepoRepository repoRepository = new RepoRepository();
+            repoRepository.AddMultiple(repos);
         }
     }
 }
