@@ -8,21 +8,18 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace GitMonitor.UWP.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        private bool _isEmailValid = false;
+        private bool _isIntervalValid = false;
+        private List<Setting> _settings { get; set; }
+
         public SettingsPage()
         {
             this.InitializeComponent();
         }
-
-        private List<Setting> _settings { get; set; }
 
         private async void Page_Loading(FrameworkElement sender, object args)
         {
@@ -45,6 +42,26 @@ namespace GitMonitor.UWP.Pages
                     else if (setting.Key == SettingEnum.EnableEmailNotifications.ToString())
                     {
                         cbEnableEmailNoti.IsChecked = Convert.ToBoolean(setting.Value);
+                    }
+                    else if (setting.Key == SettingEnum.SMTPEmail.ToString())
+                    {
+                        tbSMTPEmail.Text = setting.Value;
+                    }
+                    else if (setting.Key == SettingEnum.SMTPPassword.ToString())
+                    {
+                        pbSMTPPassword.Password = setting.Value;
+                    }
+                    else if (setting.Key == SettingEnum.SMTPHost.ToString())
+                    {
+                        tbSMTPHost.Text = setting.Value;
+                    }
+                    else if (setting.Key == SettingEnum.SMTPPort.ToString())
+                    {
+                        tbSMTPPort.Text = setting.Value;
+                    }
+                    else if (setting.Key == SettingEnum.SMTPEnableSsl.ToString())
+                    {
+                        cbSMTPEnableSsl.IsChecked = Convert.ToBoolean(setting.Value);
                     }
                 }
             }
@@ -70,6 +87,11 @@ namespace GitMonitor.UWP.Pages
                     settings.Add(new Setting { Key = SettingEnum.Interval.ToString(), Value = tbInterval.Text });
                     settings.Add(new Setting { Key = SettingEnum.EnableDesktopNotifications.ToString(), Value = cbEnableDesktopNoti.IsChecked.ToString() });
                     settings.Add(new Setting { Key = SettingEnum.EnableEmailNotifications.ToString(), Value = cbEnableEmailNoti.IsChecked.ToString() });
+                    settings.Add(new Setting { Key = SettingEnum.SMTPEmail.ToString(), Value = tbSMTPEmail.Text });
+                    settings.Add(new Setting { Key = SettingEnum.SMTPPassword.ToString(), Value = pbSMTPPassword.Password });
+                    settings.Add(new Setting { Key = SettingEnum.SMTPHost.ToString(), Value = tbSMTPHost.Text });
+                    settings.Add(new Setting { Key = SettingEnum.SMTPPort.ToString(), Value = tbSMTPPort.Text });
+                    settings.Add(new Setting { Key = SettingEnum.SMTPEnableSsl.ToString(), Value = cbSMTPEnableSsl.IsChecked.ToString() });
 
                     await APIUtility.Put(settings, RouteUtility._updateSetting);
 
@@ -86,7 +108,7 @@ namespace GitMonitor.UWP.Pages
         {
             try
             {
-                btnSave.IsEnabled = false;
+                _isIntervalValid = false;
                 tbIntervalVal.Text = ValidationUtility.ValidateInterval(tbInterval.Text);
 
                 if (tbIntervalVal.Text == string.Empty)
@@ -101,14 +123,107 @@ namespace GitMonitor.UWP.Pages
                     }
                     else
                     {
-                        btnSave.IsEnabled = true;
+                        _isIntervalValid = true;
                     }
                 }
+                EnableSaveButton();
             }
             catch (Exception ex)
             {
                 await new ErrorDialog(ex).ShowAsync();
             }
+        }
+
+        private async void tbEmail_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                tbEmailVal.Text = string.Empty;
+                _isEmailValid = false;
+
+                tbEmailVal.Text = ValidationUtility.ValidateEmail(tbSMTPEmail.Text);
+
+                _isEmailValid = tbEmailVal.Text == string.Empty ? true : false;
+
+                EnableSaveButton();
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+        private async void tbPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                tbPasswordVal.Text = pbSMTPPassword.Password.Length > 0 ? string.Empty : StringUtility._emptyField;
+
+                EnableSaveButton();
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void cbEnableEmailNoti_Unchecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                EnableSaveButton();
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void cbEnableEmailNoti_Checked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                EnableSaveButton();
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void tbSMTPHost_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                tbSMTPHostVal.Text = tbSMTPHost.Text.Length > 0 ? string.Empty : StringUtility._emptyField;
+
+                EnableSaveButton();
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void tbSMTPPort_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                tbSMTPPortVal.Text = tbSMTPPort.Text.Length > 0 ? string.Empty : StringUtility._emptyField;
+
+                EnableSaveButton();
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private void EnableSaveButton()
+        {
+            btnSave.IsEnabled = Convert.ToBoolean(cbEnableEmailNoti.IsChecked) == true ?
+                                 _isEmailValid && _isIntervalValid && pbSMTPPassword.Password.Length > 0 && 
+                                 tbSMTPHost.Text.Length > 0 && tbSMTPPort.Text.Length > 0 :
+                                 _isIntervalValid;
         }
     }
 }

@@ -17,24 +17,34 @@
     </Page.Resources>
 
     <StackPanel>
-        <TextBox Name="tbSearchRepoByName" Width="300" PlaceholderText="Search repository" 
+        <TextBox Name="tbSearch" Width="300" PlaceholderText="Search repository" 
                  HorizontalAlignment="Right"
                  Margin="0,0,0,8"
-                 TextChanged="tbSearchRepoByName_TextChanged"/>
+                 TextChanged="tbSearch_TextChanged"/>
         
         <controls:DataGrid x:Name="dgUnTrackedRepos"
                        Style="{StaticResource dgStyle}">
             <controls:DataGrid.Columns>
-
                 <controls:DataGridTextColumn Header="Name" IsReadOnly="True"
                                              Binding="{Binding Name}"/>
+                
                 <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
                                              Binding="{Binding CreatedAt}"/>
-                <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
-                                             Binding="{Binding WorkingDirectory}"/>
+                
+                <controls:DataGridTemplateColumn Header="Repo Location" IsReadOnly="True">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding WorkingDirectory}"
+                                       VerticalAlignment="Center"
+                                       Padding="10,0,10,0"
+                                       ToolTipService.ToolTip="{Binding WorkingDirectory}"
+                                       ToolTipService.Placement="Right"/>
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
+                
                 <controls:DataGridTemplateColumn Header="Track"  
                                              CellTemplate="{StaticResource addIconTemplate}"/>
-
             </controls:DataGrid.Columns>
         </controls:DataGrid>
     </StackPanel>

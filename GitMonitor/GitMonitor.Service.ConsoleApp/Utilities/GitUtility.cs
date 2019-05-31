@@ -129,94 +129,94 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
         private static void FetchCommand(Repo repo)
         {
-            try
-            {
-                ProcessUtility.ExecuteCommand(repo.WorkingDirectory, GitFetch);
-            }
-            catch (Exception ex)
-            {
-                LogUtility.LogMessage(ex);
-            }
+            ProcessUtility.ExecuteCommand(repo.WorkingDirectory, GitFetch);
+
         }
 
         private static string[] BranchVVCommand(Repo repo)
         {
-            try
-            {
-                string[] output = ProcessUtility.ExecuteCommand(repo.WorkingDirectory, GitBranchVV).Split('\n');
-                return FormatBrancVVOutPut(output);
-            }
-            catch (Exception ex)
-            {
-                LogUtility.LogMessage(ex);
-            }
-
-            return null;
+            string[] output = ProcessUtility.ExecuteCommand(repo.WorkingDirectory, GitBranchVV).Split('\n');
+            return FormatBrancVVOutPut(output);
         }
 
         private static void StashCommand(Repo repo)
         {
-            try
-            {
-                ProcessUtility.ExecuteCommand(repo.WorkingDirectory, GitStash);
-            }
-            catch (Exception ex)
-            {
-                LogUtility.LogMessage(ex);
-            }
+            ProcessUtility.ExecuteCommand(repo.WorkingDirectory, GitStash);
         }
 
         private static string PullCommand(Repo repo, Branch branch, string command)
         {
-            try
-            {
-                return ProcessUtility.ExecuteCommand(repo.WorkingDirectory, command + $" {branch.Remote} {branch.TrackingBranch}:{branch.Name}");
-            }
-            catch (Exception ex)
-            {
-                LogUtility.LogMessage(ex);
-            }
-            return null;
+            return ProcessUtility.ExecuteCommand(repo.WorkingDirectory, command + $" {branch.Remote} {branch.TrackingBranch}:{branch.Name}");
         }
 
         private static void SetStatus(Branch branch, string branchvvline)
         {
-            try
+            int brNameLimit = 0;
+            // branchvvline will be of the following format:
+            // features         7eca8f7 [origin/features] New File Added from another dir
+            // {brName}        {commit#}  {tracking info}     {commit msg}
+            while (branchvvline[brNameLimit] != ' ') brNameLimit++;
+            while (branchvvline[brNameLimit] == ' ') brNameLimit++;
+
+            // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+            //                 ^brNameLimit
+            int commitEnd = branchvvline.IndexOf(' ', brNameLimit);
+
+            // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+            //                         ^commitEnd 
+
+            int upStreamEnd = branchvvline.IndexOf(' ', commitEnd + 1);
+
+            // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+            //                         ^commitEnd        ^upStreamEnd     
+
+            //branch.AheadBy = 0;
+            //branch.BehindBy = 0;
+
+            if (branchvvline[upStreamEnd - 1] == ':')
             {
-                int brNameLimit = 0;
-                // branchvvline will be of the following format:
-                // features         7eca8f7 [origin/features] New File Added from another dir
-                // {brName}        {commit#}  {tracking info}     {commit msg}
-                while (branchvvline[brNameLimit] != ' ') brNameLimit++;
-                while (branchvvline[brNameLimit] == ' ') brNameLimit++;
-
+                //                               upStreamEnd v        v space2
                 // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
-                //                 ^brNameLimit
-                int commitEnd = branchvvline.IndexOf(' ', brNameLimit);
-
+                //                                                 ^space1
+                int space1 = branchvvline.IndexOf(' ', upStreamEnd + 1);
+                int space2 = branchvvline.IndexOf(' ', space1 + 1);
+                string key = branchvvline.Substring(upStreamEnd + 1, space1 - upStreamEnd - 1);
+                int value = Convert.ToInt32(branchvvline.Substring(space1 + 1, space2 - space1 - 2));
+                //                                            (key)
                 // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
-                //                         ^commitEnd 
-
-                int upStreamEnd = branchvvline.IndexOf(' ', commitEnd + 1);
-
-                // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
-                //                         ^commitEnd        ^upStreamEnd     
-
-                //branch.AheadBy = 0;
-                //branch.BehindBy = 0;
-
-                if (branchvvline[upStreamEnd - 1] == ':')
+                //                                                  ^(value = 1)
+                if (key.Equals("ahead"))
                 {
-                    //                               upStreamEnd v        v space2
+                    if (branch.AheadBy != value)
+                    {
+                        branch.AheadBy = value;
+                        branch.SendEmailNoti = true;
+                        branch.SendDesktopNoti = true;
+                    }
+                }
+                else if (key.Equals("behind"))
+                {
+                    if (branch.BehindBy != value)
+                    {
+                        branch.BehindBy = value;
+                        branch.SendEmailNoti = true;
+                        branch.SendDesktopNoti = true;
+                    }
+                }
+                // Possibility1:                                      v space2
+                // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
+
+                // Possibility2:                                      v space2
+                // features         7eca8f7 [origin/features: ahead 1] New File Added from another dir
+                if (branchvvline[space2 - 1] == ',')
+                {
+                    //                                             space2 v         v space4
                     // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
-                    //                                                 ^space1
-                    int space1 = branchvvline.IndexOf(' ', upStreamEnd + 1);
-                    int space2 = branchvvline.IndexOf(' ', space1 + 1);
-                    string key = branchvvline.Substring(upStreamEnd + 1, space1 - upStreamEnd - 1);
-                    int value = Convert.ToInt32(branchvvline.Substring(space1 + 1, space2 - space1 - 2));
-                    //                                            (key)
-                    // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
-                    //                                                  ^(value = 1)
+                    //                                                     space3^
+                    int space3 = branchvvline.IndexOf(' ', space2 + 1);
+                    int space4 = branchvvline.IndexOf(' ', space3 + 1);
+                    key = branchvvline.Substring(space2 + 1, space3 - space2 - 1);
+                    value = Convert.ToInt32(branchvvline.Substring(space3 + 1, space4 - space3 - 2));
                     if (key.Equals("ahead"))
                     {
                         if (branch.AheadBy != value)
@@ -235,46 +235,12 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                             branch.SendDesktopNoti = true;
                         }
                     }
-                    // Possibility1:                                      v space2
-                    // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
-
-                    // Possibility2:                                      v space2
-                    // features         7eca8f7 [origin/features: ahead 1] New File Added from another dir
-                    if (branchvvline[space2 - 1] == ',')
-                    {
-                        //                                             space2 v         v space4
-                        // features         7eca8f7 [origin/features: ahead 1, behind 1] New File Added from another dir
-                        //                                                     space3^
-                        int space3 = branchvvline.IndexOf(' ', space2 + 1);
-                        int space4 = branchvvline.IndexOf(' ', space3 + 1);
-                        key = branchvvline.Substring(space2 + 1, space3 - space2 - 1);
-                        value = Convert.ToInt32(branchvvline.Substring(space3 + 1, space4 - space3 - 2));
-                        if (key.Equals("ahead"))
-                        {
-                            if (branch.AheadBy != value)
-                            {
-                                branch.AheadBy = value;
-                                branch.SendEmailNoti = true;
-                                branch.SendDesktopNoti = true;
-                            }
-                        }
-                        else if (key.Equals("behind"))
-                        {
-                            if (branch.BehindBy != value)
-                            {
-                                branch.BehindBy = value;
-                                branch.SendEmailNoti = true;
-                                branch.SendDesktopNoti = true;
-                            }
-                        }
-                    }
                 }
-
-                string remotebranch = branchvvline.Substring(commitEnd + 2, upStreamEnd - commitEnd - 3);
-                branch.Remote = remotebranch.Split('/')[0];
-                branch.TrackingBranch = remotebranch.Split('/')[1];
             }
-            catch { }
+
+            string remotebranch = branchvvline.Substring(commitEnd + 2, upStreamEnd - commitEnd - 3);
+            branch.Remote = remotebranch.Split('/')[0];
+            branch.TrackingBranch = remotebranch.Split('/')[1];
         }
 
         private static IEnumerable<string> GetUpstreamsFromConfig(string workingDir)

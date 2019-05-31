@@ -6,12 +6,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" Loading="Page_Loading">
 
-    <StackPanel Spacing="5" Padding="5" >
-        <TextBlock Text="Interval"/>
-
+    <Page.Resources>
+        <Style x:Name="tbStyle" TargetType="TextBox">
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+    </Page.Resources>
+    <StackPanel  Padding="15,0,0,0" Spacing="5">
+        <TextBlock>
+                <Run>Interval</Run>
+                <Run Foreground="Red">*</Run>
+        </TextBlock>
         <TextBox Name="tbInterval" 
-                 Width="250"
-                 HorizontalAlignment="Left" 
+                 Style="{StaticResource tbStyle}"
                  TextChanged="tbInterval_TextChanged"/>
         <TextBlock Name="tbIntervalVal" Foreground="Red" />
 
@@ -21,9 +28,55 @@
 
         <CheckBox x:Name="cbEnableEmailNoti"
                   Content="Enable Email Notifications"
-                  Style="{StaticResource cbStyle}"/>
+                  Style="{StaticResource cbStyle}"
+                  Checked="cbEnableEmailNoti_Checked"
+                  Unchecked="cbEnableEmailNoti_Unchecked"/>
 
-        <Button Name="btnSave" Content="Save" Style="{StaticResource btnStyle}" 
+        <StackPanel Visibility="{Binding IsChecked, ElementName=cbEnableEmailNoti}">
+            <TextBlock>
+                <Run>Email</Run>
+                <Run Foreground="Red">*</Run>
+            </TextBlock>
+            <TextBox Name="tbSMTPEmail" 
+                     Style="{StaticResource tbStyle}"
+                     TextChanged="tbEmail_TextChanged"/>
+            <TextBlock Name="tbEmailVal" Foreground="Red" />
+
+            <TextBlock>
+                <Run>Password</Run>
+                <Run Foreground="Red">*</Run>
+            </TextBlock>
+            <PasswordBox Name="pbSMTPPassword" 
+                         Width="250"
+                         HorizontalAlignment="Left"
+                         PasswordChanged="tbPassword_PasswordChanged"/>
+            <TextBlock Name="tbPasswordVal" Foreground="Red" />
+
+            <TextBlock>
+                <Run>SMTP Host</Run>
+                <Run Foreground="Red">*</Run>
+            </TextBlock>
+            <TextBox Name="tbSMTPHost" 
+                     TextChanged="tbSMTPHost_TextChanged"
+                     Style="{StaticResource tbStyle}"/>
+            <TextBlock Name="tbSMTPHostVal" Foreground="Red" />
+
+            <TextBlock>
+                <Run>SMTP Port</Run>
+                <Run Foreground="Red">*</Run>
+            </TextBlock>
+            <TextBox Name="tbSMTPPort" 
+                     TextChanged="tbSMTPPort_TextChanged"
+                     Style="{StaticResource tbStyle}"/>
+            <TextBlock Name="tbSMTPPortVal" Foreground="Red" />
+
+            <CheckBox x:Name="cbSMTPEnableSsl"
+                  Content="EnableSsl"
+                  Style="{StaticResource cbStyle}"/>
+        </StackPanel>
+
+        <Button Name="btnSave" Content="Save"
+                Style="{StaticResource btnStyle}" 
                 Click="btnSave_Click"/>
     </StackPanel>
 </Page>

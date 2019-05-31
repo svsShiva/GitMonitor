@@ -1,51 +1,72 @@
-﻿using System.Linq;
+﻿using GitMonitor.UWP.Pages.Dialogs;
+using System;
+using System.Linq;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace GitMonitor.UWP.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         public MainPage()
         {
             this.InitializeComponent();
-
-            //TitleBar Customization
-            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-
-            Window.Current.SetTitleBar(AppTitleBar);
         }
 
-        private void nvMainView_Loaded(object sender, RoutedEventArgs e)
+        private async void SetTitleBar()
         {
-            nvMainView.SelectedItem = nvMainView.MenuItems[0];
-            cfMainFrame.SourcePageType = typeof(DashboardPage);
-        }
-
-        private void nvMainView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
-        {
-            if (args.IsSettingsInvoked)
+            try
             {
-                cfMainFrame.Navigate(typeof(SettingsPage));
+                //TitleBar Customization
+                ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+
+                titleBar.ButtonBackgroundColor = Colors.Transparent;
+                titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+
+                Window.Current.SetTitleBar(AppTitleBar);
             }
-            else
+            catch (Exception ex)
             {
-                // find NavigationViewItem with Content that equals InvokedItem
-                var item = sender.MenuItems
-                                 .OfType<NavigationViewItem>()
-                                 .First(x => (string)x.Content == (string)args.InvokedItem);
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
 
-                Navigate(item as NavigationViewItem);
+        private async void nvMainView_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                nvMainView.SelectedItem = nvMainView.MenuItems[0];
+                cfMainFrame.SourcePageType = typeof(DashboardPage);
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private async void nvMainView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            try
+            {
+                if (args.IsSettingsInvoked)
+                {
+                    cfMainFrame.Navigate(typeof(SettingsPage));
+                }
+                else
+                {
+                    // find NavigationViewItem with Content that equals InvokedItem
+                    var item = sender.MenuItems
+                                     .OfType<NavigationViewItem>()
+                                     .First(x => (string)x.Content == (string)args.InvokedItem);
+
+                    Navigate(item as NavigationViewItem);
+                }
+            }
+            catch (Exception ex)
+            {
+                await new ErrorDialog(ex).ShowAsync();
             }
         }
 

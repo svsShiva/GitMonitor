@@ -19,6 +19,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
                 string notificationSubject = string.Empty;
                 string notificationMessage = string.Empty;
+                string emailBody = StringUtility._emailTableHeader;
                 string emails = string.Empty;
 
                 //TODO: check all the settings related to smtp are available
@@ -50,14 +51,18 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                             {
                                 notificationMessage += string.Format(StringUtility._branchDivergedMessage, branch.Name, branch.AheadBy, branch.BehindBy);
                             }
+
+                            emailBody += string.Format(StringUtility._emailTableBody, branch.Name, branch.BehindBy, branch.BehindBy);
                         }
+
+                        emailBody += StringUtility._emailTableFooter;
 
                         //Sending Email Notification
                         if (isSMTPsettingsAvailable)
                         {
                             emails = new Repository.EmailGroupRepository().GetEmailGroupByIDS(repo.EmailGroupIDS);
 
-                            EmailUtility.SendEmail(emails, notificationSubject, notificationMessage);
+                            EmailUtility.SendEmail(emails, notificationSubject, emailBody);
 
                             //Update branch's notification flag to false
                             new Repository.RepoRepository().UpdateNotiFlag(repo.RepoID, false);
@@ -67,9 +72,9 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                LogUtility.LogMessage(ex);
+                throw;
             }
         }
     }

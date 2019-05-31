@@ -22,15 +22,16 @@
 
     <StackPanel Spacing="5" >
 
-        <StackPanel Orientation="Horizontal" Spacing="5" Opacity="0.6" HorizontalAlignment="Right" Margin="0,0,0,8">
-            <TextBox Name="tbSearchEmailGroup" Width="300"
+        <StackPanel Orientation="Horizontal" Spacing="5" Opacity="0.8" HorizontalAlignment="Right" Margin="0,0,0,8">
+            <TextBox Name="tbSearch" Width="300"
                      PlaceholderText="Search Email Groups"
-                     TextChanged="tbSearchEmailGroup_TextChanged"/>
+                     TextChanged="tbSearch_TextChanged"/>
             
             <Button Name="btnAdddEmailGroup"
                     Click="btnAddEmailGroup_Click"
                     Content="Addd Email Group"
-                    HorizontalAlignment="Right"/>
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource btnStyle}"/>
         </StackPanel>
 
         <controls:DataGrid x:Name="dgEmailGroups" Style="{StaticResource dgStyle}">

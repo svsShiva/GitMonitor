@@ -16,6 +16,8 @@ namespace GitMonitor.UWP.Pages.Dialogs
 
         private List<string> _emailGroups;
 
+        private string _repoName = string.Empty;
+
         public AddEditRepoDialog(string title, Repo repo = null)
         {
             this.Title = title;
@@ -24,9 +26,11 @@ namespace GitMonitor.UWP.Pages.Dialogs
             {
                 DataContext = repo;
 
-                _emailGroups = repo.EmailGroupIDS != null ? 
-                                    repo.EmailGroupIDS.Split(';').ToList() : 
+                _emailGroups = repo.EmailGroupIDS != null ?
+                                    repo.EmailGroupIDS.Split(';').ToList() :
                                     new List<string>();
+
+                _repoName = repo.Name;
             }
 
             GetEmailGroups();
@@ -42,9 +46,9 @@ namespace GitMonitor.UWP.Pages.Dialogs
 
                 EmailGroups = await APIUtility.Get<List<EmailGroup>>(RouteUtility._getAllEmailGroups);
 
-                foreach(EmailGroup emailGroup in EmailGroups)
+                foreach (EmailGroup emailGroup in EmailGroups)
                 {
-                    if(_emailGroups.Contains(emailGroup.EmailGroupID.ToString()))
+                    if (_emailGroups.Contains(emailGroup.EmailGroupID.ToString()))
                     {
                         emailGroup.IsSelected = true;
                     }
@@ -86,7 +90,9 @@ namespace GitMonitor.UWP.Pages.Dialogs
 
         private void ContentDialog_CancelClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            Repo repo = DataContext as Repo;
 
+            repo.Name = _repoName;
         }
 
         private async void hlRefresh_Click(object sender, RoutedEventArgs e)
@@ -102,6 +108,21 @@ namespace GitMonitor.UWP.Pages.Dialogs
             catch (Exception ex)
             {
                 await new ErrorDialog(ex).ShowAsync();
+            }
+        }
+
+        private void tbRepoName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            tbRepoNameVal.Text = string.Empty;
+
+            if (tbRepoName.Text.Length == 0)
+            {
+                tbRepoNameVal.Text = StringUtility._emptyField;
+                this.IsPrimaryButtonEnabled = false;
+            }
+            else
+            {
+                this.IsPrimaryButtonEnabled = true;
             }
         }
     }

@@ -7,13 +7,8 @@ using Windows.UI.Xaml.Controls;
 using GitMonitor.UWP.Utilities;
 using System.Linq;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace GitMonitor.UWP.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class EmailGroupsPage : Page
     {
         public EmailGroupsPage()
@@ -111,14 +106,14 @@ namespace GitMonitor.UWP.Pages
             }
         }
 
-        private async void tbSearchEmailGroup_TextChanged(object sender, TextChangedEventArgs e)
+        private async void tbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
-                if (tbSearchEmailGroup.Text.Length != 0)
+                if (tbSearch.Text.Length != 0)
                 {
                     dgEmailGroups.ItemsSource = EmailGroups
-                                                .Where(m => m.Name.ToLower().Contains(tbSearchEmailGroup.Text) || m.Emails.ToLower().Contains(tbSearchEmailGroup.Text))
+                                                .Where(m => m.Name.ToLower().Contains(tbSearch.Text) || m.Emails.ToLower().Contains(tbSearch.Text))
                                                 .ToList();
                 }
                 else

@@ -10,37 +10,34 @@
 
     <Page.Resources>
         <DataTemplate x:Key="refreshIconTemplate">
-            <StackPanel>
-                <AppBarButton x:Uid="abbtnRefresh" Icon="Refresh" Click="abbtnRefresh_Click" 
-                              Style="{StaticResource abbtnStyle}"/>
-            </StackPanel>
+            <AppBarButton x:Uid="abbtnRefresh" Icon="Refresh" Click="abbtnRefresh_Click" 
+                          Style="{StaticResource abbtnStyle}"/>
         </DataTemplate>
         <DataTemplate x:Key="editIconTemplate">
-            <StackPanel>
-                <AppBarButton x:Uid="abbtnEdit" Icon="Edit" Click="abbtnEdit_Click" 
-                              Style="{StaticResource abbtnStyle}"/>
-            </StackPanel>
+            <AppBarButton x:Uid="abbtnEdit" Icon="Edit" Click="abbtnEdit_Click" 
+                          Style="{StaticResource abbtnStyle}"/>
         </DataTemplate>
         <DataTemplate x:Key="deleteIconTemplate">
-            <StackPanel>
-                <AppBarButton x:Uid="abbtnDelete" Icon="UnPin" Click="abbtnDelete_Click" 
-                              Style="{StaticResource abbtnStyle}"/>
-            </StackPanel>
+            <AppBarButton x:Uid="abbtnDelete" Icon="UnPin" Click="abbtnDelete_Click" 
+                          Style="{StaticResource abbtnStyle}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="syncIconTemplate">
+            <AppBarButton x:Uid="abbtnSync" Icon="Sync" Click="abbtnSync_Click" 
+                          Style="{StaticResource abbtnStyle}"/>
         </DataTemplate>
     </Page.Resources>
 
     <StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="5" Opacity="0.6" HorizontalAlignment="Right" Margin="0,0,0,8">
-           
+        <StackPanel Orientation="Horizontal" Spacing="5" Opacity="0.8" HorizontalAlignment="Right" Margin="0,0,0,8">
             <Border Background="Red" Style="{StaticResource bdStyle}" Visibility="{Binding IsBehind}"/>
             <TextBlock Text="Behind" VerticalAlignment="Center"/>
             <Border Background="Orange" Style="{StaticResource bdStyle}" Visibility="{Binding IsAhead}"/>
             <TextBlock Text="Ahead" VerticalAlignment="Center"/>
             <Border Background="Green" Style="{StaticResource bdStyle}" Visibility="{Binding IsUptoDate}"/>
             <TextBlock Text="UptoDate" VerticalAlignment="Center"/>
-            
-            <TextBox Name="tbSearchRepoByName" Width="300" Margin="20,0,0,0" PlaceholderText="Search repository" 
-                 TextChanged="tbSearchRepoByName_TextChanged"/>
+
+            <TextBox Name="tbSearch" Width="300" Margin="20,0,0,0" PlaceholderText="Search repository" 
+                 TextChanged="tbSearch_TextChanged"/>
         </StackPanel>
 
         <controls:DataGrid x:Name="dgDashboard"
@@ -73,8 +70,17 @@
                 <controls:DataGridTextColumn Header="Creation Date" IsReadOnly="True"
                                          Binding="{Binding CreatedAt}"/>
 
-                <controls:DataGridTextColumn Header="Repo Location" IsReadOnly="True"
-                                         Binding="{Binding WorkingDirectory}"/>
+                <controls:DataGridTemplateColumn Header="Repo Location" IsReadOnly="True">
+                    <controls:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding WorkingDirectory}"
+                                       VerticalAlignment="Center"
+                                       Padding="10,0,10,0"
+                                       ToolTipService.ToolTip="{Binding WorkingDirectory}"
+                                       ToolTipService.Placement="Right"/>
+                        </DataTemplate>
+                    </controls:DataGridTemplateColumn.CellTemplate>
+                </controls:DataGridTemplateColumn>
 
                 <controls:DataGridTextColumn Header="Current Branch" IsReadOnly="True"
                                          Binding="{Binding CurrentBranch}"/>
@@ -87,6 +93,8 @@
                 <controls:DataGridTemplateColumn Header="Edit"  CellTemplate="{StaticResource editIconTemplate}"/>
 
                 <controls:DataGridTemplateColumn Header="UnTrack" CellTemplate="{StaticResource deleteIconTemplate}"/>
+
+                <controls:DataGridTemplateColumn Header="Sync" CellTemplate="{StaticResource syncIconTemplate}"/>
             </controls:DataGrid.Columns>
         </controls:DataGrid>
     </StackPanel>

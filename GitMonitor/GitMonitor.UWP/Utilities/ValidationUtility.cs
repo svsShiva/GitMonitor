@@ -8,7 +8,7 @@ namespace GitMonitor.UWP.Utilities
         {
             if (name == string.Empty)
             {
-                return StringUtility._emptyGroupName;
+                return StringUtility._emptyField;
             }
             else if (name.Length > 20)
             {
@@ -22,7 +22,7 @@ namespace GitMonitor.UWP.Utilities
         {
             if (email == string.Empty)
             {
-                return StringUtility._emptyEmail;
+                return StringUtility._emptyField;
             }
             else if (!Regex.IsMatch(email, StringUtility._emailRegularExpression))
             {
@@ -44,7 +44,7 @@ namespace GitMonitor.UWP.Utilities
             }
             else
             {
-                return StringUtility._emptyInterval;
+                return StringUtility._emptyField;
             }
         }
 

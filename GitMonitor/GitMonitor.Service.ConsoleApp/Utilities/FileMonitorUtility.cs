@@ -71,7 +71,6 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
 
         public void GetAllRepos()
         {
-
             DriveInfo[] allDrives = DriveInfo.GetDrives();
 
             foreach (var drive in allDrives)
@@ -114,9 +113,9 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                 RepoRepository repoRepository = new RepoRepository();
                 repoRepository.AddMultiple(repos);
             }
-            catch (Exception ex)
+            catch
             {
-                LogUtility.LogMessage(ex);
+                throw;
             }
         }
     }

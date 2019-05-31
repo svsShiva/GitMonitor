@@ -149,13 +149,13 @@ namespace GitMonitor.UWP.Pages
             }
         }
 
-        private async void tbSearchRepoByName_TextChanged(object sender, TextChangedEventArgs e)
+        private async void tbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
-                if (tbSearchRepoByName.Text.Length != 0)
+                if (tbSearch.Text.Length != 0)
                 {
-                    dgDashboard.ItemsSource = Repos.Where(m => m.Name.ToLower().Contains(tbSearchRepoByName.Text)).ToList();
+                    dgDashboard.ItemsSource = Repos.Where(m => m.Name.ToLower().Contains(tbSearch.Text)).ToList();
                 }
                 else
                 {

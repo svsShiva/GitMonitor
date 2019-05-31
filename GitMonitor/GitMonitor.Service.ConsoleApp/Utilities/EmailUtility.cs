@@ -28,7 +28,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                     message.Body = body;
                     message.IsBodyHtml = true;
 
-                    if (!cc.Equals(""))
+                    if (cc != null)
                     {
                         foreach (var item in cc.Split(';'))
                         {
@@ -57,7 +57,7 @@ namespace GitMonitor.Service.ConsoleApp.Utilities
                     smtp.Port = Convert.ToInt32(settings.Find(m => m.Key == SettingEnum.SMTPPort.ToString()).Value);
                     smtp.EnableSsl = Convert.ToBoolean(settings.Find(m => m.Key == SettingEnum.SMTPEnableSsl.ToString()).Value);
                     smtp.Credentials = new NetworkCredential(settings.Find(m => m.Key == SettingEnum.SMTPEmail.ToString()).Value,
-                                                             settings.Find(m => m.Key == SettingEnum.SMTPPassword.ToString()).Value);
+                                           settings.Find(m => m.Key == SettingEnum.SMTPPassword.ToString()).Value);
 
                     smtp.Send(message);
                 }

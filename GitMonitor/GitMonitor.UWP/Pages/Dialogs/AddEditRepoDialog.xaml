@@ -9,12 +9,18 @@
     PrimaryButtonText="Save"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_SaveClick"
+    SecondaryButtonClick="ContentDialog_CancelClick"
     x:Name="cdAddEditRepo">
 
     <ScrollViewer VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled">
-        <StackPanel>
-            <TextBlock Text="Name" />
-            <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+        <StackPanel Padding="0,0,16,0">
+            <TextBlock>
+                <Run>Name</Run>
+                <Run Foreground="Red">*</Run>
+            </TextBlock>
+            <TextBox Name="tbRepoName" Text="{Binding Name, Mode=TwoWay}"
+                     TextChanged="tbRepoName_TextChanged"/>
+            <TextBlock Name="tbRepoNameVal" Foreground="Red"/>
 
             <TextBlock Text="URL"/>
             <TextBlock Text="{Binding RepoUrl}"/>

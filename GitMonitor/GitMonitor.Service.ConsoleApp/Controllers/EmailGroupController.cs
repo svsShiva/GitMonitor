@@ -18,7 +18,14 @@ namespace GitMonitor.Service.ConsoleApp.Controllers
 
         public HttpResponseMessage GetAllEmailGroups()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, _emailGroup.GetAllEmailGroups());
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, _emailGroup.GetAllEmailGroups());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
 
 

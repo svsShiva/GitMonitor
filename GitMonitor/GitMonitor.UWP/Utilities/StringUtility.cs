@@ -20,10 +20,6 @@
 
         internal static string _emailAlreadyAdded = @"Email already exists";
 
-        internal static string _emptyGroupName = @"Name cannot not be empty";
-
-        internal static string _emptyEmail = @"Email cannot not be empty";
-
         internal static string _lengthMaxGroupName = @"length cannot be more than 20";
 
         internal static string _nameExists = @"Name already exists";
@@ -31,8 +27,6 @@
         internal static string _emailGroupDeletionConfirmation = @"Delete the selected Email Group {0} ?";
 
         internal static string _emailGroupDeletedSucessfully = @"Deleted the Email Group {0} ?";
-
-        internal static string _emptyInterval = @"Interval cannot not be empty";
 
         internal static string _invalidInterval = @"Interval can only take numbers";
 
@@ -42,6 +36,6 @@
 
         internal static string _InvalidRange = @"Value shoud be between {0} and {1}";
 
-        internal static string _emptyPassword = @"Password cannot not be empty";
+        internal static string _emptyField = @"This field cannot not be empty";
     }
 }

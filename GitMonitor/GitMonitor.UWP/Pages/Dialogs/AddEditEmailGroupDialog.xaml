@@ -10,7 +10,7 @@
     PrimaryButtonClick="ContentDialog_SaveClick">
 
     <ScrollViewer VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled">
-        <StackPanel  Spacing="3">
+        <StackPanel  Spacing="3" Padding="0,0,16,0">
 
             <TextBlock Text="Group Name"/>
             <TextBox Style="{StaticResource tbStyle}" x:Name="tbGroupName"
